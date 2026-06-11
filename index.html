@@ -2,11 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>نظام متابعة الامتحانات - النسخة الاحترافية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- العودة لخط Cairo للعربية و Inter للأرقام -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -32,12 +31,11 @@
     --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
     
-    /* تعريف الخطوط الأصلي */
     --font-ar: 'Cairo', sans-serif;
     --font-num: 'Inter', sans-serif;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+  * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
   
   body {
     font-family: var(--font-ar);
@@ -51,7 +49,7 @@
 
   .latin { font-family: var(--font-num); letter-spacing: -0.02em; }
 
-  /* --- Login Overlay (Professional Glass) --- */
+  /* --- Login Overlay --- */
   #loginOverlay {
     position: fixed; inset: 0; z-index: 9999;
     background: radial-gradient(circle at top right, #EEF2FF, #F8FAFC);
@@ -93,7 +91,7 @@
 
   /* --- Main Layout --- */
   .topbar {
-    height: 70px; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
+    height: 70px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border); padding: 0 32px;
     display: flex; align-items: center; justify-content: space-between;
     position: sticky; top: 0; z-index: 100;
@@ -110,14 +108,14 @@
 
   /* --- Admin Panel --- */
   .admin-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow-md); }
-  .ap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .ap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
   .ap-title { font-weight: 800; font-size: 18px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
   .date-badge { font-family: var(--font-num); font-size: 15px; font-weight: 700; background: var(--bg); padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); color: var(--text-main); }
   
   .add-row { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
   .add-row input { flex: 1; min-width: 120px; padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px; font-size: 15px; transition: 0.2s; }
   .add-row input:focus { border-color: var(--primary); }
-  .btn-add { padding: 12px 28px; background: var(--success); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.2); }
+  .btn-add { padding: 12px 28px; background: var(--success); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.2); white-space: nowrap; }
   .btn-add:hover { transform: translateY(-2px); filter: brightness(1.05); }
   
   .archive-actions { display: flex; gap: 16px; align-items: center; padding-top: 24px; border-top: 1px solid var(--border); flex-wrap: wrap; }
@@ -126,6 +124,7 @@
     padding: 12px 28px; background: var(--warning); color: white; border: none; 
     border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; 
     display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 4px 12px rgba(245,158,11,0.2);
+    white-space: nowrap;
   }
   .btn-archive:hover { transform: translateY(-2px); filter: brightness(1.05); }
 
@@ -154,11 +153,12 @@
   .f-btn { 
     padding: 10px 22px; border: 2px solid var(--border); border-radius: 12px; 
     background: var(--surface); font-size: 14px; font-weight: 700; cursor: pointer; color: var(--text-muted); transition: all 0.2s ease; 
+    white-space: nowrap;
   }
   .f-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
   .f-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(79,70,229,0.2); }
 
-  /* --- Table --- */
+  /* --- Table (Desktop) --- */
   .tbl-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); }
   table { width: 100%; border-collapse: collapse; font-size: 15px; }
   th { background: var(--bg); padding: 18px 20px; text-align: right; font-size: 12px; font-weight: 800; color: var(--text-muted); border-bottom: 2px solid var(--border); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -181,7 +181,7 @@
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
   /* Badges */
-  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; font-size: 13px; font-weight: 700; border: 1px solid transparent; }
+  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; font-size: 13px; font-weight: 700; border: 1px solid transparent; white-space: nowrap; }
   .dot { width: 8px; height: 8px; border-radius: 50%; }
   .b-pend { background: var(--warning-light); color: #B45309; border-color: rgba(245,158,11,0.2); } .b-pend .dot { background: var(--warning); }
   .b-trav { background: var(--primary-light); color: var(--primary); border-color: rgba(79,70,229,0.2); } .b-trav .dot { background: var(--primary); animation: pulse 1.5s infinite; }
@@ -224,16 +224,148 @@
   .a-del { background: var(--danger-light); color: var(--danger); width: 44px; flex: none; }
   .a-del:hover { background: var(--danger); color: white; }
 
+  /* ============================================
+     MOBILE RESPONSIVE DESIGN
+     ============================================ */
+  
   @media (max-width: 1024px) {
     .metrics { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 24px; }
   }
+  
   @media (max-width: 768px) {
-    .metrics { grid-template-columns: 1fr; }
+    /* Topbar Mobile */
+    .topbar {
+      height: auto;
+      padding: 12px 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand { font-size: 18px; }
+    .tb-right { width: 100%; justify-content: space-between; }
+    .user-pill { font-size: 12px; padding: 6px 12px; }
+    .clock { font-size: 13px; padding: 6px 10px; }
+    .btn-out { padding: 6px 12px; font-size: 13px; }
+    
+    .container { padding: 16px; }
+    
+    /* Metrics Mobile */
+    .metrics { 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 12px;
+    }
+    .m-card { padding: 16px; }
+    .m-val { font-size: 32px; }
+    .m-label { font-size: 11px; }
+    .m-sub { font-size: 11px; }
+    
+    /* Admin Panel Mobile */
+    .admin-panel { padding: 20px; }
     .add-row { flex-direction: column; }
+    .add-row input { min-width: 100%; }
+    .btn-add { width: 100%; justify-content: center; }
     .archive-actions { flex-direction: column; align-items: stretch; }
-    .act-btn { width: 100%; justify-content: center; }
-    .container { padding: 20px; }
-    .topbar { padding: 0 20px; }
+    .inp-date { width: 100%; }
+    .btn-archive { width: 100%; justify-content: center; }
+    
+    /* Controls Mobile */
+    .controls { 
+      flex-direction: column; 
+      align-items: stretch;
+      padding: 12px;
+    }
+    .search-inp { 
+      min-width: 100%; 
+      width: 100%;
+    }
+    .f-btn { 
+      flex: 1; 
+      min-width: calc(50% - 4px);
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+    
+    /* Table to Card Layout on Mobile */
+    .tbl-wrap { border-radius: 12px; }
+    table, thead, tbody, th, td, tr { display: block; }
+    thead { display: none; }
+    tbody tr { 
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    tbody tr:hover { background: var(--surface); }
+    td { 
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    td:last-child { border-bottom: none; }
+    td::before {
+      content: attr(data-label);
+      font-weight: 700;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    
+    /* Special handling for action buttons on mobile */
+    td:last-child {
+      flex-direction: column;
+      align-items: stretch;
+      padding-top: 12px;
+    }
+    .act-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+    
+    /* Region header mobile */
+    .reg-head { 
+      padding: 12px 16px;
+      font-size: 13px;
+    }
+    
+    /* Progress section mobile */
+    .progress-sec { padding: 20px; }
+    .p-lbl { font-size: 13px; }
+    
+    /* Archive grid mobile */
+    .arch-grid { grid-template-columns: 1fr; }
+  }
+  
+  @media (max-width: 480px) {
+    .login-box { padding: 32px 24px; }
+    .login-title { font-size: 22px; }
+    
+    .metrics { grid-template-columns: 1fr; }
+    .m-card { padding: 14px; }
+    .m-val { font-size: 28px; }
+    
+    .f-btn { 
+      min-width: 100%;
+      margin-bottom: 4px;
+    }
+    
+    .badge { 
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+    
+    .c-name { font-size: 14px; }
+    .c-school { font-size: 12px; }
+    
+    .t-cell { font-size: 12px; }
+    .t-lbl { font-size: 11px; width: 20px; }
   }
 </style>
 </head>
@@ -292,7 +424,7 @@
           <button class="btn-add" onclick="addC()"> إضافة حامل جديد</button>
         </div>
         <div class="archive-actions">
-          <div style="flex:1; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <div style="flex:1; display:flex; align-items:center; gap:12px; flex-wrap:wrap; width:100%;">
             <label style="font-size:14px;font-weight:700;color:var(--text-main);white-space:nowrap;">تاريخ النموذج الجديد:</label>
             <input type="date" id="nextDate" class="inp-date latin" style="flex:1;max-width:260px;">
           </div>
@@ -333,7 +465,7 @@
     <!-- CONTROLS -->
     <div class="controls">
       <input class="search-inp" id="src" type="text" placeholder="🔍 ابحث باسم الحامل أو المنطقة أو المدرسة...">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;">
         <button class="f-btn active" onclick="setF('all',this)">الكل</button>
         <button class="f-btn" onclick="setF('pending',this)">قيد الانتظار</button>
         <button class="f-btn" onclick="setF('travelling',this)">في الطريق للمركز</button>
@@ -598,12 +730,12 @@ function row(c){
   else bt=`<button class="act-btn btn-dis" disabled>✓ اكتملت المهمة</button>`;
 
   return `<tr>
-    <td><span class="c-id latin">${c.id}</span></td>
-    <td><div class="c-name">${c.name}</div><div class="c-school">${c.school}</div></td>
-    <td style="font-weight:600;font-size:14px;">${c.region}</td>
-    <td>${th}</td>
-    <td>${bd}</td>
-    <td>${bt}</td>
+    <td data-label="#"><span class="c-id latin">${c.id}</span></td>
+    <td data-label="حامل الأسئلة"><div class="c-name">${c.name}</div><div class="c-school">${c.school}</div></td>
+    <td data-label="المنطقة" style="font-weight:600;font-size:14px;">${c.region}</td>
+    <td data-label="الزمن">${th}</td>
+    <td data-label="الحالة">${bd}</td>
+    <td data-label="الإجراء">${bt}</td>
   </tr>`;
 }
 
@@ -620,7 +752,7 @@ function startTmr(){
         const t2=c.p2?`${ft(c.p1)} → ${ft(c.p2)}`:(c.p1?'جاري العد...' : '-');
         const t3=c.p3?`${ft(c.p2)} → ${ft(c.p3)}`:(c.p2?'جاري العد...' : '-');
         el.parentElement.parentElement.innerHTML=`
-          <div class="t-ph"><span class="t-lbl">م:</span><span class="t-val ${!c.p1?'t-live':''}" style="color:${c.p1?'var(--success)':'var(--purple)'}">${t1}</span></div>
+          <div class="t-ph"><span class="t-lbl">م١:</span><span class="t-val ${!c.p1?'t-live':''}" style="color:${c.p1?'var(--success)':'var(--purple)'}">${t1}</span></div>
           <div class="t-ph"><span class="t-lbl">م٢:</span><span class="t-val ${c.p1&&!c.p2?'t-live':''}" style="color:${c.p2?'var(--info)':(c.p1?'var(--warning)':'#ccc')}">${t2}</span></div>
           <div class="t-ph"><span class="t-lbl">م٣:</span><span class="t-val ${c.p2&&!c.p3?'t-live':''}" style="color:${c.p3?'var(--success)':(c.p2?'var(--warning)':'#ccc')}">${t3}</span></div>`;
       }
