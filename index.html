@@ -221,6 +221,50 @@
 
   .archive-viewer-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 
+  /* ✅ أزرار الإجراءات في جدول الحاملين */
+  .action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: var(--font-ar);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 2px;
+  }
+  .action-btn-edit { background: var(--ocean-light); color: var(--ocean); }
+  .action-btn-edit:hover { background: var(--ocean); color: white; }
+  .action-btn-delete { background: var(--brick-light); color: var(--brick); }
+  .action-btn-delete:hover { background: var(--brick); color: white; }
+
+  .bulk-actions {
+    background: var(--navy-light);
+    border: 1px solid var(--navy);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .bulk-actions.show { display: flex; }
+  .bulk-actions .count { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .bulk-actions .buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .checkbox-cell { width: 40px; text-align: center; }
+  .checkbox-cell input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--navy);
+  }
+
   @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .container { padding: 24px; } }
   @media (max-width: 768px) {
     .topbar { padding: 12px 16px; }
@@ -349,15 +393,37 @@
         <div class="card-header">
           <h2 class="card-title">👥 إدارة حاملي الأسئلة</h2>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button class="btn btn-emerald btn-small" onclick="showAddCarrierModal()">+ إضافة حامل جديد</button>
+            <button class="btn btn-emerald btn-small" onclick="showAddCarrierModal()">➕ إضافة حامل جديد</button>
             <button class="btn btn-ocean btn-small" onclick="printCarrierList()">🖨️ طباعة قائمة الدخول</button>
           </div>
         </div>
         <div style="background:var(--ocean-light);border:1px solid var(--ocean);border-radius:12px;padding:16px;margin-bottom:20px;font-size:14px;color:var(--ocean);">💡 <strong>كيفية دخول حاملي الأسئلة:</strong> بعد إضافة حامل جديد، سيظهر رمز دخول خاص به. اضغط على "طباعة قائمة الدخول" لتوليد قائمة بجميع الحاملين مع أكوادهم.</div>
+        
+        <!-- ✅ شريط الإجراءات الجماعية -->
+        <div class="bulk-actions" id="bulkActions">
+          <div class="count">✅ تم تحديد <span id="selectedCount" class="latin">0</span> حامل</div>
+          <div class="buttons">
+            <button class="btn btn-brick btn-small" onclick="deleteSelectedCarriers()">🗑️ حذف المحدد</button>
+            <button class="btn btn-slate btn-small" onclick="clearSelection()">❌ إلغاء التحديد</button>
+          </div>
+        </div>
+        
         <div class="table-wrap">
           <div class="table-scroll">
             <table>
-              <thead><tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>المنطقة</th><th>المدرسة</th><th>رمز الدخول</th><th>الحالة</th></tr></thead>
+              <thead>
+                <tr>
+                  <th class="checkbox-cell"><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                  <th>#</th>
+                  <th>الاسم</th>
+                  <th>الهاتف</th>
+                  <th>المنطقة</th>
+                  <th>المدرسة</th>
+                  <th>رمز الدخول</th>
+                  <th>الحالة</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
               <tbody id="carriersTableBody"></tbody>
             </table>
           </div>
@@ -369,12 +435,10 @@
       <div class="card">
         <h2 class="card-title">🗄️ أرشيف أيام المتابعة</h2>
         
-        <!-- ✅ قسم إدارة التاريخ المحدث -->
         <div class="new-day-section">
           <h3>📅 إدارة تاريخ المتابعة</h3>
           <p>التاريخ الحالي المخزن في النظام قد لا يتطابق مع تاريخ جهازك. استخدم الأزرار أدناه للمزامنة.</p>
           
-          <!-- عرض التاريخين جنباً إلى جنب -->
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;">
             <div style="background:white;border-radius:10px;padding:14px;border:2px solid var(--navy);">
               <div style="font-size:11px;color:var(--text-muted);font-weight:700;">📅 تاريخ النظام المخزن</div>
@@ -386,7 +450,6 @@
             </div>
           </div>
           
-          <!-- أزرار المزامنة -->
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
             <button class="btn btn-emerald btn-small" onclick="syncWithDeviceDate()" style="flex:1;min-width:200px;">
               🔄 مزامنة مع تاريخ الجهاز
@@ -396,7 +459,6 @@
             </button>
           </div>
           
-          <!-- نموذج بدء يوم جديد -->
           <div style="border-top:2px dashed var(--emerald);padding-top:16px;">
             <div style="font-size:13px;font-weight:700;color:#065F46;margin-bottom:8px;">📅 بدء يوم متابعة جديد (أرشفة اليوم الحالي)</div>
             <div class="new-day-form">
@@ -498,10 +560,11 @@
   </div>
 </div>
 
+<!-- Add Carrier Modal -->
 <div id="addCarrierModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 class="modal-title">👥 إضافة حامل أسئلة جديد</h3>
+      <h3 class="modal-title">➕ إضافة حامل أسئلة جديد</h3>
       <button class="modal-close" onclick="closeModal('addCarrierModal')">&times;</button>
     </div>
     <div id="modalAlert" class="alert"></div>
@@ -511,6 +574,25 @@
     <div class="form-group"><label>المدرسة</label><input type="text" id="newCarrierSchool" placeholder="أدخل اسم المدرسة"></div>
     <div class="form-group"><label>الوقت المتوقع (دقيقة)</label><input type="number" id="newCarrierTime" placeholder="95" class="latin"></div>
     <button class="btn btn-emerald" onclick="addCarrier()">إضافة الحامل</button>
+  </div>
+</div>
+
+<!-- ✅ Edit Carrier Modal -->
+<div id="editCarrierModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">✏️ تعديل بيانات الحامل</h3>
+      <button class="modal-close" onclick="closeModal('editCarrierModal')">&times;</button>
+    </div>
+    <div id="editModalAlert" class="alert"></div>
+    <input type="hidden" id="editCarrierId">
+    <div class="form-group"><label>الرقم التسلسلي</label><input type="text" id="editCarrierIdDisplay" class="latin" disabled></div>
+    <div class="form-group"><label>الاسم الكامل</label><input type="text" id="editCarrierName"></div>
+    <div class="form-group"><label>رقم الهاتف</label><input type="tel" id="editCarrierPhone" class="latin"></div>
+    <div class="form-group"><label>المنطقة</label><input type="text" id="editCarrierRegion"></div>
+    <div class="form-group"><label>المدرسة</label><input type="text" id="editCarrierSchool"></div>
+    <div class="form-group"><label>الوقت المتوقع (دقيقة)</label><input type="number" id="editCarrierTime" class="latin"></div>
+    <button class="btn btn-ocean" onclick="saveCarrierEdit()">💾 حفظ التعديلات</button>
   </div>
 </div>
 
@@ -563,8 +645,8 @@ let now = Date.now();
 let trackingInterval = null;
 let unsubscribe = null;
 let unsubscribeArchive = null;
+let selectedCarriers = new Set(); // ✅ المحددون للحذف الجماعي
 
-// ✅ الحصول على التاريخ المحلي الحالي (بدون مشاكل UTC)
 function getLocalDateStr() {
   const d = new Date();
   const year = d.getFullYear();
@@ -580,9 +662,6 @@ const ADMIN_PASSWORD = 'Admin@2026';
 
 const SAUDI_MONTHS = ['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'];
 
-// ==========================================
-// ✅ دوال التاريخ - محلياً (بدون مشاكل UTC)
-// ==========================================
 function formatDateArabic(date) {
   if (!date) return '--';
   const parts = date.split('-');
@@ -626,90 +705,47 @@ function formatFullDate(date) {
   return h ? `${g} | ${h}` : g;
 }
 
-// ==========================================
-// 🔄 دوال مزامنة التاريخ
-// ==========================================
 function updateDateComparison() {
   const storedDisplay = document.getElementById('storedDateDisplay');
   const deviceDisplay = document.getElementById('deviceDateDisplay');
-  
-  if (storedDisplay) {
-    storedDisplay.textContent = formatFullDate(currentDate);
-  }
-  if (deviceDisplay) {
-    deviceDisplay.textContent = formatFullDate(getLocalDateStr());
-  }
+  if (storedDisplay) storedDisplay.textContent = formatFullDate(currentDate);
+  if (deviceDisplay) deviceDisplay.textContent = formatFullDate(getLocalDateStr());
 }
 
 function syncWithDeviceDate() {
   const deviceDate = getLocalDateStr();
-  
   if (deviceDate === currentDate) {
     showToast('✅ التاريخ متزامن بالفعل مع تاريخ الجهاز', 'success');
     return;
   }
-  
-  const confirmMsg = `⚠️ سيتم تحديث تاريخ النظام:\n\n` +
-    `📅 من: ${formatFullDate(currentDate)}\n` +
-    `💻 إلى: ${formatFullDate(deviceDate)}\n\n` +
-    `⚠️ ملاحظة: إذا كان هناك بيانات غير مؤرشفة لليوم الحالي، ` +
-    `يُنصح بأرشفتها أولاً قبل المزامنة.\n\n` +
-    `هل تريد المتابعة؟`;
-  
-  if (!confirm(confirmMsg)) return;
-  
+  if (!confirm(`⚠️ سيتم تحديث تاريخ النظام:\n\n📅 من: ${formatFullDate(currentDate)}\n💻 إلى: ${formatFullDate(deviceDate)}\n\nهل تريد المتابعة؟`)) return;
   currentDate = deviceDate;
   localStorage.setItem('currentTrackingDate', currentDate);
-  
   updateDateDisplay();
   updateDateComparison();
-  
   const parts = currentDate.split('-');
   const tomorrow = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]) + 1);
-  const tomorrowStr = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
-  document.getElementById('newDayDate').value = tomorrowStr;
-  
-  showToast(`✅ تم مزامنة التاريخ مع جهازك: ${formatFullDate(currentDate)}`, 'success');
+  document.getElementById('newDayDate').value = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
+  showToast(`✅ تم مزامنة التاريخ: ${formatFullDate(currentDate)}`, 'success');
 }
 
 function manuallySetDate() {
-  const input = prompt(
-    `أدخل التاريخ بصيغة YYYY-MM-DD\n\n` +
-    `مثال: 2026-06-12\n\n` +
-    `التاريخ الحالي: ${currentDate}`,
-    currentDate
-  );
-  
+  const input = prompt(`أدخل التاريخ بصيغة YYYY-MM-DD\n\nمثال: 2026-06-12\n\nالتاريخ الحالي: ${currentDate}`, currentDate);
   if (!input) return;
-  
-  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-  if (!dateRegex.test(input)) {
-    showToast('❌ صيغة التاريخ غير صحيحة. استخدم YYYY-MM-DD', 'error');
-    return;
-  }
-  
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(input)) { showToast('❌ صيغة غير صحيحة. استخدم YYYY-MM-DD', 'error'); return; }
   const parts = input.split('-');
-  const year = parseInt(parts[0]);
-  const month = parseInt(parts[1]) - 1;
-  const day = parseInt(parts[2]);
+  const year = parseInt(parts[0]), month = parseInt(parts[1]) - 1, day = parseInt(parts[2]);
   const testDate = new Date(year, month, day);
-  
   if (testDate.getFullYear() !== year || testDate.getMonth() !== month || testDate.getDate() !== day) {
-    showToast('❌ التاريخ غير صالح', 'error');
-    return;
+    showToast('❌ التاريخ غير صالح', 'error'); return;
   }
-  
   currentDate = input;
   localStorage.setItem('currentTrackingDate', currentDate);
-  
   updateDateDisplay();
   updateDateComparison();
-  
   const tomorrow = new Date(year, month, day + 1);
-  const tomorrowStr = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
-  document.getElementById('newDayDate').value = tomorrowStr;
-  
-  showToast(`✅ تم تحديث التاريخ إلى: ${formatFullDate(currentDate)}`, 'success');
+  document.getElementById('newDayDate').value = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
+  showToast(`✅ تم تحديث التاريخ: ${formatFullDate(currentDate)}`, 'success');
 }
 
 async function createAdminAccount() {
@@ -770,13 +806,9 @@ function showApp() {
   if (currentUser.role === 'admin') {
     document.getElementById('uDisp').textContent = '👑 مدير النظام';
     document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
-    
     const parts = currentDate.split('-');
     const tomorrow = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]) + 1);
-    const tomorrowStr = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
-    document.getElementById('newDayDate').value = tomorrowStr;
-    
-    // ✅ تحديث عرض مقارنة التواريخ
+    document.getElementById('newDayDate').value = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
     setTimeout(() => updateDateComparison(), 100);
   } else {
     document.getElementById('uDisp').textContent = '👤 ' + currentUser.name + ' (#' + currentUser.carrierId + ')';
@@ -819,16 +851,9 @@ function setupRealtimeListener() {
 
 function setupArchiveListener() {
   if (unsubscribeArchive) unsubscribeArchive();
-  
   const localArchive = JSON.parse(localStorage.getItem('localArchive') || '{}');
-  Object.keys(localArchive).forEach(date => {
-    archiveData[date] = localArchive[date];
-  });
-  
-  if (currentUser && currentUser.role === 'admin') {
-    renderArchiveList();
-  }
-  
+  Object.keys(localArchive).forEach(date => { archiveData[date] = localArchive[date]; });
+  if (currentUser && currentUser.role === 'admin') renderArchiveList();
   try {
     if (db && auth.currentUser) {
       unsubscribeArchive = db.collection('archive').onSnapshot((snapshot) => {
@@ -843,32 +868,21 @@ function setupArchiveListener() {
           }
         });
         if (currentUser && currentUser.role === 'admin') renderArchiveList();
-      }, (error) => {
-        console.warn('⚠️ فشل الاستماع السحابي للأرشيف:', error.message);
-      });
+      }, (error) => console.warn('⚠️ فشل الاستماع السحابي:', error.message));
     }
-  } catch (e) {
-    console.warn('⚠️ لا يمكن الاتصال بـ Firebase للأرشيف:', e.message);
-  }
+  } catch (e) { console.warn('⚠️ لا يمكن الاتصال بـ Firebase:', e.message); }
 }
 
 async function startNewDay() {
   const newDate = document.getElementById('newDayDate').value;
-  if (!newDate) { showToast('⚠️ الرجاء اختيار تاريخ ليوم المتابعة الجديد', 'error'); return; }
-  if (newDate <= currentDate) { showToast('⚠️ يجب أن يكون التاريخ الجديد بعد تاريخ اليوم الحالي', 'error'); return; }
-
+  if (!newDate) { showToast('⚠️ الرجاء اختيار تاريخ', 'error'); return; }
+  if (newDate <= currentDate) { showToast('⚠️ يجب أن يكون التاريخ الجديد بعد اليوم الحالي', 'error'); return; }
   const hasData = carriers.some(c => c.p0 || c.p1 || c.p2 || c.p3);
-  
   if (!hasData) {
-    if (!confirm('⚠️ لا توجد بيانات نشاط اليوم الحالي.\n\nهل تريد المتابعة وأرشفة يوم فارغ؟')) return;
+    if (!confirm('⚠️ لا توجد بيانات. هل تريد أرشفة يوم فارغ؟')) return;
   } else {
-    const confirmMsg = `⚠️ سيتم:\n\n` +
-      `1. أرشفة بيانات اليوم الحالي:\n   📅 ${formatFullDate(currentDate)}\n   👥 ${carriers.length} حامل\n   ✅ ${carriers.filter(c => c.p3).length} مكتمل\n\n` +
-      `2. تفريغ جميع بيانات الحاملين\n\n` +
-      `3. بدء يوم متابعة جديد:\n   📅 ${formatFullDate(newDate)}\n\nهل تريد المتابعة؟`;
-    if (!confirm(confirmMsg)) return;
+    if (!confirm(`⚠️ سيتم:\n\n1. أرشفة: ${formatFullDate(currentDate)}\n2. تفريغ البيانات\n3. بدء: ${formatFullDate(newDate)}\n\nمتابعة؟`)) return;
   }
-  
   try {
     const archiveRecord = {
       date: currentDate,
@@ -883,86 +897,53 @@ async function startNewDay() {
         pending: carriers.filter(c => !c.p0).length
       }
     };
-    
     const localArchive = JSON.parse(localStorage.getItem('localArchive') || '{}');
     localArchive[currentDate] = archiveRecord;
     localStorage.setItem('localArchive', JSON.stringify(localArchive));
-    
     archiveData[currentDate] = archiveRecord;
-    
-    try {
-      if (db && auth.currentUser) {
-        await db.collection('archive').doc(currentDate).set(archiveRecord);
-      }
-    } catch (e) { console.warn('⚠️ الأرشفة السحابية فشلت:', e.message); }
-    
+    try { if (db && auth.currentUser) await db.collection('archive').doc(currentDate).set(archiveRecord); } catch (e) { console.warn(e); }
     try {
       if (db && auth.currentUser) {
         const batch = db.batch();
-        carriers.forEach(carrier => {
-          batch.update(db.collection('carriers').doc(carrier.id.toString()), { p0: null, p1: null, p2: null, p3: null });
-        });
+        carriers.forEach(carrier => batch.update(db.collection('carriers').doc(carrier.id.toString()), { p0: null, p1: null, p2: null, p3: null }));
         await batch.commit();
       }
-    } catch (e) { console.warn('⚠️ فشل تفريغ البيانات السحابية:', e.message); }
-    
+    } catch (e) { console.warn(e); }
     currentDate = newDate;
     localStorage.setItem('currentTrackingDate', currentDate);
     updateDateDisplay();
     updateDateComparison();
     document.getElementById('newDayDate').value = '';
-    
     renderArchiveList();
     if (db && auth.currentUser) setupRealtimeListener();
-    
-    showToast(`✅ تم أرشفة يوم ${formatDateArabic(currentDate)} وبدء يوم جديد`, 'success');
-  } catch (error) {
-    showToast('❌ خطأ: ' + error.message, 'error');
-  }
+    showToast(`✅ تم أرشفة ${formatDateArabic(currentDate)}`, 'success');
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
 async function deleteArchive(date) {
-  if (!confirm(`⚠️ هل أنت متأكد من حذف أرشيف يوم ${formatFullDate(date)}؟`)) return;
-  
+  if (!confirm(`⚠️ حذف أرشيف ${formatFullDate(date)}؟`)) return;
   try {
-    try {
-      if (db && auth.currentUser) {
-        await db.collection('archive').doc(date).delete();
-      }
-    } catch (e) { console.warn('⚠️ فشل الحذف السحابي:', e.message); }
-    
+    try { if (db && auth.currentUser) await db.collection('archive').doc(date).delete(); } catch (e) { console.warn(e); }
     const localArchive = JSON.parse(localStorage.getItem('localArchive') || '{}');
     delete localArchive[date];
     localStorage.setItem('localArchive', JSON.stringify(localArchive));
-    
     delete archiveData[date];
-    
     renderArchiveList();
-    
-    showToast(`🗑️ تم حذف أرشيف يوم ${formatDateArabic(date)}`, 'success');
-  } catch (error) {
-    showToast('❌ خطأ: ' + error.message, 'error');
-  }
+    showToast(`🗑️ تم حذف أرشيف ${formatDateArabic(date)}`, 'success');
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
 function renderArchiveList() {
   const grid = document.getElementById('archiveGrid');
   const countEl = document.getElementById('archiveCount');
   const dates = Object.keys(archiveData).sort().reverse();
-  
   if (countEl) countEl.innerHTML = `<span class="latin">${dates.length}</span> يوم محفوظ`;
-  
-  if (dates.length === 0) {
-    grid.innerHTML = '<div class="archive-empty">📭 لا يوجد أرشيف محفوظ بعد</div>';
-    return;
-  }
-  
+  if (dates.length === 0) { grid.innerHTML = '<div class="archive-empty">📭 لا يوجد أرشيف</div>'; return; }
   let html = '';
   dates.forEach(date => {
     const data = archiveData[date];
     const stats = data.stats || {};
     const completionRate = stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0;
-    
     html += `
       <div class="archive-card">
         <div class="archive-date">
@@ -970,8 +951,8 @@ function renderArchiveList() {
           <span class="hijri-date">🌙 ${formatHijriDate(date)}</span>
         </div>
         <div class="archive-stats">
-          <div>👥 عدد الحاملين: <strong class="latin">${stats.total || 0}</strong></div>
-          <div>📤 تم التسليم: <strong class="latin">${stats.delivered || 0}</strong></div>
+          <div>👥 الحاملين: <strong class="latin">${stats.total || 0}</strong></div>
+          <div>📤 التسليم: <strong class="latin">${stats.delivered || 0}</strong></div>
           <div>✅ مكتمل: <strong class="latin">${stats.done || 0}</strong> (<span class="latin">${completionRate}</span>%)</div>
         </div>
         <div class="archive-actions">
@@ -982,28 +963,23 @@ function renderArchiveList() {
       </div>
     `;
   });
-  
   grid.innerHTML = html;
 }
 
 function viewArchive(date) {
   const data = archiveData[date];
   if (!data) return;
-  
   document.getElementById('archiveViewDate').textContent = formatFullDate(date);
   const content = document.getElementById('archiveViewContent');
   const carriers = data.carriers || [];
   const stats = data.stats || {};
-  
   let tableRows = '';
   carriers.forEach(c => {
-    let status = 'قيد الانتظار';
-    let badgeClass = 'b-pend';
+    let status = 'قيد الانتظار', badgeClass = 'b-pend';
     if (c.p3) { status = 'مكتمل'; badgeClass = 'b-comp'; }
     else if (c.p2) { status = 'عائد'; badgeClass = 'b-ret'; }
     else if (c.p1) { status = 'في المركز'; badgeClass = 'b-deliv'; }
     else if (c.p0) { status = 'في الطريق'; badgeClass = 'b-trav'; }
-    
     let timeHtml = '<span style="color:#ccc">-</span>';
     if (c.p0) {
       const t1 = c.p1 ? `${fmtTime(c.p0)} → ${fmtTime(c.p1)}` : 'جاري...';
@@ -1015,68 +991,57 @@ function viewArchive(date) {
         <div><span style="color:var(--text-muted);font-size:11px;">م٣:</span> <b style="color:var(--emerald);">${t3}</b></div>
       </div>`;
     }
-    
-    tableRows += `
-      <tr>
-        <td><span class="c-id latin">${c.id}</span></td>
-        <td><div class="c-name">${c.name}</div><div class="c-school">${c.school}</div>${c.phone ? `<div class="c-phone">📞 ${c.phone}</div>` : ''}</td>
-        <td style="font-weight:600;">${c.region}</td>
-        <td>${timeHtml}</td>
-        <td><span class="badge ${badgeClass}"><span class="badge-dot"></span>${status}</span></td>
-      </tr>
-    `;
+    tableRows += `<tr>
+      <td><span class="c-id latin">${c.id}</span></td>
+      <td><div class="c-name">${c.name}</div><div class="c-school">${c.school}</div></td>
+      <td style="font-weight:600;">${c.region}</td>
+      <td>${timeHtml}</td>
+      <td><span class="badge ${badgeClass}"><span class="badge-dot"></span>${status}</span></td>
+    </tr>`;
   });
-  
   content.innerHTML = `
     <div class="archive-viewer-header">
       <h2>📋 أرشيف يوم المتابعة</h2>
       <div class="archive-date-display">${formatDateArabic(date)}</div>
       <div class="archive-date-display" style="font-size:14px;">🌙 ${formatHijriDate(date)}</div>
       <div class="archive-stats-row">
-        <div class="stat-item"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي الحاملين</div></div>
-        <div class="stat-item"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">في الطريق/المركز</div></div>
-        <div class="stat-item"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تم التسليم</div></div>
+        <div class="stat-item"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي</div></div>
+        <div class="stat-item"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">نشط</div></div>
+        <div class="stat-item"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تسليم</div></div>
         <div class="stat-item"><div class="stat-num">${stats.done || 0}</div><div class="stat-lbl">مكتمل</div></div>
-        <div class="stat-item"><div class="stat-num">${stats.pending || 0}</div><div class="stat-lbl">قيد الانتظار</div></div>
+        <div class="stat-item"><div class="stat-num">${stats.pending || 0}</div><div class="stat-lbl">انتظار</div></div>
       </div>
     </div>
     <div class="archive-viewer-actions">
-      <button class="btn btn-ocean btn-small" onclick="exportArchiveAsHTML('${date}')">📥 تحميل كملف HTML</button>
+      <button class="btn btn-ocean btn-small" onclick="exportArchiveAsHTML('${date}')">📥 تحميل HTML</button>
       <button class="btn btn-emerald btn-small" onclick="window.print()">🖨️ طباعة</button>
     </div>
     <div class="table-wrap">
       <div class="table-scroll">
         <table>
-          <thead>
-            <tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن (المراحل)</th><th>الحالة</th></tr>
-          </thead>
+          <thead><tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن</th><th>الحالة</th></tr></thead>
           <tbody>${tableRows}</tbody>
         </table>
       </div>
     </div>
   `;
-  
   document.getElementById('viewArchiveModal').classList.add('active');
 }
 
 function exportArchiveAsHTML(date) {
   const data = archiveData[date];
   if (!data) { showToast('⚠️ البيانات غير متوفرة', 'error'); return; }
-  
   const carriers = data.carriers || [];
   const stats = data.stats || {};
   const gregorian = formatDateArabic(date);
   const hijri = formatHijriDate(date);
-  
   let tableRows = '';
   carriers.forEach(c => {
-    let status = 'قيد الانتظار';
-    let badgeClass = 'b-pend';
+    let status = 'قيد الانتظار', badgeClass = 'b-pend';
     if (c.p3) { status = 'مكتمل'; badgeClass = 'b-comp'; }
     else if (c.p2) { status = 'عائد'; badgeClass = 'b-ret'; }
     else if (c.p1) { status = 'في المركز'; badgeClass = 'b-deliv'; }
     else if (c.p0) { status = 'في الطريق'; badgeClass = 'b-trav'; }
-    
     let timeHtml = '-';
     if (c.p0) {
       const t1 = c.p1 ? `${fmtTime(c.p0)} → ${fmtTime(c.p1)}` : 'جاري...';
@@ -1088,18 +1053,14 @@ function exportArchiveAsHTML(date) {
         <div><span style="color:#666;">م٣:</span> <b>${t3}</b></div>
       </div>`;
     }
-    
-    tableRows += `
-      <tr>
-        <td style="font-family:'Inter',sans-serif;font-weight:700;">${c.id}</td>
-        <td><b>${c.name}</b><br><small style="color:#666;">${c.school}</small>${c.phone ? `<br><small style="color:#666;">📞 ${c.phone}</small>` : ''}</td>
-        <td><b>${c.region}</b></td>
-        <td>${timeHtml}</td>
-        <td><span class="badge ${badgeClass}">${status}</span></td>
-      </tr>
-    `;
+    tableRows += `<tr>
+      <td style="font-family:'Inter',sans-serif;font-weight:700;">${c.id}</td>
+      <td><b>${c.name}</b><br><small style="color:#666;">${c.school}</small></td>
+      <td><b>${c.region}</b></td>
+      <td>${timeHtml}</td>
+      <td><span class="badge ${badgeClass}">${status}</span></td>
+    </tr>`;
   });
-  
   const htmlContent = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -1148,23 +1109,22 @@ function exportArchiveAsHTML(date) {
     <div class="hijri">🌙 ${hijri}</div>
   </div>
   <div class="stats">
-    <div class="stat-card"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي الحاملين</div></div>
-    <div class="stat-card"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">في الطريق/المركز</div></div>
-    <div class="stat-card"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تم التسليم</div></div>
+    <div class="stat-card"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي</div></div>
+    <div class="stat-card"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">نشط</div></div>
+    <div class="stat-card"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تسليم</div></div>
     <div class="stat-card"><div class="stat-num">${stats.done || 0}</div><div class="stat-lbl">مكتمل</div></div>
-    <div class="stat-card"><div class="stat-num">${stats.pending || 0}</div><div class="stat-lbl">قيد الانتظار</div></div>
+    <div class="stat-card"><div class="stat-num">${stats.pending || 0}</div><div class="stat-lbl">انتظار</div></div>
   </div>
   <div class="table-wrap">
     <table>
-      <thead><tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن (المراحل)</th><th>الحالة</th></tr></thead>
+      <thead><tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن</th><th>الحالة</th></tr></thead>
       <tbody>${tableRows}</tbody>
     </table>
   </div>
-  <div class="footer">تم إنشاء هذا الأرشيف بواسطة نظام متابعة الامتحانات | ${new Date().toLocaleString('ar')}</div>
+  <div class="footer">نظام متابعة الامتحانات | ${new Date().toLocaleString('ar')}</div>
 </div>
 </body>
 </html>`;
-  
   const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1172,31 +1132,26 @@ function exportArchiveAsHTML(date) {
   a.download = `archive_${date}_${Date.now()}.html`;
   a.click();
   URL.revokeObjectURL(url);
-  
-  showToast(`✅ تم تصدير أرشيف يوم ${formatDateArabic(date)} بنجاح`, 'success');
+  showToast(`✅ تم تصدير أرشيف ${formatDateArabic(date)}`, 'success');
 }
 
 function exportAllArchives() {
   const dates = Object.keys(archiveData).sort().reverse();
-  if (dates.length === 0) { showToast('⚠️ لا يوجد أرشيف للتصدير', 'info'); return; }
-  
+  if (dates.length === 0) { showToast('⚠️ لا يوجد أرشيف', 'info'); return; }
   let allPages = '';
-  dates.forEach((date, index) => {
+  dates.forEach(date => {
     const data = archiveData[date];
     const carriers = data.carriers || [];
     const stats = data.stats || {};
     const gregorian = formatDateArabic(date);
     const hijri = formatHijriDate(date);
-    
     let tableRows = '';
     carriers.forEach(c => {
-      let status = 'قيد الانتظار';
-      let badgeClass = 'b-pend';
+      let status = 'قيد الانتظار', badgeClass = 'b-pend';
       if (c.p3) { status = 'مكتمل'; badgeClass = 'b-comp'; }
       else if (c.p2) { status = 'عائد'; badgeClass = 'b-ret'; }
       else if (c.p1) { status = 'في المركز'; badgeClass = 'b-deliv'; }
       else if (c.p0) { status = 'في الطريق'; badgeClass = 'b-trav'; }
-      
       let timeHtml = '-';
       if (c.p0) {
         const t1 = c.p1 ? `${fmtTime(c.p0)} → ${fmtTime(c.p1)}` : 'جاري...';
@@ -1208,7 +1163,6 @@ function exportAllArchives() {
           <div><span style="color:#666;">م٣:</span> <b>${t3}</b></div>
         </div>`;
       }
-      
       tableRows += `<tr>
         <td style="font-family:'Inter',sans-serif;font-weight:700;">${c.id}</td>
         <td><b>${c.name}</b><br><small style="color:#666;">${c.school}</small></td>
@@ -1217,17 +1171,16 @@ function exportAllArchives() {
         <td><span class="badge ${badgeClass}">${status}</span></td>
       </tr>`;
     });
-    
     allPages += `
       <div style="margin-bottom: 40px; page-break-after: always;">
         <div class="header">
-          <h1>📋 أرشيف يوم المتابعة - ${gregorian}</h1>
+          <h1>📋 أرشيف يوم - ${gregorian}</h1>
           <div class="hijri">🌙 ${hijri}</div>
         </div>
         <div class="stats">
-          <div class="stat-card"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي الحاملين</div></div>
+          <div class="stat-card"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي</div></div>
           <div class="stat-card"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">نشط</div></div>
-          <div class="stat-card"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تم التسليم</div></div>
+          <div class="stat-card"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تسليم</div></div>
           <div class="stat-card"><div class="stat-num">${stats.done || 0}</div><div class="stat-lbl">مكتمل</div></div>
         </div>
         <div class="table-wrap">
@@ -1239,12 +1192,11 @@ function exportAllArchives() {
       </div>
     `;
   });
-  
   const htmlContent = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>أرشيف كامل - نظام متابعة الامتحانات</title>
+<title>أرشيف كامل</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1283,15 +1235,14 @@ function exportAllArchives() {
 <button class="print-btn" onclick="window.print()">🖨️ طباعة الكل</button>
 <div class="container">
   <div class="main-header">
-    <h1>📋 الأرشيف الكامل لنظام متابعة الامتحانات</h1>
-    <div style="font-size: 16px; opacity: 0.95;">عدد الأيام المؤرشفة: ${dates.length}</div>
+    <h1>📋 الأرشيف الكامل</h1>
+    <div style="font-size: 16px; opacity: 0.95;">عدد الأيام: ${dates.length}</div>
   </div>
   ${allPages}
-  <div class="footer">تم إنشاء هذا الأرشيف بواسطة نظام متابعة الامتحانات | ${new Date().toLocaleString('ar')}</div>
+  <div class="footer">نظام متابعة الامتحانات | ${new Date().toLocaleString('ar')}</div>
 </div>
 </body>
 </html>`;
-  
   const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1299,41 +1250,33 @@ function exportAllArchives() {
   a.download = `full_archive_${Date.now()}.html`;
   a.click();
   URL.revokeObjectURL(url);
-  
-  showToast(`✅ تم تصدير ${dates.length} يوم مؤرشف بنجاح`, 'success');
+  showToast(`✅ تم تصدير ${dates.length} يوم`, 'success');
 }
 
 function importArchiveHTML(event) {
   const file = event.target.files[0];
   if (!file) return;
-  
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
       const html = e.target.result;
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-      
       const pages = doc.querySelectorAll('[style*="page-break-after"]');
       let importedCount = 0;
-      
       if (pages.length > 0) {
         pages.forEach(page => {
           const header = page.querySelector('.header h1');
           if (!header) return;
-          
           const titleText = header.textContent;
           const dateMatch = titleText.match(/(\d{1,2})\s+([\u0600-\u06FF]+)\s+(\d{4})/);
           if (!dateMatch) return;
-          
           const day = parseInt(dateMatch[1]);
           const monthName = dateMatch[2];
           const year = parseInt(dateMatch[3]);
           const monthIndex = SAUDI_MONTHS.indexOf(monthName);
           if (monthIndex === -1) return;
-          
           const dateKey = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-          
           const statNums = page.querySelectorAll('.stat-num');
           const stats = {
             total: parseInt(statNums[0]?.textContent) || 0,
@@ -1342,7 +1285,6 @@ function importArchiveHTML(event) {
             done: parseInt(statNums[3]?.textContent) || 0,
             pending: 0
           };
-          
           const rows = page.querySelectorAll('tbody tr');
           const carriers = [];
           rows.forEach((row, idx) => {
@@ -1358,7 +1300,6 @@ function importArchiveHTML(event) {
               });
             }
           });
-          
           archiveData[dateKey] = {
             date: dateKey,
             archivedAt: new Date().toISOString(),
@@ -1369,22 +1310,16 @@ function importArchiveHTML(event) {
           importedCount++;
         });
       }
-      
       if (importedCount > 0) {
         const localArchive = JSON.parse(localStorage.getItem('localArchive') || '{}');
-        Object.keys(archiveData).forEach(date => {
-          localArchive[date] = archiveData[date];
-        });
+        Object.keys(archiveData).forEach(date => { localArchive[date] = archiveData[date]; });
         localStorage.setItem('localArchive', JSON.stringify(localArchive));
-        
         renderArchiveList();
-        showToast(`✅ تم استيراد ${importedCount} يوم مؤرشف بنجاح`, 'success');
+        showToast(`✅ تم استيراد ${importedCount} يوم`, 'success');
       } else {
-        showToast('⚠️ لم يتم العثور على بيانات صالحة في الملف', 'error');
+        showToast('⚠️ لم يتم العثور على بيانات', 'error');
       }
-    } catch (err) {
-      showToast('❌ خطأ في قراءة الملف: ' + err.message, 'error');
-    }
+    } catch (err) { showToast('❌ خطأ: ' + err.message, 'error'); }
   };
   reader.readAsText(file);
   event.target.value = '';
@@ -1392,7 +1327,7 @@ function importArchiveHTML(event) {
 
 async function generateCodesForAll() {
   if (carriers.length === 0) { showToast('⚠️ لا يوجد حاملون', 'info'); return; }
-  if (!confirm('⚠️ سيتم توليد أكواد دخول لجميع الحاملين الذين ليس لديهم أكواد.')) return;
+  if (!confirm('⚠️ توليد أكواد للحاملين بدون أكواد؟')) return;
   try {
     let generatedCount = 0;
     const batch = db.batch();
@@ -1404,7 +1339,7 @@ async function generateCodesForAll() {
     });
     if (generatedCount === 0) { showToast('✅ جميع الحاملين لديهم أكواد', 'success'); return; }
     await batch.commit();
-    showToast(`✅ تم توليد ${generatedCount} رمز دخول`, 'success');
+    showToast(`✅ تم توليد ${generatedCount} رمز`, 'success');
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
@@ -1434,7 +1369,7 @@ function exportData() {
   a.download = `exam_backup_${currentDate}_${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast(`✅ تم تصدير البيانات - ${formatFullDate(currentDate)}`, 'success');
+  showToast(`✅ تم التصدير - ${formatFullDate(currentDate)}`, 'success');
 }
 
 function importData(event) {
@@ -1445,7 +1380,7 @@ function importData(event) {
     try {
       const data = JSON.parse(e.target.result);
       if (!data.carriers || !Array.isArray(data.carriers)) throw new Error('ملف غير صالح');
-      if (!confirm(`هل تريد استيراد البيانات من ${formatDateTimeArabic(data.exportDate)}؟`)) return;
+      if (!confirm(`استيراد من ${formatDateTimeArabic(data.exportDate)}؟`)) return;
       const batch = db.batch();
       data.carriers.forEach(c => {
         batch.set(db.collection('carriers').doc(c.id.toString()), { name: c.name, phone: c.phone, region: c.region, school: c.school, expectedTime: c.expectedTime, accessCode: c.accessCode, p0: c.p0, p1: c.p1, p2: c.p2, p3: c.p3 });
@@ -1457,7 +1392,7 @@ function importData(event) {
         updateDateDisplay();
         updateDateComparison();
       }
-      showToast('✅ تم استيراد البيانات', 'success');
+      showToast('✅ تم الاستيراد', 'success');
     } catch (err) { showToast('❌ خطأ: ' + err.message, 'error'); }
   };
   reader.readAsText(file);
@@ -1465,9 +1400,9 @@ function importData(event) {
 }
 
 function clearLocalData() {
-  if (confirm('⚠️ هل أنت متأكد من مسح جميع البيانات المحلية؟')) {
+  if (confirm('⚠️ مسح جميع البيانات المحلية؟')) {
     localStorage.clear();
-    showToast('🗑️ تم مسح البيانات المحلية', 'info');
+    showToast('🗑️ تم المسح', 'info');
   }
 }
 
@@ -1495,13 +1430,147 @@ async function addCarrier() {
       p0: null, p1: null, p2: null, p3: null,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    showAlert('modalAlert', `✅ تم إضافة الحامل!\n\nالرقم: ${newId}\nرمز الدخول: ${accessCode}`, 'success');
+    showAlert('modalAlert', `✅ تم الإضافة!\n\nالرقم: ${newId}\nرمز الدخول: ${accessCode}`, 'success');
     setTimeout(() => {
       closeModal('addCarrierModal');
       document.getElementById('modalAlert').className = 'alert';
       document.querySelectorAll('#addCarrierModal input').forEach(input => input.value = '');
     }, 8000);
   } catch (error) { showAlert('modalAlert', 'خطأ: ' + error.message, 'error'); }
+}
+
+// ==========================================
+// ✅ دوال التعديل والحذف
+// ==========================================
+
+function showEditCarrierModal(id) {
+  const carrier = carriers.find(c => c.id == id);
+  if (!carrier) return;
+  
+  document.getElementById('editCarrierId').value = carrier.id;
+  document.getElementById('editCarrierIdDisplay').value = carrier.id;
+  document.getElementById('editCarrierName').value = carrier.name || '';
+  document.getElementById('editCarrierPhone').value = carrier.phone || '';
+  document.getElementById('editCarrierRegion').value = carrier.region || '';
+  document.getElementById('editCarrierSchool').value = carrier.school || '';
+  document.getElementById('editCarrierTime').value = carrier.expectedTime || '';
+  document.getElementById('editModalAlert').className = 'alert';
+  document.getElementById('editCarrierModal').classList.add('active');
+}
+
+async function saveCarrierEdit() {
+  const id = document.getElementById('editCarrierId').value;
+  const name = document.getElementById('editCarrierName').value.trim();
+  const phone = document.getElementById('editCarrierPhone').value.trim();
+  const region = document.getElementById('editCarrierRegion').value.trim();
+  const school = document.getElementById('editCarrierSchool').value.trim();
+  const time = document.getElementById('editCarrierTime').value;
+  
+  if (!name || !phone || !region || !school || !time) {
+    showAlert('editModalAlert', 'الرجاء ملء جميع الحقول', 'error');
+    return;
+  }
+  
+  try {
+    await db.collection('carriers').doc(id).update({
+      name, phone, region, school,
+      expectedTime: parseInt(time)
+    });
+    showAlert('editModalAlert', '✅ تم حفظ التعديلات بنجاح!', 'success');
+    setTimeout(() => {
+      closeModal('editCarrierModal');
+      showToast('✅ تم تحديث البيانات', 'success');
+    }, 1500);
+  } catch (error) {
+    showAlert('editModalAlert', '❌ خطأ: ' + error.message, 'error');
+  }
+}
+
+async function deleteCarrier(id) {
+  const carrier = carriers.find(c => c.id == id);
+  if (!carrier) return;
+  
+  if (!confirm(`⚠️ هل أنت متأكد من حذف الحامل:\n\n👤 ${carrier.name}\n📍 ${carrier.region}\n🏫 ${carrier.school}\n\nلا يمكن التراجع عن هذا الإجراء!`)) {
+    return;
+  }
+  
+  try {
+    await db.collection('carriers').doc(id.toString()).delete();
+    showToast(`🗑️ تم حذف ${carrier.name}`, 'success');
+  } catch (error) {
+    showToast('❌ خطأ: ' + error.message, 'error');
+  }
+}
+
+// ✅ التحديد الجماعي
+function toggleSelectAll() {
+  const selectAll = document.getElementById('selectAll').checked;
+  const checkboxes = document.querySelectorAll('.carrier-checkbox');
+  checkboxes.forEach(cb => {
+    cb.checked = selectAll;
+    if (selectAll) {
+      selectedCarriers.add(cb.value);
+    } else {
+      selectedCarriers.delete(cb.value);
+    }
+  });
+  updateBulkActions();
+}
+
+function toggleCarrierSelection(id, isChecked) {
+  if (isChecked) {
+    selectedCarriers.add(id.toString());
+  } else {
+    selectedCarriers.delete(id.toString());
+  }
+  updateBulkActions();
+  
+  // تحديث checkbox الرئيسي
+  const selectAll = document.getElementById('selectAll');
+  const checkboxes = document.querySelectorAll('.carrier-checkbox');
+  const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+  selectAll.checked = allChecked;
+}
+
+function updateBulkActions() {
+  const bulkActions = document.getElementById('bulkActions');
+  const countEl = document.getElementById('selectedCount');
+  countEl.textContent = selectedCarriers.size;
+  if (selectedCarriers.size > 0) {
+    bulkActions.classList.add('show');
+  } else {
+    bulkActions.classList.remove('show');
+  }
+}
+
+function clearSelection() {
+  selectedCarriers.clear();
+  document.getElementById('selectAll').checked = false;
+  document.querySelectorAll('.carrier-checkbox').forEach(cb => cb.checked = false);
+  updateBulkActions();
+}
+
+async function deleteSelectedCarriers() {
+  if (selectedCarriers.size === 0) {
+    showToast('⚠️ لم يتم تحديد أي حامل', 'info');
+    return;
+  }
+  
+  if (!confirm(`⚠️ هل أنت متأكد من حذف ${selectedCarriers.size} حامل؟\n\nلا يمكن التراجع عن هذا الإجراء!`)) {
+    return;
+  }
+  
+  try {
+    const batch = db.batch();
+    selectedCarriers.forEach(id => {
+      batch.delete(db.collection('carriers').doc(id.toString()));
+    });
+    await batch.commit();
+    showToast(`🗑️ تم حذف ${selectedCarriers.size} حامل بنجاح`, 'success');
+    clearSelection();
+  } catch (error) {
+    showToast('❌ خطأ: ' + error.message, 'error');
+  }
 }
 
 function printCarrierList() {
@@ -1612,10 +1681,11 @@ function buildRow(c) {
   </tr>`;
 }
 
+// ✅ جدول إدارة الحاملين مع أزرار التعديل والحذف
 function renderCarriersTable() {
   const tbody = document.getElementById('carriersTableBody');
   if (carriers.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">لا توجد بيانات</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">لا توجد بيانات</td></tr>';
     return;
   }
   let html = '';
@@ -1629,7 +1699,10 @@ function renderCarriersTable() {
       complete: '<span class="badge b-comp"><span class="badge-dot"></span>مكتمل ✓</span>'
     };
     const badge = badges[s] || badges.pending;
+    const isChecked = selectedCarriers.has(carrier.id.toString()) ? 'checked' : '';
+    
     html += `<tr>
+      <td class="checkbox-cell"><input type="checkbox" class="carrier-checkbox" value="${carrier.id}" ${isChecked} onchange="toggleCarrierSelection(${carrier.id}, this.checked)"></td>
       <td class="latin">${carrier.id}</td>
       <td><div class="c-name">${carrier.name}</div></td>
       <td class="latin">${carrier.phone || '-'}</td>
@@ -1637,6 +1710,10 @@ function renderCarriersTable() {
       <td>${carrier.school}</td>
       <td><span class="access-code">${carrier.accessCode || '⚠️'}</span></td>
       <td>${badge}</td>
+      <td>
+        <button class="action-btn action-btn-edit" onclick="showEditCarrierModal(${carrier.id})" title="تعديل">✏️ تعديل</button>
+        <button class="action-btn action-btn-delete" onclick="deleteCarrier(${carrier.id})" title="حذف">🗑️ حذف</button>
+      </td>
     </tr>`;
   });
   tbody.innerHTML = html;
@@ -1746,9 +1823,7 @@ function startClock() {
 }
 document.getElementById('searchBox').addEventListener('input', renderTable);
 
-// ✅ تصحيح التاريخ عند بدء التشغيل
 window.onload = function() {
-  // استخدام التاريخ المخزن كما هو (بدون تصحيح تلقائي)
   const storedDate = localStorage.getItem('currentTrackingDate');
   if (storedDate) {
     currentDate = storedDate;
@@ -1756,7 +1831,6 @@ window.onload = function() {
     currentDate = getLocalDateStr();
     localStorage.setItem('currentTrackingDate', currentDate);
   }
-  
   createAdminAccount();
   auth.onAuthStateChanged(async (user) => {
     if (user) {
