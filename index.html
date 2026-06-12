@@ -2,758 +2,1200 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>نظام متابعة الامتحانات - النسخة الاحترافية</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة متابعة حاملي الأسئلة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --primary: #4F46E5;
-    --primary-light: #EEF2FF;
-    --success: #10B981;
-    --success-light: #D1FAE5;
-    --warning: #F59E0B;
-    --warning-light: #FEF3C7;
-    --danger: #EF4444;
-    --danger-light: #FEE2E2;
-    --info: #3B82F6;
-    --purple: #8B5CF6;
-    
+    --navy: #1E3A8A;
+    --navy-light: #DBEAFE;
+    --navy-glow: rgba(30, 58, 138, 0.5);
+    --teal: #0D9488;
+    --teal-light: #CCFBF1;
+    --amber: #B45309;
+    --amber-light: #FEF3C7;
+    --emerald: #059669;
+    --emerald-light: #D1FAE5;
+    --ocean: #0369A1;
+    --ocean-light: #E0F2FE;
+    --purple: #7C3AED;
+    --purple-light: #EDE9FE;
+    --brick: #B91C1C;
+    --brick-light: #FEE2E2;
+    --slate: #475569;
+    --slate-light: #F1F5F9;
     --bg: #F8FAFC;
     --surface: #FFFFFF;
     --border: #E2E8F0;
-    --text-main: #0F172A;
+    --text: #0F172A;
     --text-muted: #64748B;
-    
     --radius: 10px;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
-    
+    --radius-lg: 16px;
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08);
     --font-ar: 'Cairo', sans-serif;
     --font-num: 'Inter', sans-serif;
   }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-  
-  body {
-    font-family: var(--font-ar);
-    background: var(--bg);
-    color: var(--text-main);
-    font-size: 15px;
-    line-height: 1.6;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-
+  body { font-family: var(--font-ar); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; }
   .latin { font-family: var(--font-num); letter-spacing: -0.02em; }
 
-  /* --- Login Overlay --- */
-  #loginOverlay {
-    position: fixed; inset: 0; z-index: 9999;
-    background: radial-gradient(circle at top right, #EEF2FF, #F8FAFC);
-    display: flex; align-items: center; justify-content: center; padding: 20px;
-  }
-  .login-box {
-    background: var(--surface); width: 100%; max-width: 440px;
-    padding: 48px 40px; border-radius: 20px;
-    box-shadow: var(--shadow-lg); border: 1px solid var(--border);
-    position: relative; overflow: hidden;
-  }
-  .login-box::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--purple));
-  }
-  .login-title { text-align: center; font-weight: 800; font-size: 26px; margin-bottom: 30px; color: var(--text-main); }
-  .login-tabs { display: flex; background: var(--bg); padding: 5px; border-radius: 12px; margin-bottom: 30px; }
-  .l-tab { 
-    flex: 1; text-align: center; padding: 12px; font-size: 15px; font-weight: 700; 
-    cursor: pointer; border-radius: 8px; color: var(--text-muted); transition: all 0.3s ease; 
-  }
-  .l-tab.active { background: var(--surface); color: var(--primary); box-shadow: var(--shadow-sm); }
-  
-  .inp-group { margin-bottom: 24px; }
-  .inp-group label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--text-main); }
-  .inp-group input { 
-    width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 12px; 
-    font-family: var(--font-ar); font-size: 15px; transition: all 0.2s ease; background: var(--bg);
-  }
-  .inp-group input:focus { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 4px var(--primary-light); }
-  
-  .btn-login { 
-    width: 100%; padding: 16px; background: var(--primary); color: white; border: none; 
-    border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.2s ease; 
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
-  }
-  .btn-login:hover { background: #4338CA; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3); }
-  .err-msg { color: var(--danger); font-size: 14px; margin-top: 16px; text-align: center; display: none; font-weight: 600; background: var(--danger-light); padding: 10px; border-radius: 8px; }
+  .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+  .login-box { background: white; border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.25); position: relative; overflow: hidden; }
+  .login-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--navy), var(--teal), var(--emerald)); }
+  .login-title { color: var(--navy); margin-bottom: 8px; text-align: center; font-size: 28px; font-weight: 800; }
+  .login-subtitle { color: var(--text-muted); text-align: center; margin-bottom: 30px; font-size: 14px; }
+  .login-tabs { display: flex; background: var(--slate-light); padding: 5px; border-radius: 12px; margin-bottom: 30px; }
+  .login-tab { flex: 1; text-align: center; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; border-radius: 8px; color: var(--text-muted); transition: 0.3s; }
+  .login-tab.active { background: var(--surface); color: var(--navy); box-shadow: var(--shadow); }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 14px; }
+  .form-group input, .form-group select { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 12px; font-family: var(--font-ar); font-size: 15px; transition: 0.2s; background: var(--bg); }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--navy); background: var(--surface); box-shadow: 0 0 0 4px var(--navy-light); }
+  .btn { width: 100%; padding: 16px; background: var(--navy); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(30,58,138,0.25); }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(30,58,138,0.35); }
+  .btn:disabled { background: #94A3B8; cursor: not-allowed; transform: none; }
+  .btn-navy { background: var(--navy); box-shadow: 0 4px 12px rgba(30,58,138,0.25); }
+  .btn-navy:hover { background: #1E40AF; }
+  .btn-teal { background: var(--teal); box-shadow: 0 4px 12px rgba(13,148,136,0.25); }
+  .btn-teal:hover { background: #0F766E; }
+  .btn-amber { background: var(--amber); box-shadow: 0 4px 12px rgba(180,83,9,0.25); }
+  .btn-amber:hover { background: #92400E; }
+  .btn-emerald { background: var(--emerald); box-shadow: 0 4px 12px rgba(5,150,105,0.25); }
+  .btn-emerald:hover { background: #047857; }
+  .btn-ocean { background: var(--ocean); box-shadow: 0 4px 12px rgba(3,105,161,0.25); }
+  .btn-ocean:hover { background: #075985; }
+  .btn-purple { background: var(--purple); box-shadow: 0 4px 12px rgba(124,58,237,0.25); }
+  .btn-purple:hover { background: #6D28D9; }
+  .btn-brick { background: var(--brick); box-shadow: 0 4px 12px rgba(185,28,28,0.25); }
+  .btn-brick:hover { background: #991B1B; }
+  .btn-slate { background: var(--slate); box-shadow: 0 4px 12px rgba(71,85,105,0.25); }
+  .btn-slate:hover { background: #334155; }
+  .btn-small { padding: 10px 18px; font-size: 14px; width: auto; }
+  .alert { padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: none; font-weight: 600; }
+  .alert-error { background: var(--brick-light); color: var(--brick); border-right: 4px solid var(--brick); }
+  .alert-success { background: var(--emerald-light); color: #065F46; border-right: 4px solid var(--emerald); }
+  .alert-info { background: var(--ocean-light); color: #0C4A6E; border-right: 4px solid var(--ocean); }
+  .alert.show { display: block; animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  .admin-credentials { background: var(--emerald-light); border: 2px dashed var(--emerald); border-radius: 12px; padding: 16px; margin-top: 20px; text-align: center; display: none; }
+  .admin-credentials.show { display: block; animation: slideIn 0.3s ease; }
+  .admin-credentials h4 { color: #065F46; margin-bottom: 10px; font-size: 15px; }
+  .admin-credentials p { font-size: 13px; margin: 4px 0; color: #047857; }
+  .admin-credentials strong { font-family: var(--font-num); font-size: 14px; }
 
-  /* --- Main Layout --- */
-  .topbar {
-    height: 70px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border); padding: 0 32px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100;
-  }
-  .brand { font-weight: 800; font-size: 20px; display: flex; align-items: center; gap: 12px; color: var(--text-main); }
-  .brand span { color: var(--primary); }
-  .tb-right { display: flex; align-items: center; gap: 20px; }
-  .clock { font-family: var(--font-num); font-size: 15px; color: var(--text-muted); background: var(--bg); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border); font-weight: 600; }
-  .user-pill { font-size: 14px; font-weight: 700; padding: 8px 18px; border-radius: 99px; background: var(--primary-light); color: var(--primary); border: 1px solid rgba(79,70,229,0.15); }
-  .btn-out { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 18px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
-  .btn-out:hover { background: var(--danger); color: white; transform: translateY(-1px); }
-
+  .app-container { display: none; }
+  .app-container.active { display: block; }
+  .topbar { background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 70px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--navy), var(--teal)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; box-shadow: var(--shadow); }
+  .brand-title { font-size: 20px; font-weight: 800; }
+  .brand-title span { color: var(--navy); }
+  .user-menu { display: flex; align-items: center; gap: 16px; }
+  .user-pill { font-size: 14px; font-weight: 700; padding: 8px 18px; border-radius: 99px; background: var(--navy-light); color: var(--navy); border: 1px solid rgba(30,58,138,0.2); }
+  .btn-logout { background: transparent; border: 1px solid var(--brick); color: var(--brick); padding: 8px 18px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 14px; transition: 0.2s; }
+  .btn-logout:hover { background: var(--brick); color: white; }
+  .clock { font-family: var(--font-num); font-size: 15px; color: var(--text-muted); background: var(--slate-light); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border); font-weight: 600; }
   .container { max-width: 1440px; margin: 0 auto; padding: 32px; }
 
-  /* --- Admin Panel --- */
-  .admin-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow-md); }
-  .ap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-  .ap-title { font-weight: 800; font-size: 18px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
-  .date-badge { font-family: var(--font-num); font-size: 15px; font-weight: 700; background: var(--bg); padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); color: var(--text-main); }
-  
-  .add-row { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-  .add-row input { flex: 1; min-width: 120px; padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px; font-size: 15px; transition: 0.2s; }
-  .add-row input:focus { border-color: var(--primary); }
-  .btn-add { padding: 12px 28px; background: var(--success); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.2); white-space: nowrap; }
-  .btn-add:hover { transform: translateY(-2px); filter: brightness(1.05); }
-  
-  .archive-actions { display: flex; gap: 16px; align-items: center; padding-top: 24px; border-top: 1px solid var(--border); flex-wrap: wrap; }
-  .inp-date { padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px; font-family: var(--font-num); font-size: 15px; }
-  .btn-archive { 
-    padding: 12px 28px; background: var(--warning); color: white; border: none; 
-    border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; 
-    display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 4px 12px rgba(245,158,11,0.2);
-    white-space: nowrap;
-  }
-  .btn-archive:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  .tabs { display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 2px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; }
+  .tab { background: transparent; border: none; padding: 10px 20px; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--text-muted); transition: 0.3s; border-bottom: 3px solid transparent; font-family: var(--font-ar); }
+  .tab:hover { color: var(--navy); }
+  .tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  /* --- Metrics Grid --- */
-  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
-  .m-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-md); transition: 0.3s; position: relative; overflow: hidden; }
-  .m-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--primary-light); }
-  .m-label { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .m-val { font-family: var(--font-num); font-size: 40px; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 8px; }
-  .m-sub { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+  .stat-card { background: var(--surface); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: 0.3s; border-top: 4px solid var(--navy); }
+  .stat-card:nth-child(2) { border-top-color: var(--teal); }
+  .stat-card:nth-child(3) { border-top-color: var(--amber); }
+  .stat-card:nth-child(4) { border-top-color: var(--emerald); }
+  .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .stat-label { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-value { font-size: 40px; font-weight: 800; color: var(--navy); font-family: var(--font-num); line-height: 1; margin-bottom: 8px; }
+  .stat-sub { font-size: 13px; color: var(--text-muted); }
 
-  /* --- Progress Bars --- */
-  .progress-sec { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow-md); }
-  .p-row { margin-bottom: 20px; }
-  .p-row:last-child { margin-bottom: 0; }
-  .p-head { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; align-items: center; }
-  .p-lbl { font-weight: 700; color: var(--text-main); }
-  .p-pct { font-family: var(--font-num); font-weight: 800; color: var(--primary); font-size: 15px; }
-  .bar-bg { height: 12px; background: var(--bg); border-radius: 99px; overflow: hidden; border: 1px solid var(--border); }
-  .bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+  .card { background: var(--surface); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--border); }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  .card-title { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
 
-  /* --- Controls --- */
-  .controls { display: flex; gap: 12px; margin-bottom: 28px; background: var(--surface); padding: 16px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); flex-wrap: wrap; align-items: center; }
-  .search-inp { flex: 1; min-width: 280px; padding: 12px 18px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; transition: 0.2s; }
-  .search-inp:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
-  .f-btn { 
-    padding: 10px 22px; border: 2px solid var(--border); border-radius: 12px; 
-    background: var(--surface); font-size: 14px; font-weight: 700; cursor: pointer; color: var(--text-muted); transition: all 0.2s ease; 
-    white-space: nowrap;
-  }
-  .f-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-  .f-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(79,70,229,0.2); }
-
-  /* --- Table Container with Horizontal Scroll --- */
-  .tbl-wrap { 
-    background: var(--surface); 
-    border: 1px solid var(--border); 
-    border-radius: 16px; 
-    overflow: hidden; 
-    box-shadow: var(--shadow-md);
-  }
-  .table-scroll {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    font-size: 15px;
-    min-width: 900px; /* Prevent table from shrinking too much */
-  }
-  th { 
-    background: var(--bg); 
-    padding: 18px 20px; 
-    text-align: right; 
-    font-size: 12px; 
-    font-weight: 800; 
-    color: var(--text-muted); 
-    border-bottom: 2px solid var(--border); 
-    white-space: nowrap; 
-    text-transform: uppercase; 
-    letter-spacing: 0.05em; 
-  }
-  td { 
-    padding: 18px 20px; 
-    border-bottom: 1px solid var(--border); 
-    vertical-align: middle; 
-  }
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 900px; }
+  th, td { padding: 18px 20px; text-align: right; border-bottom: 1px solid var(--border); }
+  th { background: var(--slate-light); font-weight: 800; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
   tr:last-child td { border-bottom: none; }
   tbody tr { transition: background 0.15s ease; }
   tbody tr:hover { background: #F8FAFC; }
-  
-  .c-id { font-family: var(--font-num); font-weight: 700; color: var(--text-muted); font-size: 14px; }
-  .c-name { font-weight: 700; font-size: 15px; color: var(--text-main); margin-bottom: 4px; }
-  .c-school { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-  
-  /* Time Cell */
-  .t-cell { font-family: var(--font-num); font-size: 13px; line-height: 1.8; }
-  .t-ph { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-  .t-ph:last-child { margin-bottom: 0; }
-  .t-lbl { color: var(--text-muted); font-size: 12px; width: 24px; font-weight: 700; }
-  .t-val { font-weight: 600; }
-  .t-live { animation: blink 1.5s infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-  /* Badges */
   .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; font-size: 13px; font-weight: 700; border: 1px solid transparent; white-space: nowrap; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .b-pend { background: var(--warning-light); color: #B45309; border-color: rgba(245,158,11,0.2); } .b-pend .dot { background: var(--warning); }
-  .b-trav { background: var(--primary-light); color: var(--primary); border-color: rgba(79,70,229,0.2); } .b-trav .dot { background: var(--primary); animation: pulse 1.5s infinite; }
-  .b-deliv { background: var(--success-light); color: var(--success); border-color: rgba(16,185,129,0.2); } .b-deliv .dot { background: var(--success); }
-  .b-ret { background: #DBEAFE; color: #2563EB; border-color: rgba(59,130,246,0.2); } .b-ret .dot { background: #2563EB; animation: pulse 1.5s infinite; }
-  .b-comp { background: #ECFDF5; color: #059669; border-color: rgba(16,185,129,0.2); } .b-comp .dot { background: #059669; }
-  .b-over { background: var(--danger-light); color: var(--danger); border-color: rgba(239,68,68,0.2); } .b-over .dot { background: var(--danger); animation: pulse 0.8s infinite; }
-  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(0.6)} }
+  .badge-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .b-pend { background: var(--amber-light); color: var(--amber); } .b-pend .badge-dot { background: var(--amber); animation: pulse 1.5s infinite; }
+  .b-trav { background: var(--navy-light); color: var(--navy); } .b-trav .badge-dot { background: var(--navy); animation: pulse 1.5s infinite; }
+  .b-deliv { background: var(--teal-light); color: var(--teal); } .b-deliv .badge-dot { background: var(--teal); }
+  .b-ret { background: var(--ocean-light); color: var(--ocean); } .b-ret .badge-dot { background: var(--ocean); animation: pulse 1.5s infinite; }
+  .b-comp { background: var(--emerald-light); color: var(--emerald); } .b-comp .badge-dot { background: var(--emerald); }
+  .b-over { background: var(--brick-light); color: var(--brick); } .b-over .badge-dot { background: var(--brick); animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(0.6); } }
 
-  /* Buttons */
-  .act-btn { 
-    padding: 10px 20px; border-radius: 10px; border: none; font-weight: 700; 
-    font-size: 14px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; 
-    align-items: center; gap: 8px; white-space: nowrap; 
-  }
+  .progress-sec { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow); }
+  .progress-row { margin-bottom: 20px; }
+  .progress-row:last-child { margin-bottom: 0; }
+  .progress-row-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .pr-label { font-size: 14px; color: var(--text); font-weight: 700; }
+  .pr-pct { font-size: 15px; font-weight: 800; font-family: var(--font-num); color: var(--navy); }
+  .bar-bg { background: var(--slate-light); border-radius: 99px; height: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+
+  .phases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
+  .phase-box { background: var(--bg); border-radius: var(--radius-lg); padding: 20px; border: 3px solid var(--border); transition: 0.3s; }
+  .phase-box.phase1 { border-color: var(--navy); }
+  .phase-box.phase2 { border-color: var(--teal); }
+  .phase-box.phase3 { border-color: var(--emerald); }
+  .phase-title { font-size: 16px; font-weight: 800; margin-bottom: 15px; text-align: center; padding: 10px; border-radius: 8px; }
+  .phase1 .phase-title { background: var(--navy); color: white; }
+  .phase2 .phase-title { background: var(--teal); color: white; }
+  .phase3 .phase-title { background: var(--emerald); color: white; }
+  .timer-display { font-size: 2em; font-weight: 700; text-align: center; padding: 15px; background: white; border-radius: 10px; margin: 15px 0; font-family: var(--font-num); }
+  .phase1 .timer-display { color: var(--navy); }
+  .phase2 .timer-display { color: var(--teal); }
+  .phase3 .timer-display { color: var(--emerald); }
+
+  .controls { display: flex; gap: 12px; margin-bottom: 24px; background: var(--surface); padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
+  .search-inp { flex: 1; min-width: 280px; padding: 12px 18px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; font-family: var(--font-ar); }
+  .search-inp:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 4px var(--navy-light); }
+  .f-btn { padding: 10px 22px; border: 2px solid var(--border); border-radius: 12px; background: var(--surface); font-size: 14px; font-weight: 700; cursor: pointer; color: var(--text-muted); transition: 0.2s; white-space: nowrap; font-family: var(--font-ar); }
+  .f-btn:hover { border-color: var(--navy); color: var(--navy); }
+  .f-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+  .act-btn { padding: 10px 20px; border-radius: 10px; border: none; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; font-family: var(--font-ar); }
   .act-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
-  .btn-s { background: var(--purple); color: white; box-shadow: 0 4px 12px rgba(139,92,246,0.2); }
-  .btn-p1 { background: var(--success); color: white; box-shadow: 0 4px 12px rgba(16,185,129,0.2); }
-  .btn-p2 { background: var(--info); color: white; box-shadow: 0 4px 12px rgba(59,130,246,0.2); }
-  .btn-p3 { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79,70,229,0.2); }
-  .btn-dis { background: var(--bg); color: var(--text-muted); border: 2px solid var(--border); cursor: default; box-shadow: none; }
+  .btn-dis { background: var(--slate-light); color: var(--text-muted); border: 2px solid var(--border); cursor: default; }
   .btn-dis:hover { transform: none; filter: none; }
 
-  .reg-head { background: var(--bg); font-weight: 800; font-size: 14px; padding: 14px 20px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; color: var(--text-main); }
-  .reg-count { background: var(--primary); color: white; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-family: var(--font-num); font-weight: 700; }
-  
-  .hidden { display: none !important; }
-  .empty { padding: 48px; text-align: center; color: var(--text-muted); font-size: 15px; }
-
-  /* Archive List */
-  .arch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-  .arch-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; cursor: pointer; transition: all 0.2s ease; }
-  .arch-card:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-  .arch-date { font-family: var(--font-num); font-weight: 800; font-size: 22px; color: var(--primary); margin-bottom: 12px; }
-  .arch-stats { font-size: 13px; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: 500; }
-  .arch-btns { display: flex; gap: 10px; }
-  .a-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-  .a-view { background: var(--primary-light); color: var(--primary); }
-  .a-view:hover { background: var(--primary); color: white; }
-  .a-del { background: var(--danger-light); color: var(--danger); width: 44px; flex: none; }
-  .a-del:hover { background: var(--danger); color: white; }
-
-  /* ============================================
-     MOBILE RESPONSIVE DESIGN (FIXED)
-     ============================================ */
-  
-  @media (max-width: 1024px) {
-    .metrics { grid-template-columns: repeat(2, 1fr); }
-    .container { padding: 24px; }
+  /* 🚀 زر الانطلاق بتأثير بلوري كحلي متوهج */
+  .btn-launch {
+    background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 50%, #1E3A8A 100%);
+    color: white !important;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    font-family: var(--font-ar);
+    box-shadow: 
+      0 0 20px rgba(30, 58, 138, 0.4),
+      0 0 40px rgba(30, 58, 138, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
   }
-  
-  @media (max-width: 768px) {
-    /* Topbar Mobile */
-    .topbar {
-      height: auto;
-      padding: 12px 16px;
-      flex-wrap: wrap;
-      gap: 12px;
+
+  .btn-launch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-launch:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 0 30px rgba(30, 58, 138, 0.6),
+      0 0 60px rgba(30, 58, 138, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-launch:hover::before {
+    left: 100%;
+  }
+
+  .btn-launch:active {
+    transform: translateY(0);
+    box-shadow: 
+      0 0 15px rgba(30, 58, 138, 0.5),
+      inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .reg-head { background: var(--slate-light); font-weight: 800; font-size: 14px; padding: 14px 20px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .reg-count { background: var(--navy); color: white; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-family: var(--font-num); font-weight: 700; }
+  .c-id { font-family: var(--font-num); font-weight: 700; color: var(--text-muted); font-size: 14px; }
+  .c-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .c-school { font-size: 13px; color: var(--text-muted); }
+  .c-phone { font-family: var(--font-num); font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .access-code { background: var(--navy-light); color: var(--navy); padding: 4px 10px; border-radius: 6px; font-family: var(--font-num); font-weight: 700; font-size: 13px; display: inline-block; }
+
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  .modal.active { display: flex; }
+  .modal-content { background: white; border-radius: var(--radius-lg); padding: 30px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .modal-title { font-size: 20px; font-weight: 800; }
+  .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-muted); }
+
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: white; padding: 16px 28px; border-radius: 12px; font-weight: 700; font-size: 14px; box-shadow: var(--shadow-lg); z-index: 10000; opacity: 0; transition: all 0.3s; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.success { background: var(--emerald); }
+  .toast.error { background: var(--brick); }
+  .toast.info { background: var(--ocean); }
+  .hidden { display: none !important; }
+
+  /* Sync Section */
+  .sync-section { background: linear-gradient(135deg, var(--ocean-light) 0%, var(--purple-light) 100%); border: 2px dashed var(--ocean); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .sync-info { flex: 1; min-width: 250px; }
+  .sync-info h3 { font-size: 16px; font-weight: 800; color: var(--ocean); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .sync-info p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .sync-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* Code Generation Section */
+  .code-gen-section { background: var(--emerald-light); border: 2px dashed var(--emerald); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+  .code-gen-section h3 { font-size: 16px; font-weight: 800; color: #065F46; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .code-gen-section p { font-size: 13px; color: #047857; margin-bottom: 16px; }
+  .code-gen-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* Codes Display Modal */
+  .codes-list { max-height: 400px; overflow-y: auto; }
+  .code-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .code-item-info { flex: 1; }
+  .code-item-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .code-item-details { font-size: 12px; color: var(--text-muted); }
+  .code-item-code { background: var(--navy); color: white; padding: 6px 12px; border-radius: 6px; font-family: var(--font-num); font-weight: 700; font-size: 14px; }
+
+  /* Print List */
+  .print-list { display: none; }
+  @media print {
+    body * { visibility: hidden; }
+    .print-list, .print-list * { visibility: visible; }
+    .print-list { 
+      display: block !important; 
+      position: absolute; 
+      left: 0; 
+      top: 0; 
+      width: 100%; 
+      padding: 30px;
+      background: white;
     }
-    .brand { font-size: 18px; }
-    .tb-right { width: 100%; justify-content: space-between; }
-    .user-pill { font-size: 12px; padding: 6px 12px; }
-    .clock { font-size: 13px; padding: 6px 10px; }
-    .btn-out { padding: 6px 12px; font-size: 13px; }
-    
-    .container { padding: 16px; }
-    
-    /* Metrics Mobile */
-    .metrics { 
-      grid-template-columns: repeat(2, 1fr); 
-      gap: 12px;
+    .print-list h2 { 
+      font-size: 24px; 
+      margin-bottom: 10px; 
+      text-align: center;
+      color: #1E3A8A;
     }
-    .m-card { padding: 16px; }
-    .m-val { font-size: 32px; }
-    .m-label { font-size: 11px; }
-    .m-sub { font-size: 11px; }
-    
-    /* Admin Panel Mobile */
-    .admin-panel { padding: 20px; }
-    .add-row { flex-direction: column; }
-    .add-row input { min-width: 100%; }
-    .btn-add { width: 100%; justify-content: center; }
-    .archive-actions { flex-direction: column; align-items: stretch; }
-    .inp-date { width: 100%; }
-    .btn-archive { width: 100%; justify-content: center; }
-    
-    /* Controls Mobile */
-    .controls { 
-      flex-direction: column; 
-      align-items: stretch;
-      padding: 12px;
+    .print-list > p { 
+      text-align: center; 
+      margin-bottom: 20px; 
+      color: #666;
+      font-size: 14px;
     }
-    .search-inp { 
-      min-width: 100%; 
-      width: 100%;
-    }
-    .f-btn { 
-      flex: 1; 
-      min-width: calc(50% - 4px);
-      padding: 10px 16px;
+    .print-table { 
+      width: 100%; 
+      border-collapse: collapse;
       font-size: 13px;
     }
-    
-    /* Table: Horizontal Scroll on Mobile */
-    .tbl-wrap { border-radius: 12px; }
-    .table-scroll {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+    .print-table th { 
+      background: #1E3A8A;
+      color: white;
+      padding: 10px 8px;
+      text-align: center;
+      border: 1px solid #000;
+      font-weight: 700;
+      font-size: 12px;
     }
-    table { min-width: 800px; }
-    
-    /* Progress section mobile */
-    .progress-sec { padding: 20px; }
-    .p-lbl { font-size: 13px; }
-    
-    /* Archive grid mobile */
-    .arch-grid { grid-template-columns: 1fr; }
+    .print-table td { 
+      border: 1px solid #000;
+      padding: 8px 6px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .print-table tr:nth-child(even) {
+      background: #F1F5F9;
+    }
+    /* Column Widths - Optimized */
+    .print-table th:nth-child(1),
+    .print-table td:nth-child(1) { width: 40px; font-weight: 700; }
+    .print-table th:nth-child(2),
+    .print-table td:nth-child(2) { width: 130px; text-align: right; padding-right: 8px; font-size: 12px; }
+    .print-table th:nth-child(3),
+    .print-table td:nth-child(3) { width: 100px; font-size: 12px; }
+    .print-table th:nth-child(4),
+    .print-table td:nth-child(4) { width: 150px; text-align: right; padding-right: 8px; font-size: 11px; }
+    /* Access Code Column - Prominent */
+    .print-table th:nth-child(5),
+    .print-table td:nth-child(5) {
+      width: 180px;
+      background: #DBEAFE;
+      font-weight: 900;
+      font-size: 18px;
+      font-family: 'Inter', monospace;
+      letter-spacing: 3px;
+      color: #1E3A8A;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .print-list > p:last-child {
+      margin-top: 30px;
+      font-size: 11px;
+      color: #999;
+      border-top: 1px dashed #ccc;
+      padding-top: 10px;
+    }
   }
-  
+
+  @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .container { padding: 24px; } }
+  @media (max-width: 768px) {
+    .topbar { height: auto; padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
+    .brand { font-size: 18px; }
+    .user-menu { width: 100%; justify-content: space-between; }
+    .container { padding: 16px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .stat-card { padding: 16px; }
+    .stat-value { font-size: 32px; }
+    .card { padding: 20px; }
+    .phases-grid { grid-template-columns: 1fr; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .search-inp { min-width: 100%; }
+    .f-btn { flex: 1; min-width: calc(50% - 4px); }
+    table { min-width: 800px; }
+  }
   @media (max-width: 480px) {
     .login-box { padding: 32px 24px; }
     .login-title { font-size: 22px; }
-    
-    .metrics { grid-template-columns: 1fr; }
-    .m-card { padding: 14px; }
-    .m-val { font-size: 28px; }
-    
-    .f-btn { 
-      min-width: 100%;
-      margin-bottom: 4px;
-    }
-    
-    .badge { 
-      font-size: 12px;
-      padding: 5px 10px;
-    }
-    
-    .c-name { font-size: 14px; }
-    .c-school { font-size: 12px; }
-    
-    .t-cell { font-size: 12px; }
-    .t-lbl { font-size: 11px; width: 20px; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .f-btn { min-width: 100%; }
   }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="loginOverlay">
+<!-- Login Screen -->
+<div id="loginScreen" class="login-screen">
   <div class="login-box">
     <div class="login-title">📋 نظام المتابعة</div>
+    <div class="login-subtitle">لوحة متابعة الامتحانات - مزامنة فورية</div>
+    <div id="loginAlert" class="alert"></div>
     <div class="login-tabs">
-      <div class="l-tab active" onclick="swLogin('carrier')" id="ltC">حامل أسئلة</div>
-      <div class="l-tab" onclick="swLogin('admin')" id="ltA">مدير النظام</div>
+      <div class="login-tab active" onclick="switchLoginTab('carrier')">حامل أسئلة</div>
+      <div class="login-tab" onclick="switchLoginTab('admin')">مدير النظام</div>
     </div>
-    <div id="frmC">
-      <div class="inp-group"><label>الرقم التسلسلي (ID)</label><input type="number" id="cId" placeholder="مثال: 1" class="latin"></div>
-      <button class="btn-login" onclick="logCarrier()">دخول كحامل أسئلة</button>
+    <div id="formCarrier">
+      <div class="form-group">
+        <label>الرقم التسلسلي (ID)</label>
+        <input type="number" id="carrierId" placeholder="أدخل رقمك التسلسلي" class="latin">
+      </div>
+      <div class="form-group">
+        <label>رمز الدخول (Access Code)</label>
+        <input type="text" id="carrierCode" placeholder="أدخل رمز الدخول" class="latin">
+      </div>
+      <button class="btn btn-navy" onclick="loginCarrier()">دخول كحامل أسئلة</button>
+      <div style="margin-top: 15px; padding: 12px; background: var(--ocean-light); border-radius: 8px; font-size: 12px; color: var(--ocean); text-align: center; border: 1px dashed var(--ocean);">
+        💡 احصل على بيانات الدخول من مدير النظام
+      </div>
     </div>
-    <div id="frmA" class="hidden">
-      <div class="inp-group"><label>كلمة المرور</label><input type="password" id="aPass" placeholder="••••••••"></div>
-      <button class="btn-login" onclick="logAdmin()">دخول كمدير</button>
+    <div id="formAdmin" style="display:none;">
+      <div class="form-group">
+        <label>البريد الإلكتروني</label>
+        <input type="email" id="adminEmail" placeholder="admin@examtraking.local" class="latin">
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <input type="password" id="adminPassword" placeholder="••••••••">
+      </div>
+      <button class="btn btn-navy" onclick="loginAdmin()">دخول كمدير</button>
     </div>
-    <div class="err-msg" id="lErr"></div>
+    <div class="admin-credentials" id="adminCredentials">
+      <h4>✅ تم إنشاء حساب المدير بنجاح!</h4>
+      <p>البريد الإلكتروني: <strong>admin@examtraking.local</strong></p>
+      <p>كلمة المرور: <strong>Admin@2026</strong></p>
+      <p style="margin-top:10px;font-size:12px;">يمكنك الآن تسجيل الدخول كمدير</p>
+    </div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app" class="hidden">
+<!-- Print List -->
+<div class="print-list" id="printList">
+  <h2>📋 قائمة حاملي الأسئلة وأكواد الدخول</h2>
+  <p>التاريخ: <span id="printDate"></span> | العدد: <span id="printCount"></span> حامل</p>
+  <table class="print-table" id="printTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>الاسم</th>
+        <th>المنطقة</th>
+        <th>المدرسة</th>
+        <th>🔑 رمز الدخول</th>
+      </tr>
+    </thead>
+    <tbody id="printTableBody"></tbody>
+  </table>
+  <p>️ هذه القائمة سرية - يجب حفظها في مكان آمن وعدم مشاركتها إلا مع الحامل المعني</p>
+</div>
+
+<!-- Main App -->
+<div id="appContainer" class="app-container">
   <div class="topbar">
-    <div class="brand">📋 لوحة <span>المتابعة</span></div>
-    <div class="tb-right">
+    <div class="brand">
+      <div class="brand-icon">📋</div>
+      <div class="brand-title">لوحة <span>المتابعة</span></div>
+    </div>
+    <div class="user-menu">
       <span class="user-pill" id="uDisp">--</span>
       <div class="clock latin" id="clk">--:--:--</div>
-      <button class="btn-out" onclick="logout()">تسجيل الخروج</button>
+      <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
     </div>
   </div>
-
   <div class="container">
-    <!-- ADMIN PANEL -->
-    <div id="admPanel" class="admin-panel hidden">
-      <div class="ap-header">
-        <div class="ap-title">⚙️ إدارة النظام</div>
-        <div class="date-badge latin" id="curDate">--/--/----</div>
-      </div>
-      
-      <div class="login-tabs" style="margin-bottom:24px;">
-        <div class="l-tab active" onclick="swAdmTab('act')" id="tabAct">المتابعة الحالية</div>
-        <div class="l-tab" onclick="swAdmTab('arc')" id="tabArc">️ الأرشيف اليومي</div>
-      </div>
+    <div class="tabs" id="tabsContainer">
+      <button class="tab active" onclick="switchTab('dashboard')">📊 لوحة التحكم</button>
+      <button class="tab admin-only" onclick="switchTab('carriers')">👥 إدارة الحاملين</button>
+      <button class="tab admin-only" onclick="switchTab('sync')">🔄 المزامنة</button>
+      <button class="tab" onclick="switchTab('tracking')">⏰ التتبع الزمني</button>
+    </div>
 
-      <div id="admAct">
-        <div class="add-row">
-          <input type="text" id="nName" placeholder="اسم الحامل">
-          <input type="text" id="nReg" placeholder="المنطقة">
-          <input type="text" id="nSch" placeholder="المدرسة">
-          <input type="number" id="nExp" placeholder="الوقت المتوقع (دقيقة)" class="latin" style="max-width:160px;">
-          <button class="btn-add" onclick="addC()"> إضافة حامل جديد</button>
+    <!-- Dashboard Tab -->
+    <div id="dashboardTab" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">إجمالي الحاملين</div><div class="stat-value latin" id="statTotal">0</div><div class="stat-sub">عدد المسجلين في النظام</div></div>
+        <div class="stat-card"><div class="stat-label">في الطريق / المركز</div><div class="stat-value latin" id="statActive">0</div><div class="stat-sub">حاملين نشطين حالياً</div></div>
+        <div class="stat-card"><div class="stat-label">تم التسليم</div><div class="stat-value latin" id="statDelivered">0</div><div class="stat-sub">أسئلة تم تسليمها للمراكز</div></div>
+        <div class="stat-card"><div class="stat-label">مهام مكتملة</div><div class="stat-value latin" id="statDone">0</div><div class="stat-sub">إجابات تم تسليمها بنجاح</div></div>
+      </div>
+      <div class="progress-sec">
+        <div style="font-size:18px; font-weight:800; margin-bottom:24px; display:flex; align-items:center; gap:10px;"> مستوى الإنجاز العام</div>
+        <div class="progress-row">
+          <div class="progress-row-top"><span class="pr-label">التقدم الإجمالي</span><span class="pr-pct latin" id="pct1">0%</span></div>
+          <div class="bar-bg"><div class="bar-fill" id="bar1" style="width:0%;background:var(--navy)"></div></div>
         </div>
-        <div class="archive-actions">
-          <div style="flex:1; display:flex; align-items:center; gap:12px; flex-wrap:wrap; width:100%;">
-            <label style="font-size:14px;font-weight:700;color:var(--text-main);white-space:nowrap;">تاريخ النموذج الجديد:</label>
-            <input type="date" id="nextDate" class="inp-date latin" style="flex:1;max-width:260px;">
+        <div class="progress-row">
+          <div class="progress-row-top"><span class="pr-label">تسليم الأسئلة للمراكز</span><span class="pr-pct latin" id="pct2">0%</span></div>
+          <div class="bar-bg"><div class="bar-fill" id="bar2" style="width:0%;background:var(--teal)"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-row-top"><span class="pr-label">تسليم مغلفات الإجابات للامتحانات</span><span class="pr-pct latin" id="pct3">0%</span></div>
+          <div class="bar-bg"><div class="bar-fill" id="bar3" style="width:0%;background:var(--amber)"></div></div>
+        </div>
+      </div>
+      <div class="controls">
+        <input class="search-inp" id="searchBox" type="text" placeholder="🔍 ابحث باسم الحامل أو المنطقة أو المدرسة...">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;">
+          <button class="f-btn active" onclick="setFilter('all',this)">الكل</button>
+          <button class="f-btn" onclick="setFilter('pending',this)">قيد الانتظار</button>
+          <button class="f-btn" onclick="setFilter('travelling',this)">في الطريق</button>
+          <button class="f-btn" onclick="setFilter('delivered',this)">في المركز</button>
+          <button class="f-btn" onclick="setFilter('returning',this)">عائد</button>
+          <button class="f-btn" onclick="setFilter('complete',this)">مكتمل</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن (المراحل)</th><th>الحالة</th><th>الإجراء</th></tr></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carriers Tab -->
+    <div id="carriersTab" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">👥 إدارة حاملي الأسئلة</h2>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-emerald btn-small" onclick="showAddCarrierModal()">+ إضافة حامل جديد</button>
+            <button class="btn btn-ocean btn-small" onclick="printCarrierList()">🖨️ طباعة قائمة الدخول</button>
           </div>
-          <button class="btn-archive" onclick="archiveReset()">💾 حفظ اليوم الحالي وبدء نموذج جديد</button>
+        </div>
+        <div style="background:var(--ocean-light);border:1px solid var(--ocean);border-radius:12px;padding:16px;margin-bottom:20px;font-size:14px;color:var(--ocean);">
+          💡 <strong>كيفية دخول حاملي الأسئلة:</strong> بعد إضافة حامل جديد، سيظهر رمز دخول خاص به. اضغط على "طباعة قائمة الدخول" لتوليد قائمة بجميع الحاملين مع أكوادهم، ثم وزعها عليهم.
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>المنطقة</th><th>المدرسة</th><th>رمز الدخول</th><th>الحالة</th></tr></thead>
+              <tbody id="carriersTableBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div id="admArc" class="hidden">
-        <div class="arch-grid" id="arcList"></div>
+    <!-- Sync Tab -->
+    <div id="syncTab" class="tab-content">
+      <div class="card">
+        <h2 class="card-title">🔄 المزامنة وإدارة الأكواد</h2>
+        
+        <div class="code-gen-section">
+          <h3>🔑 توليد أكواد الدخول</h3>
+          <p>هذه الأداة تقوم بتوليد أكواد دخول فريدة لجميع الحاملين الذين ليس لديهم أكواد (الحاملين القدامى). بعد التوليد، يمكنك طباعة القائمة وتوزيعها عليهم.</p>
+          <div class="code-gen-actions">
+            <button class="btn btn-emerald btn-small" onclick="generateCodesForAll()">🔑 توليد أكواد لجميع الحاملين</button>
+            <button class="btn btn-navy btn-small" onclick="showAllCodes()"> عرض جميع الأكواد</button>
+          </div>
+        </div>
+
+        <div class="sync-section">
+          <div class="sync-info">
+            <h3>💾 مزامنة البيانات</h3>
+            <p>النظام متصل بـ Firebase والمزامنة تلقائية. يمكنك أيضاً تصدير/استيراد البيانات يدوياً للنسخ الاحتياطي.</p>
+          </div>
+          <div class="sync-btns">
+            <button class="btn btn-ocean btn-small" onclick="exportData()">📤 تصدير البيانات</button>
+            <button class="btn btn-purple btn-small" onclick="document.getElementById('importFile').click()"> استيراد</button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+            <button class="btn btn-brick btn-small" onclick="clearLocalData()">🗑️ مسح المحلي</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- METRICS -->
-    <div class="metrics">
-      <div class="m-card"><div class="m-label">إجمالي الحاملين</div><div class="m-val latin" id="sTot">0</div><div class="m-sub">عدد المسجلين في النظام</div></div>
-      <div class="m-card"><div class="m-label">في الطريق / المركز</div><div class="m-val latin" id="sAct">0</div><div class="m-sub">حاملين نشطين حالياً</div></div>
-      <div class="m-card"><div class="m-label">تم التسليم</div><div class="m-val latin" id="sDel">0</div><div class="m-sub">أسئلة تم تسليمها للمراكز</div></div>
-      <div class="m-card"><div class="m-label">مهام مكتملة</div><div class="m-val latin" id="sDone">0</div><div class="m-sub">إجابات تم تسليمها بنجاح</div></div>
-    </div>
-
-    <!-- PROGRESS -->
-    <div class="progress-sec">
-      <div style="font-size:18px; font-weight:800; margin-bottom:28px; display:flex; align-items:center; gap:10px;">📊 مستوى الإنجاز العام</div>
-      <div class="p-row">
-        <div class="p-head"><span class="p-lbl">التقدم الإجمالي</span><span class="p-pct latin" id="p1">0%</span></div>
-        <div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%;background:var(--primary)"></div></div>
-      </div>
-      <div class="p-row">
-        <div class="p-head"><span class="p-lbl">تسليم الأسئلة للمراكز</span><span class="p-pct latin" id="p2">0%</span></div>
-        <div class="bar-bg"><div class="bar-fill" id="b2" style="width:0%;background:var(--success)"></div></div>
-      </div>
-      <div class="p-row">
-        <div class="p-head"><span class="p-lbl">تسليم مغلفات الإجابات للامتحانات</span><span class="p-pct latin" id="p3">0%</span></div>
-        <div class="bar-bg"><div class="bar-fill" id="b3" style="width:0%;background:var(--warning)"></div></div>
-      </div>
-    </div>
-
-    <!-- CONTROLS -->
-    <div class="controls">
-      <input class="search-inp" id="src" type="text" placeholder="🔍 ابحث باسم الحامل أو المنطقة أو المدرسة...">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;">
-        <button class="f-btn active" onclick="setF('all',this)">الكل</button>
-        <button class="f-btn" onclick="setF('pending',this)">قيد الانتظار</button>
-        <button class="f-btn" onclick="setF('travelling',this)">في الطريق للمركز</button>
-        <button class="f-btn" onclick="setF('delivered',this)">في المركز</button>
-        <button class="f-btn" onclick="setF('returning',this)">عائد بالمغلف</button>
-        <button class="f-btn" onclick="setF('complete',this)">مكتمل</button>
-      </div>
-    </div>
-
-    <!-- TABLE -->
-    <div class="tbl-wrap">
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th width="50">#</th>
-              <th>حامل الأسئلة</th>
-              <th>المنطقة</th>
-              <th>الزمن (المراحل)</th>
-              <th>الحالة</th>
-              <th>الإجراء</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
+    <!-- Tracking Tab -->
+    <div id="trackingTab" class="tab-content">
+      <div class="card">
+        <h2 class="card-title">⏰ التتبع الزمني للمراحل</h2>
+        <div style="margin-top: 20px;">
+          <div class="form-group">
+            <label>اختر حامل الأسئلة:</label>
+            <select id="carrierSelect" onchange="loadCarrierTracking()" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 10px; font-family: var(--font-ar); font-size: 15px;">
+              <option value="">-- اختر --</option>
+            </select>
+          </div>
+          <div id="trackingContent" style="display: none;">
+            <div class="phases-grid">
+              <div class="phase-box phase1">
+                <div class="phase-title">🚗 المرحلة الأولى: انطلاق من المديرية</div>
+                <div class="timer-display" id="timer1">--:--:--</div>
+                <button class="btn btn-navy" id="btnPhase1" onclick="startPhase1()">تسجيل الانطلاق من المديرية</button>
+              </div>
+              <div class="phase-box phase2">
+                <div class="phase-title">🎯 المرحلة الثانية: وقت الامتحان</div>
+                <div class="timer-display" id="timer2">--:--:--</div>
+                <button class="btn btn-teal" id="btnPhase2" onclick="startPhase2()">✓ تسليم الأسئلة للمركز</button>
+              </div>
+              <div class="phase-box phase3">
+                <div class="phase-title">✅ المرحلة الثالثة: تسليم الإجابات</div>
+                <div class="timer-display" id="timer3">--:--:--</div>
+                <button class="btn btn-emerald" id="btnPhase3" onclick="startPhase3()">✓ استلام مغلف الإجابات</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Add Carrier Modal -->
+<div id="addCarrierModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">👥 إضافة حامل أسئلة جديد</h3>
+      <button class="modal-close" onclick="closeModal('addCarrierModal')">&times;</button>
+    </div>
+    <div id="modalAlert" class="alert"></div>
+    <div class="form-group"><label>الاسم الكامل</label><input type="text" id="newCarrierName" placeholder="أدخل اسم الحامل"></div>
+    <div class="form-group"><label>رقم الهاتف</label><input type="tel" id="newCarrierPhone" placeholder="05xxxxxxxx" class="latin"></div>
+    <div class="form-group"><label>المنطقة</label><input type="text" id="newCarrierRegion" placeholder="أدخل المنطقة"></div>
+    <div class="form-group"><label>المدرسة</label><input type="text" id="newCarrierSchool" placeholder="أدخل اسم المدرسة"></div>
+    <div class="form-group"><label>الوقت المتوقع (دقيقة)</label><input type="number" id="newCarrierTime" placeholder="95" class="latin"></div>
+    <button class="btn btn-emerald" onclick="addCarrier()">إضافة الحامل</button>
+  </div>
+</div>
+
+<!-- Show All Codes Modal -->
+<div id="showCodesModal" class="modal">
+  <div class="modal-content" style="max-width: 700px;">
+    <div class="modal-header">
+      <h3 class="modal-title">🔑 جميع أكواد الدخول</h3>
+      <button class="modal-close" onclick="closeModal('showCodesModal')">&times;</button>
+    </div>
+    <div style="background:var(--navy-light);border:1px solid var(--navy);border-radius:12px;padding:16px;margin-bottom:20px;font-size:14px;color:var(--navy);">
+      💡 هذه القائمة تحتوي على جميع الحاملين مع أكواد دخولهم. احفظها في مكان آمن.
+    </div>
+    <div class="codes-list" id="codesList"></div>
+    <button class="btn btn-ocean" style="margin-top:20px;" onclick="printCarrierList()">️ طباعة القائمة</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
 <script>
-// DATA
-const DEF=[
-{id:1,name:"محمد غريب",region:"حارم",school:"مشاعل الحرية الأولى",exp:95,p0:null,p1:null,p2:null,p3:null},
-{id:2,name:"هشام حورية",region:"حارم",school:"القوس",exp:75,p0:null,p1:null,p2:null,p3:null},
-{id:3,name:"احمد نصر الحسين",region:"حارم",school:"كفرتخاريم القديمة",exp:65,p0:null,p1:null,p2:null,p3:null},
-{id:4,name:"محمد ثروت كادك",region:"حارم",school:"ثانوية قورقنيا الأولى",exp:60,p0:null,p1:null,p2:null,p3:null},
-{id:5,name:"يوسف حاج يوسف",region:"حارم",school:"رضوة ح2",exp:55,p0:null,p1:null,p2:null,p3:null},
-{id:6,name:"يوسف غنيمي",region:"حارم",school:"عدنان صطوف",exp:60,p0:null,p1:null,p2:null,p3:null},
-{id:7,name:"ابراهيم محمد الابراهيم",region:"معرتمصرين",school:"الثانوية الصناعية",exp:55,p0:null,p1:null,p2:null,p3:null},
-{id:8,name:"سامح سرحان",region:"معرتمصرين",school:"عبد الرحمن بن عوف",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:9,name:"منير العلي",region:"معرتمصرين",school:"نهاد علولو",exp:35,p0:null,p1:null,p2:null,p3:null},
-{id:10,name:"أحمد علي اليوسف",region:"معرتمصرين",school:"بهيج نجار",exp:40,p0:null,p1:null,p2:null,p3:null},
-{id:11,name:"معمر حاج حمدان",region:"خان شيخون",school:"خالد بن الوليد",exp:80,p0:null,p1:null,p2:null,p3:null},
-{id:12,name:"احمد بربور",region:"خان شيخون",school:"عثمان بن عفان الأولى",exp:100,p0:null,p1:null,p2:null,p3:null},
-{id:13,name:"حسام الأسعد",region:"خان شيخون",school:"حيش الشمالية",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:14,name:"عزام العلي",region:"خان شيخون",school:"خديجة بنت خويلد",exp:60,p0:null,p1:null,p2:null,p3:null},
-{id:15,name:"مؤيد الزين",region:"سرمدا",school:"البردقلي",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:16,name:"محمد حمود حاج علي",region:"سرمدا",school:"ثانوية الدانا الثانية",exp:75,p0:null,p1:null,p2:null,p3:null},
-{id:17,name:"رضوان عدلة",region:"سرمدا",school:"عمر المختار",exp:95,p0:null,p1:null,p2:null,p3:null},
-{id:18,name:"أسامة حاج حسين",region:"سرمدا",school:"الشيماء",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:19,name:"عامر الحسون",region:"سرمدا",school:"محمد رزوق",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:20,name:"جميل حميدي",region:"سرمدا",school:"ميسلون",exp:85,p0:null,p1:null,p2:null,p3:null},
-{id:21,name:"جهاد الطه",region:"اريحا",school:"شهداء كنصفرة",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:22,name:"زياد زريق",region:"اريحا",school:"خالد بن الوليد",exp:90,p0:null,p1:null,p2:null,p3:null},
-{id:23,name:"صالح يونسو",region:"اريحا",school:"ثانوية احسم الأولى",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:24,name:"ابراهيم المعروف",region:"اريحا",school:"اورم الجوز الثانية",exp:45,p0:null,p1:null,p2:null,p3:null},
-{id:25,name:"سامر عاقل",region:"اريحا",school:"ثانوية محمبل",exp:45,p0:null,p1:null,p2:null,p3:null},
-{id:26,name:"ماجد الابراهيم",region:"اريحا",school:"جابر بن حيان",exp:50,p0:null,p1:null,p2:null,p3:null},
-{id:27,name:"عمار الاحمد",region:"اريحا",school:"الثانوية الصناعية",exp:50,p0:null,p1:null,p2:null,p3:null},
-{id:28,name:"محمد برهان حجون",region:"اريحا",school:"الامام مالك",exp:50,p0:null,p1:null,p2:null,p3:null},
-{id:29,name:"محمد جواد",region:"المعرة",school:"شهداء المعرة",exp:80,p0:null,p1:null,p2:null,p3:null},
-{id:30,name:"زاهر الخشن",region:"المعرة",school:"النعمان",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:31,name:"احمد نعنع",region:"المعرة",school:"دار السلام",exp:80,p0:null,p1:null,p2:null,p3:null},
-{id:32,name:"مجد اقدح",region:"المعرة",school:"المتوسطة",exp:95,p0:null,p1:null,p2:null,p3:null},
-{id:33,name:"أسامة السعد",region:"المعرة",school:"عمرو بن العاص",exp:60,p0:null,p1:null,p2:null,p3:null},
-{id:34,name:"عبد الله السوادي",region:"سراقب",school:"عثمان بن عفان",exp:40,p0:null,p1:null,p2:null,p3:null},
-{id:35,name:"محمد صبحي الحافظ",region:"سراقب",school:"تل الطوقان الثالثة",exp:45,p0:null,p1:null,p2:null,p3:null},
-{id:36,name:"محمد سالم",region:"سراقب",school:"ثانوية الخنساء",exp:45,p0:null,p1:null,p2:null,p3:null},
-{id:37,name:"يحيى مصفرة",region:"سراقب",school:"ثانوية سراقب الأولى",exp:45,p0:null,p1:null,p2:null,p3:null},
-{id:38,name:"انمار جميل حاج حمدان",region:"إدلب",school:"المعالي",exp:35,p0:null,p1:null,p2:null,p3:null},
-{id:39,name:"عبد الرحمن الشيخ",region:"إدلب",school:"ثانوية العروبة",exp:35,p0:null,p1:null,p2:null,p3:null},
-{id:40,name:"محمود بخوري",region:"إدلب",school:"الوحدة العربية",exp:35,p0:null,p1:null,p2:null,p3:null},
-{id:41,name:"محمد أديب عبد القادر",region:"إدلب",school:"إدلب الصناعية",exp:35,p0:null,p1:null,p2:null,p3:null},
-{id:42,name:"عبد الوهاب عطار",region:"إدلب",school:"يوسف العظمة",exp:30,p0:null,p1:null,p2:null,p3:null},
-{id:43,name:"هشام غنوم",region:"إدلب",school:"الفضيلة",exp:35,p0:null,p1:null,p2:null,p3:null},
-{id:44,name:"سعيد دويك",region:"إدلب",school:"فاروق الأمة",exp:45,p0:null,p1:null,p2:null,p3:null},
-{id:45,name:"صفوان النبهان",region:"إدلب",school:"ثانوية تفتناز الأولى",exp:50,p0:null,p1:null,p2:null,p3:null},
-{id:46,name:"مناع غريبي",region:"جسر الشغور",school:"ثانوية بداما الثانية",exp:80,p0:null,p1:null,p2:null,p3:null},
-{id:47,name:"محمد خالد عجان",region:"جسر الشغور",school:"خربة الجوز",exp:95,p0:null,p1:null,p2:null,p3:null},
-{id:48,name:"ياسين عمر ياسين",region:"جسر الشغور",school:"الرشيد المحدثة",exp:95,p0:null,p1:null,p2:null,p3:null},
-{id:49,name:"احمد المصري",region:"جسر الشغور",school:"ثانوية زرزور الثانية",exp:110,p0:null,p1:null,p2:null,p3:null},
-{id:50,name:"محمد أبو عرب",region:"جسر الشغور",school:"مشمشان القديمة",exp:95,p0:null,p1:null,p2:null,p3:null},
-{id:51,name:"احمد غزول",region:"جسر الشغور",school:"ثانوية زينب بنت خزيمة",exp:95,p0:null,p1:null,p2:null,p3:null},
-{id:52,name:"محمد فاتح الشحود",region:"جسر الشغور",school:"عبد الرحمن الناصر",exp:75,p0:null,p1:null,p2:null,p3:null},
-{id:53,name:"عمر السعيد",region:"جسر الشغور",school:"ثانوية الجسر الأولى",exp:85,p0:null,p1:null,p2:null,p3:null},
-{id:54,name:"محمد فاخر فاخوري",region:"كفرنبل",school:"ثانوية كفرنبل الأولى",exp:100,p0:null,p1:null,p2:null,p3:null},
-{id:55,name:"فياض العلوش",region:"كفرنبل",school:"أبي ذر الغفاري",exp:90,p0:null,p1:null,p2:null,p3:null},
-{id:56,name:"مهند حاج سليمان",region:"كفرنبل",school:"حزارين للتعليم الأساسي",exp:90,p0:null,p1:null,p2:null,p3:null},
-{id:57,name:"علي الحمود",region:"كفرنبل",school:"حاس الشرقية",exp:85,p0:null,p1:null,p2:null,p3:null},
-{id:58,name:"علاء الدست",region:"قاح",school:"مرمرة",exp:70,p0:null,p1:null,p2:null,p3:null},
-{id:59,name:"احمد حناك",region:"قاح",school:"ثانوية جيل التمكين",exp:100,p0:null,p1:null,p2:null,p3:null},
-{id:60,name:"مصعب بيطار",region:"قاح",school:"الشروق2",exp:90,p0:null,p1:null,p2:null,p3:null},
-{id:61,name:"محمد شاهين",region:"قاح",school:"ابن الوليد",exp:90,p0:null,p1:null,p2:null,p3:null},
-{id:62,name:"محمد شوك",region:"قاح",school:"هارون الرشيد",exp:110,p0:null,p1:null,p2:null,p3:null},
-{id:63,name:"زكريا الحسين",region:"قاح",school:"ثانوية دير حسان",exp:90,p0:null,p1:null,p2:null,p3:null}
-];
+const firebaseConfig = {
+  apiKey: "AIzaSyCF6VxQCqHbvSG8M5AGwlapQq7wM0hBLB0",
+  authDomain: "examtraking.firebaseapp.com",
+  projectId: "examtraking",
+  storageBucket: "examtraking.firebasestorage.app",
+  messagingSenderId: "1000402803446",
+  appId: "1:1000402803446:web:e452066f1a16b19b886ad7",
+  measurementId: "G-LDE4B2DZDE"
+};
 
-let C=[], ARC={}, U=null, F='all', now=Date.now(), TMR=null, CD="";
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-function load(){
-  try{ C=JSON.parse(localStorage.getItem('ec_v4'))||[...DEF]; }catch(e){C=[...DEF];}
-  try{ ARC=JSON.parse(localStorage.getItem('ea_v4'))||{}; }catch(e){ARC={};}
-  CD=localStorage.getItem('ed_v4')||new Date().toISOString().split('T')[0];
-  save();
-}
-function save(){
-  localStorage.setItem('ec_v4',JSON.stringify(C));
-  localStorage.setItem('ea_v4',JSON.stringify(ARC));
-  localStorage.setItem('ed_v4',CD);
-  stats(); render(); updDate();
+let currentUser = null;
+let carriers = [];
+let currentFilter = 'all';
+let now = Date.now();
+let trackingInterval = null;
+let unsubscribe = null;
+
+const ADMIN_EMAIL = 'admin@examtraking.local';
+const ADMIN_PASSWORD = 'Admin@2026';
+
+async function createAdminAccount() {
+  try {
+    await auth.createUserWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD);
+    document.getElementById('adminCredentials').classList.add('show');
+    showAlert('loginAlert', '✅ تم إنشاء حساب المدير بنجاح!', 'success');
+  } catch (error) {
+    if (error.code !== 'auth/email-already-in-use') {
+      console.error('خطأ:', error);
+    }
+  }
 }
 
-/* AUTH */
-function swLogin(t){
-  document.getElementById('ltC').classList.toggle('active',t=='carrier');
-  document.getElementById('ltA').classList.toggle('active',t=='admin');
-  document.getElementById('frmC').classList.toggle('hidden',t!='carrier');
-  document.getElementById('frmA').classList.toggle('hidden',t!='admin');
-  document.getElementById('lErr').style.display='none';
-}
-function logAdmin(){
-  if(document.getElementById('aPass').value==='Admin@2026'){U={r:'admin'};enter();}
-  else err('كلمة المرور خاطئة');
-}
-function logCarrier(){
-  const id=parseInt(document.getElementById('cId').value);
-  const c=C.find(x=>x.id==id);
-  if(c){U={r:'carrier',id:id,n:c.name};enter();}
-  else err('رقم تسلسلي غير موجود');
-}
-function err(m){const e=document.getElementById('lErr');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',4000);}
-function enter(){
-  document.getElementById('loginOverlay').style.display='none';
-  document.getElementById('app').classList.remove('hidden');
-  const d=document.getElementById('uDisp'), p=document.getElementById('admPanel');
-  if(U.r=='admin'){d.textContent='👑 مدير النظام';p.classList.remove('hidden');document.getElementById('nextDate').value=new Date(Date.now()+86400000).toISOString().split('T')[0];}
-  else{d.textContent=`👤 ${U.n} (#${U.id})`;p.classList.add('hidden');}
-  render(); stats(); startTmr();
-}
-function logout(){if(confirm('هل تريد تسجيل الخروج؟')){stopTmr();location.reload();}}
-
-/* ARCHIVE */
-function swAdmTab(t){
-  document.getElementById('tabAct').classList.toggle('active',t=='act');
-  document.getElementById('tabArc').classList.toggle('active',t=='arc');
-  document.getElementById('admAct').classList.toggle('hidden',t!='act');
-  document.getElementById('admArc').classList.toggle('hidden',t!='arc');
-  if(t=='arc') renArc();
-}
-function archiveReset(){
-  const nd=document.getElementById('nextDate').value;
-  if(!nd)return alert('يرجى تحديد تاريخ للنموذج الجديد');
-  if(!confirm(`هل أنت متأكد من حفظ بيانات اليوم (${CD}) في الأرشيف وبدء نموذج جديد بتاريخ ${nd}؟`))return;
-  ARC[CD]=JSON.parse(JSON.stringify(C));
-  C=C.map(c=>({...c,p0:null,p1:null,p2:null,p3:null}));
-  CD=nd; save(); alert('✅ تم حفظ اليوم السابق في الأرشيف بنجاح وتم بدء نموذج جديد!'); swAdmTab('act');
-}
-function renArc(){
-  const el=document.getElementById('arcList');
-  const ds=Object.keys(ARC).sort().reverse();
-  if(!ds.length){el.innerHTML='<div class="empty">لا يوجد أرشيف محفوظ بعد</div>';return;}
-  el.innerHTML=ds.map(d=>{
-    const a=ARC[d], tot=a.length, done=a.filter(x=>x.p3).length, pct=tot?Math.round(done/tot*100):0;
-    return `<div class="arch-card">
-      <div class="arch-date latin">${d}</div>
-      <div class="arch-stats"><span>${tot} حامل</span><span>${done} مكتمل (${pct}%)</span></div>
-      <div class="arch-btns">
-        <button class="a-btn a-view" onclick="viewArc('${d}')">عرض التفاصيل</button>
-        <button class="a-btn a-del" onclick="delArc('${d}')">🗑️</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-function viewArc(d){
-  const orig=[...C], od=CD;
-  C=ARC[d]; CD=d+" (أرشيف)";
-  document.getElementById('admAct').classList.add('hidden');
-  document.getElementById('admArc').classList.add('hidden');
-  const btn=document.createElement('div'); btn.id='arcBack';
-  btn.innerHTML=`<button class="btn-login" style="width:auto;padding:12px 24px;margin-bottom:20px;" onclick="restArc()">← العودة للمتابعة الحالية</button>`;
-  document.querySelector('.container').prepend(btn);
-  render(); stats(); updDate();
-}
-function restArc(){ load(); document.getElementById('arcBack').remove(); document.getElementById('admAct').classList.remove('hidden'); swAdmTab('act'); }
-function delArc(d){if(confirm(`هل أنت متأكد من حذف أرشيف يوم ${d} نهائياً؟`)){delete ARC[d];save();renArc();}}
-function updDate(){document.getElementById('curDate').textContent=CD;}
-
-/* CORE */
-function st(c){if(c.p3)return'complete';if(c.p2)return'returning';if(c.p1)return'delivered';if(c.p0)return'travelling';return'pending';}
-function ft(t){if(!t)return'--:--';const d=new Date(t);return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
-function fe(ms){if(ms<0)ms=0;const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;return h>0?h+':'+m.toString().padStart(2,'0')+':'+sc.toString().padStart(2,'0'):m.toString().padStart(2,'0')+':'+sc.toString().padStart(2,'0');}
-function ov(c){return c.p0&&!c.p3&&(now-c.p0)>(c.exp*60000);}
-
-function doAct(id,ph){
-  const c=C.find(x=>x.id==id); if(!c)return;
-  if(U.r=='carrier'&&U.id!=id)return alert('ليس لديك صلاحية تعديل بيانات حامل آخر');
-  const t=Date.now();
-  if(ph=='p0'&&!c.p0)c.p0=t; else if(ph=='p1'&&c.p0&&!c.p1)c.p1=t;
-  else if(ph=='p2'&&c.p1&&!c.p2)c.p2=t; else if(ph=='p3'&&c.p2&&!c.p3)c.p3=t;
-  save();
-}
-function addC(){
-  const n=document.getElementById('nName').value.trim(), r=document.getElementById('nReg').value.trim(), s=document.getElementById('nSch').value.trim(), e=document.getElementById('nExp').value;
-  if(!n||!r||!s||!e)return alert('يرجى إكمال جميع الحقول المطلوبة');
-  const nid=C.length?Math.max(...C.map(x=>x.id))+1:1;
-  C.push({id:nid,name:n,region:r,school:s,exp:parseInt(e),p0:null,p1:null,p2:null,p3:null});
-  save(); ['nName','nReg','nSch','nExp'].forEach(i=>document.getElementById(i).value='');
-}
-function setF(f,b){F=f;document.querySelectorAll('.f-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();}
-
-function stats(){
-  const t=C.length, d=C.filter(x=>x.p1).length, dn=C.filter(x=>x.p3).length, ac=C.filter(x=>x.p0&&!x.p3).length;
-  document.getElementById('sTot').textContent=t; document.getElementById('sAct').textContent=ac;
-  document.getElementById('sDel').textContent=d; document.getElementById('sDone').textContent=dn;
-  const p1=t?Math.round(((d+dn)/(t*2))*100):0, p2=t?Math.round(d/t*100):0, p3=t?Math.round(dn/t*100):0;
-  document.getElementById('p1').textContent=p1+'%'; document.getElementById('b1').style.width=p1+'%';
-  document.getElementById('p2').textContent=p2+'%'; document.getElementById('b2').style.width=p2+'%';
-  document.getElementById('p3').textContent=p3+'%'; document.getElementById('b3').style.width=p3+'%';
+function switchLoginTab(type) {
+  document.querySelectorAll('.login-tab').forEach(tab => tab.classList.remove('active'));
+  if (type === 'carrier') {
+    document.getElementById('formCarrier').style.display = 'block';
+    document.getElementById('formAdmin').style.display = 'none';
+    document.querySelectorAll('.login-tab')[0].classList.add('active');
+  } else {
+    document.getElementById('formCarrier').style.display = 'none';
+    document.getElementById('formAdmin').style.display = 'block';
+    document.querySelectorAll('.login-tab')[1].classList.add('active');
+  }
+  document.getElementById('loginAlert').className = 'alert';
+  document.getElementById('adminCredentials').classList.remove('show');
 }
 
-function render(){
-  const tb=document.getElementById('tbody'), sr=document.getElementById('src').value.toLowerCase();
-  let fl=C.filter(c=>{
-    const s=st(c); if(F!='all'&&s!=F)return false;
-    if(sr&&!c.name.includes(sr)&&!c.region.includes(sr)&&!c.school.includes(sr))return false;
-    if(U.r=='carrier'&&c.id!=U.id)return false; return true;
+async function loginCarrier() {
+  const id = document.getElementById('carrierId').value.trim();
+  const code = document.getElementById('carrierCode').value.trim();
+  if (!id || !code) {
+    showAlert('loginAlert', 'الرجاء إدخال الرقم التسلسلي ورمز الدخول', 'error');
+    return;
+  }
+  try {
+    const carrierDoc = await db.collection('carriers').doc(id).get();
+    if (!carrierDoc.exists) {
+      showAlert('loginAlert', 'الحامل غير موجود في النظام', 'error');
+      return;
+    }
+    const carrier = carrierDoc.data();
+    if (carrier.accessCode !== code.toUpperCase()) {
+      showAlert('loginAlert', 'رمز الدخول غير صحيح', 'error');
+      return;
+    }
+    currentUser = { uid: id, ...carrier, role: 'carrier', carrierId: id };
+    showApp();
+  } catch (error) {
+    showAlert('loginAlert', 'خطأ: ' + error.message, 'error');
+  }
+}
+
+async function loginAdmin() {
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  if (!email || !password) {
+    showAlert('loginAlert', 'الرجاء إدخال البريد وكلمة المرور', 'error');
+    return;
+  }
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+  } catch (error) {
+    let msg = 'خطأ في تسجيل الدخول';
+    if (error.code === 'auth/user-not-found') msg = 'المستخدم غير موجود';
+    else if (error.code === 'auth/wrong-password') msg = 'كلمة المرور غير صحيحة';
+    showAlert('loginAlert', msg, 'error');
+  }
+}
+
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appContainer').classList.add('active');
+  if (currentUser.role === 'admin') {
+    document.getElementById('uDisp').textContent = '👑 مدير النظام';
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+  } else {
+    document.getElementById('uDisp').textContent = '👤 ' + currentUser.name + ' (#' + currentUser.carrierId + ')';
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+  }
+  setupRealtimeListener();
+  startClock();
+}
+
+async function logout() {
+  if (confirm('هل تريد تسجيل الخروج؟')) {
+    if (trackingInterval) clearInterval(trackingInterval);
+    if (unsubscribe) unsubscribe();
+    if (currentUser && currentUser.role === 'admin') await auth.signOut();
+    location.reload();
+  }
+}
+
+function setupRealtimeListener() {
+  if (unsubscribe) unsubscribe();
+  unsubscribe = db.collection('carriers').onSnapshot((snapshot) => {
+    carriers = [];
+    snapshot.forEach(doc => {
+      carriers.push({ id: doc.id, ...doc.data() });
+    });
+    carriers.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+    updateStats();
+    renderTable();
+    if (currentUser.role === 'admin') renderCarriersTable();
+    loadCarrierSelect();
+  }, (error) => {
+    showToast('❌ خطأ في المزامنة', 'error');
   });
-  if(!fl.length){tb.innerHTML='<tr><td colspan="6" class="empty">لا توجد نتائج مطابقة</td></tr>';return;}
-  
-  if(U.r=='admin'){
-    const regs=[...new Set(fl.map(c=>c.region))].sort(); let h='';
-    regs.forEach(r=>{
-      const g=fl.filter(c=>c.region==r);
-      h+=`<tr><td colspan="6" class="reg-head">📍 ${r} <span class="reg-count">${g.length}</span></td></tr>`;
-      g.forEach(c=>h+=row(c));
-    }); tb.innerHTML=h;
-  } else { if(fl.length) tb.innerHTML=row(fl[0]); }
 }
 
-function row(c){
-  const s=st(c), o=ov(c);
-  let th='';
-  if(c.p0){
-    const t1=c.p1?`${ft(c.p0)} → ${ft(c.p1)}`:fe(now-c.p0);
-    const t2=c.p2?`${ft(c.p1)} → ${ft(c.p2)}`:(c.p1?'جاري العد...' : '-');
-    const t3=c.p3?`${ft(c.p2)} → ${ft(c.p3)}`:(c.p2?'جاري العد...' : '-');
-    th=`<div class="t-cell">
-      <div class="t-ph"><span class="t-lbl">م:</span><span class="t-val ${!c.p1?'t-live':''}" style="color:${c.p1?'var(--success)':'var(--purple)'}">${t1}</span></div>
-      <div class="t-ph"><span class="t-lbl">م٢:</span><span class="t-val ${c.p1&&!c.p2?'t-live':''}" style="color:${c.p2?'var(--info)':(c.p1?'var(--warning)':'#ccc')}">${t2}</span></div>
-      <div class="t-ph"><span class="t-lbl">م٣:</span><span class="t-val ${c.p2&&!c.p3?'t-live':''}" style="color:${c.p3?'var(--success)':(c.p2?'var(--warning)':'#ccc')}">${t3}</span></div>
+async function generateCodesForAll() {
+  if (carriers.length === 0) {
+    showToast('⚠️ لا يوجد حاملون في النظام', 'info');
+    return;
+  }
+  if (!confirm('⚠️ سيتم توليد أكواد دخول لجميع الحاملين الذين ليس لديهم أكواد.\n\nهل تريد المتابعة؟')) return;
+  try {
+    let generatedCount = 0;
+    const batch = db.batch();
+    carriers.forEach(carrier => {
+      if (!carrier.accessCode) {
+        const newCode = generateAccessCode();
+        const ref = db.collection('carriers').doc(carrier.id.toString());
+        batch.update(ref, { accessCode: newCode });
+        generatedCount++;
+      }
+    });
+    if (generatedCount === 0) {
+      showToast('✅ جميع الحاملين لديهم أكواد بالفعل', 'success');
+      return;
+    }
+    await batch.commit();
+    showToast(`✅ تم توليد ${generatedCount} رمز دخول بنجاح`, 'success');
+  } catch (error) {
+    showToast('❌ خطأ: ' + error.message, 'error');
+  }
+}
+
+function showAllCodes() {
+  if (carriers.length === 0) {
+    showToast('⚠️ لا يوجد حاملون في النظام', 'info');
+    return;
+  }
+  const codesList = document.getElementById('codesList');
+  codesList.innerHTML = '';
+  carriers.forEach(carrier => {
+    const item = document.createElement('div');
+    item.className = 'code-item';
+    item.innerHTML = `
+      <div class="code-item-info">
+        <div class="code-item-name">${carrier.name}</div>
+        <div class="code-item-details">#${carrier.id} | ${carrier.region} | ${carrier.school} | 📞 ${carrier.phone || 'لا يوجد'}</div>
+      </div>
+      <div class="code-item-code">${carrier.accessCode || '⚠️ لا يوجد'}</div>
+    `;
+    codesList.appendChild(item);
+  });
+  document.getElementById('showCodesModal').classList.add('active');
+}
+
+function generateAccessCode() {
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
+}
+
+function exportData() {
+  const data = { version: '2.0', exportDate: new Date().toISOString(), carriers: carriers, exportNote: 'Backup of exam tracking system' };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `exam_backup_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ تم تصدير البيانات بنجاح', 'success');
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.carriers || !Array.isArray(data.carriers)) throw new Error('ملف غير صالح');
+      if (!confirm(`هل تريد استيراد البيانات من ${new Date(data.exportDate).toLocaleString('ar')}؟\n\nسيتم استبدال البيانات الحالية.`)) return;
+      const batch = db.batch();
+      data.carriers.forEach(c => {
+        const ref = db.collection('carriers').doc(c.id.toString());
+        batch.set(ref, { name: c.name, phone: c.phone, region: c.region, school: c.school, expectedTime: c.expectedTime, accessCode: c.accessCode, p0: c.p0, p1: c.p1, p2: c.p2, p3: c.p3 });
+      });
+      await batch.commit();
+      showToast('✅ تم استيراد البيانات بنجاح', 'success');
+    } catch (err) {
+      showToast('❌ خطأ: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function clearLocalData() {
+  if (confirm('⚠️ هل أنت متأكد من مسح جميع البيانات المحلية؟\n\n(البيانات في Firebase ستبقى كما هي)')) {
+    localStorage.clear();
+    showToast('🗑️ تم مسح البيانات المحلية', 'info');
+  }
+}
+
+function showAddCarrierModal() {
+  document.getElementById('addCarrierModal').classList.add('active');
+  document.getElementById('modalAlert').className = 'alert';
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+}
+
+async function addCarrier() {
+  const name = document.getElementById('newCarrierName').value.trim();
+  const phone = document.getElementById('newCarrierPhone').value.trim();
+  const region = document.getElementById('newCarrierRegion').value.trim();
+  const school = document.getElementById('newCarrierSchool').value.trim();
+  const time = document.getElementById('newCarrierTime').value;
+  if (!name || !phone || !region || !school || !time) {
+    showAlert('modalAlert', 'الرجاء ملء جميع الحقول', 'error');
+    return;
+  }
+  try {
+    let maxId = 0;
+    carriers.forEach(c => { const id = parseInt(c.id); if (id > maxId) maxId = id; });
+    const newId = (maxId + 1).toString();
+    const accessCode = generateAccessCode();
+    await db.collection('carriers').doc(newId).set({
+      name, phone, region, school,
+      expectedTime: parseInt(time),
+      accessCode,
+      p0: null, p1: null, p2: null, p3: null,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showAlert('modalAlert', `✅ تم إضافة الحامل بنجاح!\n\nالرقم التسلسلي: ${newId}\nرمز الدخول: ${accessCode}\n\n️ احفظ هذه البيانات وشاركها مع الحامل`, 'success');
+    setTimeout(() => {
+      closeModal('addCarrierModal');
+      document.getElementById('modalAlert').className = 'alert';
+      document.querySelectorAll('#addCarrierModal input').forEach(input => input.value = '');
+    }, 8000);
+  } catch (error) {
+    showAlert('modalAlert', 'خطأ: ' + error.message, 'error');
+  }
+}
+
+function printCarrierList() {
+  if (carriers.length === 0) {
+    showToast('⚠️ لا يوجد حاملون لطباعة القائمة', 'info');
+    return;
+  }
+  const tbody = document.getElementById('printTableBody');
+  tbody.innerHTML = '';
+  carriers.forEach(c => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${c.id}</td>
+      <td>${c.name}</td>
+      <td>${c.region}</td>
+      <td>${c.school}</td>
+      <td>${c.accessCode || '⚠️ لا يوجد'}</td>
+    `;
+    tbody.appendChild(row);
+  });
+  document.getElementById('printDate').textContent = new Date().toLocaleDateString('ar');
+  document.getElementById('printCount').textContent = carriers.length;
+  window.print();
+  showToast('🖨️ تم فتح نافذة الطباعة', 'success');
+}
+
+function updateStats() {
+  const total = carriers.length;
+  const delivered = carriers.filter(c => c.p1).length;
+  const done = carriers.filter(c => c.p3).length;
+  const active = carriers.filter(c => c.p0 && !c.p3).length;
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statActive').textContent = active;
+  document.getElementById('statDelivered').textContent = delivered;
+  document.getElementById('statDone').textContent = done;
+  const pct1 = total > 0 ? Math.round(((delivered + done) / (total * 2)) * 100) : 0;
+  const pct2 = total > 0 ? Math.round((delivered / total) * 100) : 0;
+  const pct3 = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('bar1').style.width = pct1 + '%';
+  document.getElementById('pct1').textContent = pct1 + '%';
+  document.getElementById('bar2').style.width = pct2 + '%';
+  document.getElementById('pct2').textContent = pct2 + '%';
+  document.getElementById('bar3').style.width = pct3 + '%';
+  document.getElementById('pct3').textContent = pct3 + '%';
+}
+
+function getStatus(c) {
+  if (c.p3) return 'complete';
+  if (c.p2) return 'returning';
+  if (c.p1) return 'delivered';
+  if (c.p0) return 'travelling';
+  return 'pending';
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  const search = document.getElementById('searchBox').value.toLowerCase();
+  let filtered = carriers.filter(c => {
+    const s = getStatus(c);
+    if (currentFilter !== 'all' && s !== currentFilter) return false;
+    if (search && !c.name.toLowerCase().includes(search) && !c.region.toLowerCase().includes(search) && !c.school.toLowerCase().includes(search)) return false;
+    if (currentUser.role === 'carrier' && currentUser.carrierId !== c.id) return false;
+    return true;
+  });
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">لا توجد نتائج مطابقة</td></tr>';
+    return;
+  }
+  let html = '';
+  if (currentUser.role === 'admin') {
+    const regions = [...new Set(filtered.map(c => c.region))].sort();
+    regions.forEach(region => {
+      const group = filtered.filter(c => c.region === region);
+      html += `<tr><td colspan="6" class="reg-head"> ${region} <span class="reg-count">${group.length}</span></td></tr>`;
+      group.forEach(c => html += buildRow(c));
+    });
+  } else {
+    if (filtered.length > 0) html += buildRow(filtered[0]);
+  }
+  tbody.innerHTML = html;
+}
+
+function buildRow(c) {
+  const s = getStatus(c);
+  const overdue = c.p0 && !c.p3 && (now - c.p0) > (c.expectedTime * 60000);
+  let timeHtml = '';
+  if (c.p0) {
+    const t1 = c.p1 ? `${fmtTime(c.p0)} → ${fmtTime(c.p1)}` : fmtElapsed(now - c.p0);
+    const t2 = c.p2 ? `${fmtTime(c.p1)} → ${fmtTime(c.p2)}` : (c.p1 ? 'جاري...' : '-');
+    const t3 = c.p3 ? `${fmtTime(c.p2)} → ${fmtTime(c.p3)}` : (c.p2 ? 'جاري...' : '-');
+    timeHtml = `<div style="font-family:var(--font-num);font-size:13px;line-height:1.8;">
+      <div style="margin-bottom:4px;"><span style="color:var(--text-muted);font-size:12px;">م١:</span> <span style="color:${c.p1 ? 'var(--teal)' : 'var(--navy)'};font-weight:600;">${t1}</span></div>
+      <div style="margin-bottom:4px;"><span style="color:var(--text-muted);font-size:12px;">م٢:</span> <span style="color:${c.p2 ? 'var(--ocean)' : (c.p1 ? 'var(--amber)' : '#ccc')};font-weight:600;">${t2}</span></div>
+      <div><span style="color:var(--text-muted);font-size:12px;">م٣:</span> <span style="color:${c.p3 ? 'var(--emerald)' : (c.p2 ? 'var(--amber)' : '#ccc')};font-weight:600;">${t3}</span></div>
     </div>`;
-  } else th='<span style="color:#ccc">-</span>';
-
-  const bds={pending:'<span class="badge b-pend"><span class="dot"></span>قيد الانتظار</span>',travelling:'<span class="badge b-trav"><span class="dot"></span>في الطريق للمركز</span>',delivered:'<span class="badge b-deliv"><span class="dot"></span>في المركز</span>',returning:'<span class="badge b-ret"><span class="dot"></span>عائد بالمغلف</span>',complete:'<span class="badge b-comp"><span class="dot"></span>مكتمل ✓</span>'};
-  let bd=bds[s]||bds.pending; if(o)bd='<span class="badge b-over"><span class="dot"></span>متأخر!</span>';
-
-  let bt=''; const ad=U.r=='admin', sf=U.r=='carrier'&&U.id==c.id, ce=ad||sf;
-  if(!ce)bt='<span style="color:#94a3b8;font-size:13px">عرض فقط</span>';
-  else if(s=='pending')bt=`<button class="act-btn btn-s" onclick="doAct(${c.id},'p0')">🚗 انطلاق من المديرية المركزية</button>`;
-  else if(s=='travelling')bt=`<button class="act-btn btn-p1" onclick="doAct(${c.id},'p1')">✓ تسليم الأسئلة للمركز</button>`;
-  else if(s=='delivered')bt=`<button class="act-btn btn-p2" onclick="doAct(${c.id},'p2')">✓ استلام مغلف الإجابات</button>`;
-  else if(s=='returning')bt=`<button class="act-btn btn-p3" onclick="doAct(${c.id},'p3')">✓ تسليم المغلفات للامتحانات</button>`;
-  else bt=`<button class="act-btn btn-dis" disabled>✓ اكتملت المهمة</button>`;
-
+  } else {
+    timeHtml = '<span style="color:#ccc">-</span>';
+  }
+  const badges = {
+    pending: '<span class="badge b-pend"><span class="badge-dot"></span>قيد الانتظار</span>',
+    travelling: '<span class="badge b-trav"><span class="badge-dot"></span>في الطريق</span>',
+    delivered: '<span class="badge b-deliv"><span class="badge-dot"></span>في المركز</span>',
+    returning: '<span class="badge b-ret"><span class="badge-dot"></span>عائد</span>',
+    complete: '<span class="badge b-comp"><span class="badge-dot"></span>مكتمل ✓</span>'
+  };
+  let badge = badges[s] || badges.pending;
+  if (overdue) badge = '<span class="badge b-over"><span class="badge-dot"></span>متأخر!</span>';
+  let btn = '';
+  const isAdmin = currentUser.role === 'admin';
+  const isSelf = currentUser.role === 'carrier' && currentUser.carrierId === c.id;
+  const canEdit = isAdmin || isSelf;
+  if (!canEdit) btn = '<span style="color:#94a3b8;font-size:13px;">عرض فقط</span>';
+  else if (s === 'pending') btn = `<button class="btn-launch" onclick="doAction(${c.id},'p0')">📤 انطلاق من المديرية</button>`;
+  else if (s === 'travelling') btn = `<button class="act-btn btn-teal" onclick="doAction(${c.id},'p1')">✓ تسليم للمركز</button>`;
+  else if (s === 'delivered') btn = `<button class="act-btn btn-amber" onclick="doAction(${c.id},'p2')">✓ استلام المغلف</button>`;
+  else if (s === 'returning') btn = `<button class="act-btn btn-emerald" onclick="doAction(${c.id},'p3')">✓ إنهاء المهمة</button>`;
+  else btn = '<button class="act-btn btn-dis" disabled>✓ اكتملت</button>';
   return `<tr>
     <td><span class="c-id latin">${c.id}</span></td>
-    <td><div class="c-name">${c.name}</div><div class="c-school">${c.school}</div></td>
-    <td style="font-weight:600;font-size:14px;">${c.region}</td>
-    <td>${th}</td>
-    <td>${bd}</td>
-    <td>${bt}</td>
+    <td><div class="c-name">${c.name}</div><div class="c-school">${c.school}</div>${c.phone ? `<div class="c-phone">📞 ${c.phone}</div>` : ''}</td>
+    <td style="font-weight:600;">${c.region}</td>
+    <td>${timeHtml}</td>
+    <td>${badge}</td>
+    <td>${btn}</td>
   </tr>`;
 }
 
-/* TIMER */
-function startTmr(){
-  if(TMR)clearInterval(TMR);
-  TMR=setInterval(()=>{
-    now=Date.now();
-    document.getElementById('clk').textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-    document.querySelectorAll('.t-live').forEach(el=>{
-      const r=el.closest('tr'), id=parseInt(r.querySelector('.c-id').textContent), c=C.find(x=>x.id==id);
-      if(c&&c.p0&&!c.p3){
-        const t1=c.p1?`${ft(c.p0)} → ${ft(c.p1)}`:fe(now-c.p0);
-        const t2=c.p2?`${ft(c.p1)} → ${ft(c.p2)}`:(c.p1?'جاري العد...' : '-');
-        const t3=c.p3?`${ft(c.p2)} → ${ft(c.p3)}`:(c.p2?'جاري العد...' : '-');
-        el.parentElement.parentElement.innerHTML=`
-          <div class="t-ph"><span class="t-lbl">م١:</span><span class="t-val ${!c.p1?'t-live':''}" style="color:${c.p1?'var(--success)':'var(--purple)'}">${t1}</span></div>
-          <div class="t-ph"><span class="t-lbl">م٢:</span><span class="t-val ${c.p1&&!c.p2?'t-live':''}" style="color:${c.p2?'var(--info)':(c.p1?'var(--warning)':'#ccc')}">${t2}</span></div>
-          <div class="t-ph"><span class="t-lbl">م٣:</span><span class="t-val ${c.p2&&!c.p3?'t-live':''}" style="color:${c.p3?'var(--success)':(c.p2?'var(--warning)':'#ccc')}">${t3}</span></div>`;
-      }
-    });
-    stats();
-  },1000);
+function renderCarriersTable() {
+  const tbody = document.getElementById('carriersTableBody');
+  if (carriers.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">لا توجد بيانات</td></tr>';
+    return;
+  }
+  let html = '';
+  carriers.forEach(carrier => {
+    const s = getStatus(carrier);
+    const badges = {
+      pending: '<span class="badge b-pend"><span class="badge-dot"></span>انتظار</span>',
+      travelling: '<span class="badge b-trav"><span class="badge-dot"></span>طريق</span>',
+      delivered: '<span class="badge b-deliv"><span class="badge-dot"></span>مركز</span>',
+      returning: '<span class="badge b-ret"><span class="badge-dot"></span>عائد</span>',
+      complete: '<span class="badge b-comp"><span class="badge-dot"></span>مكتمل ✓</span>'
+    };
+    const badge = badges[s] || badges.pending;
+    html += `<tr>
+      <td class="latin">${carrier.id}</td>
+      <td><div class="c-name">${carrier.name}</div></td>
+      <td class="latin">${carrier.phone || '-'}</td>
+      <td>${carrier.region}</td>
+      <td>${carrier.school}</td>
+      <td><span class="access-code">${carrier.accessCode || '⚠️ لا يوجد'}</span></td>
+      <td>${badge}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
 }
-function stopTmr(){if(TMR){clearInterval(TMR);TMR=null;}}
-document.getElementById('src').addEventListener('input',render);
 
-load(); startTmr();
+function loadCarrierSelect() {
+  const select = document.getElementById('carrierSelect');
+  const currentValue = select.value;
+  select.innerHTML = '<option value="">-- اختر --</option>';
+  carriers.forEach(carrier => {
+    const option = document.createElement('option');
+    option.value = carrier.id;
+    option.textContent = `${carrier.name} - ${carrier.region} (#${carrier.id})`;
+    select.appendChild(option);
+  });
+  if (currentValue) select.value = currentValue;
+}
+
+async function doAction(id, phase) {
+  const c = carriers.find(x => x.id == id);
+  if (!c) return;
+  if (currentUser.role === 'carrier' && currentUser.carrierId !== c.id) {
+    alert('ليس لديك صلاحية تعديل بيانات حامل آخر');
+    return;
+  }
+  const time = Date.now();
+  const update = {};
+  if (phase === 'p0' && !c.p0) update.p0 = time;
+  else if (phase === 'p1' && c.p0 && !c.p1) update.p1 = time;
+  else if (phase === 'p2' && c.p1 && !c.p2) update.p2 = time;
+  else if (phase === 'p3' && c.p2 && !c.p3) update.p3 = time;
+  else return;
+  try {
+    await db.collection('carriers').doc(id.toString()).update(update);
+    showToast('✅ تم التحديث بنجاح', 'success');
+  } catch (error) {
+    showToast('❌ خطأ: ' + error.message, 'error');
+  }
+}
+
+async function startPhase1() {
+  const carrierId = document.getElementById('carrierSelect').value;
+  if (!carrierId) return;
+  await doAction(carrierId, 'p0');
+}
+async function startPhase2() {
+  const carrierId = document.getElementById('carrierSelect').value;
+  if (!carrierId) return;
+  await doAction(carrierId, 'p1');
+}
+async function startPhase3() {
+  const carrierId = document.getElementById('carrierSelect').value;
+  if (!carrierId) return;
+  await doAction(carrierId, 'p2');
+}
+
+function loadCarrierTracking() {
+  const carrierId = document.getElementById('carrierSelect').value;
+  const content = document.getElementById('trackingContent');
+  if (!carrierId) { content.style.display = 'none'; return; }
+  content.style.display = 'block';
+  const carrier = carriers.find(c => c.id === carrierId);
+  if (carrier) { updateTrackingDisplay(carrier); startTrackingTimer(carrier); }
+}
+
+function updateTrackingDisplay(carrier) {
+  document.getElementById('timer1').textContent = carrier.p0 ? fmtTime(carrier.p0) : '--:--:--';
+  document.getElementById('timer2').textContent = carrier.p1 ? fmtTime(carrier.p1) : '--:--:--';
+  document.getElementById('timer3').textContent = carrier.p2 ? fmtTime(carrier.p2) : '--:--:--';
+  document.getElementById('btnPhase1').disabled = !!carrier.p0;
+  document.getElementById('btnPhase2').disabled = !carrier.p0 || !!carrier.p1;
+  document.getElementById('btnPhase3').disabled = !carrier.p1 || !!carrier.p2;
+}
+
+function startTrackingTimer(carrier) {
+  if (trackingInterval) clearInterval(trackingInterval);
+  trackingInterval = setInterval(() => {
+    now = Date.now();
+    if (carrier.p0 && !carrier.p1) document.getElementById('timer1').textContent = fmtElapsed(now - carrier.p0);
+    else if (carrier.p1 && !carrier.p2) document.getElementById('timer2').textContent = fmtElapsed(now - carrier.p1);
+    else if (carrier.p2 && !carrier.p3) document.getElementById('timer3').textContent = fmtElapsed(now - carrier.p2);
+  }, 1000);
+}
+
+function fmtTime(ts) {
+  if (!ts) return '--:--';
+  const d = new Date(ts);
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+function fmtElapsed(ms) {
+  if (ms < 0) ms = 0;
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  if (h > 0) return h + 'س ' + m.toString().padStart(2,'0') + 'د';
+  return m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+function showAlert(elementId, message, type) {
+  const alert = document.getElementById(elementId);
+  alert.textContent = message;
+  alert.className = `alert alert-${type} show`;
+  setTimeout(() => alert.classList.remove('show'), 5000);
+}
+function showToast(msg, type = 'info') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = `toast ${type} show`;
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+function switchTab(tabName) {
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(tabName + 'Tab').classList.add('active');
+  if (tabName === 'tracking') loadCarrierSelect();
+}
+function startClock() {
+  setInterval(() => {
+    document.getElementById('clk').textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  }, 1000);
+}
+document.getElementById('searchBox').addEventListener('input', renderTable);
+
+window.onload = function() {
+  createAdminAccount();
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      currentUser = { uid: user.uid, email: user.email, role: 'admin', name: user.email.split('@')[0] };
+      showApp();
+    }
+  });
+};
 </script>
 </body>
 </html>
