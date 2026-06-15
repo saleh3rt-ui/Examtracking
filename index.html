@@ -48,6 +48,7 @@
   .btn-ocean { background: var(--ocean); }
   .btn-purple { background: var(--purple); }
   .btn-brick { background: var(--brick); }
+  .btn-slate { background: var(--slate); }
   .btn-small { padding: 10px 18px; font-size: 14px; width: auto; }
   .alert { padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: none; font-weight: 600; }
   .alert-error { background: var(--brick-light); color: var(--brick); border-right: 4px solid var(--brick); }
@@ -167,6 +168,7 @@
   .archive-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--navy); }
   .archive-date { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 8px; display: flex; flex-direction: column; gap: 2px; }
   .archive-date .hijri-date { font-size: 12px; color: var(--teal); font-weight: 600; }
+  .archive-date .original-date { font-size: 10px; color: var(--text-muted); font-weight: 500; }
   .archive-stats { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
   .archive-stats div { margin-bottom: 4px; }
   .archive-actions { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -215,7 +217,6 @@
 
   .archive-viewer-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 
-  /* ✅ أزرار الإجراءات في جدول الحاملين */
   .action-btn {
     padding: 6px 12px;
     border: none;
@@ -263,7 +264,6 @@
     accent-color: var(--navy);
   }
 
-  /* ✅ قسم إعادة الضبط للمدير */
   .reset-section {
     background: linear-gradient(135deg, var(--amber-light) 0%, var(--brick-light) 100%);
     border: 2px dashed var(--amber);
@@ -274,6 +274,18 @@
   .reset-section h3 { font-size: 18px; font-weight: 800; color: var(--amber); margin-bottom: 12px; }
   .reset-section p { font-size: 13px; color: #92400E; margin-bottom: 16px; }
   .reset-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* ✅ قسم مزامنة التاريخ */
+  .date-sync-section {
+    background: linear-gradient(135deg, var(--purple-light) 0%, var(--navy-light) 100%);
+    border: 2px dashed var(--purple);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-top: 16px;
+  }
+  .date-sync-section h4 { font-size: 16px; font-weight: 800; color: var(--purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .date-sync-section p { font-size: 13px; color: #5B21B6; margin-bottom: 16px; }
+  .date-sync-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
 
   @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .container { padding: 24px; } }
   @media (max-width: 768px) {
@@ -363,7 +375,7 @@
         <div class="stat-card"><div class="stat-label">تم التسليم</div><div class="stat-value latin" id="statDelivered">0</div><div class="stat-sub">أسئلة للمراكز</div></div>
         <div class="stat-card"><div class="stat-label">مهام مكتملة</div><div class="stat-value latin" id="statDone">0</div><div class="stat-sub">إجابات للامتحانات</div></div>
       </div>
-      <div class="progress-sec" style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow);">
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow);">
         <div style="font-size:18px; font-weight:800; margin-bottom:24px;">📊 مستوى الإنجاز العام</div>
         <div style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
@@ -425,7 +437,6 @@
         </div>
         <div style="background:var(--ocean-light);border:1px solid var(--ocean);border-radius:12px;padding:16px;margin-bottom:20px;font-size:14px;color:var(--ocean);">💡 <strong>كيفية دخول حاملي الأسئلة:</strong> بعد إضافة حامل جديد، سيظهر رمز دخول خاص به. اضغط على "طباعة قائمة الدخول" لتوليد قائمة بجميع الحاملين مع أكوادهم.</div>
         
-        <!-- ✅ قسم إعادة الضبط (مدير فقط) -->
         <div class="reset-section">
           <h3>🔄 إعادة ضبط الحركات (مدير النظام فقط)</h3>
           <p>يمكنك إعادة تعيين حركات الحاملين في حال حدوث خطأ. هذه العمليات لا يمكن التراجع عنها.</p>
@@ -439,7 +450,6 @@
           </div>
         </div>
         
-        <!-- شريط الإجراءات الجماعية -->
         <div class="bulk-actions" id="bulkActions">
           <div class="count">✅ تم تحديد <span id="selectedCount" class="latin">0</span> حامل</div>
           <div class="buttons">
@@ -509,6 +519,20 @@
               </div>
               <button class="btn btn-emerald btn-small" onclick="startNewDay()" style="height: 48px;">
                 ✨ أرشفة اليوم وبدء يوم جديد
+              </button>
+            </div>
+          </div>
+
+          <!-- ✅ قسم مزامنة التاريخ مع الأرشيف -->
+          <div class="date-sync-section">
+            <h4>🔄 مزامنة تاريخ الأرشيف مع تاريخ النظام</h4>
+            <p>يمكنك مزامنة تاريخ الأرشيف الحالي أو جميع الأرشيفات لتطابق تاريخ النظام الحالي. هذا مفيد عند تصحيح التاريخ.</p>
+            <div class="date-sync-buttons">
+              <button class="btn btn-purple btn-small" onclick="syncCurrentArchiveDate()" style="flex:1;min-width:200px;">
+                🔄 مزامنة الأرشيف الحالي فقط
+              </button>
+              <button class="btn btn-navy btn-small" onclick="syncAllArchivesDate()" style="flex:1;min-width:200px;">
+                🌐 مزامنة جميع الأرشيفات
               </button>
             </div>
           </div>
@@ -750,7 +774,6 @@ function formatFullDate(date) {
 function setupDateSync() {
   if (unsubscribeDate) unsubscribeDate();
   
-  // الاستماع لتغييرات التاريخ من Firebase
   unsubscribeDate = db.collection('settings').doc('current').onSnapshot((doc) => {
     if (doc.exists) {
       const data = doc.data();
@@ -800,7 +823,7 @@ function syncWithDeviceDate() {
   
   currentDate = deviceDate;
   localStorage.setItem('currentTrackingDate', currentDate);
-  updateDateInFirebase(currentDate); // ✅ مزامنة مع Firebase
+  updateDateInFirebase(currentDate);
   updateDateDisplay();
   updateDateComparison();
   const parts = currentDate.split('-');
@@ -821,12 +844,99 @@ function manuallySetDate() {
   }
   currentDate = input;
   localStorage.setItem('currentTrackingDate', currentDate);
-  updateDateInFirebase(currentDate); // ✅ مزامنة مع Firebase
+  updateDateInFirebase(currentDate);
   updateDateDisplay();
   updateDateComparison();
   const tomorrow = new Date(year, month, day + 1);
   document.getElementById('newDayDate').value = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
   showToast(`✅ تم تحديث التاريخ: ${formatFullDate(currentDate)}`, 'success');
+}
+
+// ==========================================
+// 🔄 مزامنة تاريخ الأرشيف مع تاريخ النظام
+// ==========================================
+
+// ✅ مزامنة الأرشيف الحالي فقط
+async function syncCurrentArchiveDate() {
+  const currentArchive = archiveData[currentDate];
+  
+  if (!currentArchive) {
+    showToast('ℹ️ لا يوجد أرشيف لهذا التاريخ', 'info');
+    return;
+  }
+  
+  if (!confirm(`⚠️ مزامنة تاريخ الأرشيف الحالي مع تاريخ النظام؟\n\n📅 التاريخ: ${formatFullDate(currentDate)}\n\nسيتم تحديث حقل displayDate في الأرشيف.\n\nمتابعة؟`)) return;
+  
+  try {
+    // تحديث في Firebase
+    await db.collection('archive').doc(currentDate).update({
+      displayDate: currentDate,
+      syncedAt: new Date().toISOString(),
+      syncedBy: currentUser ? currentUser.email : 'unknown'
+    });
+    
+    // تحديث محلياً
+    currentArchive.displayDate = currentDate;
+    currentArchive.syncedAt = new Date().toISOString();
+    
+    const localArchive = JSON.parse(localStorage.getItem('localArchive') || '{}');
+    localArchive[currentDate] = currentArchive;
+    localStorage.setItem('localArchive', JSON.stringify(localArchive));
+    
+    renderArchiveList();
+    showToast(`✅ تمت مزامنة أرشيف ${formatFullDate(currentDate)}`, 'success');
+  } catch (error) {
+    showToast('❌ خطأ: ' + error.message, 'error');
+  }
+}
+
+// ✅ مزامنة جميع الأرشيفات
+async function syncAllArchivesDate() {
+  const archiveKeys = Object.keys(archiveData);
+  
+  if (archiveKeys.length === 0) {
+    showToast('ℹ️ لا يوجد أي أرشيف للمزامنة', 'info');
+    return;
+  }
+  
+  if (!confirm(`⚠️ مزامنة جميع الأرشيفات (${archiveKeys.length} يوم) مع تاريخ النظام؟\n\n📅 تاريخ النظام الحالي: ${formatFullDate(currentDate)}\n\nسيتم تحديث حقل displayDate في جميع الأرشيفات لتطابق تاريخ النظام.\n\n⚠️ ملاحظة: هذا سيغير التاريخ المعروض لجميع الأرشيفات.\n\nمتابعة؟`)) return;
+  
+  try {
+    const batch = db.batch();
+    let updatedCount = 0;
+    
+    archiveKeys.forEach(dateKey => {
+      const archive = archiveData[dateKey];
+      
+      // تحديث حقل displayDate
+      archive.displayDate = currentDate;
+      archive.syncedAt = new Date().toISOString();
+      archive.syncedBy = currentUser ? currentUser.email : 'unknown';
+      
+      // إضافة للـ batch
+      batch.set(db.collection('archive').doc(dateKey), archive, { merge: true });
+      updatedCount++;
+    });
+    
+    await batch.commit();
+    
+    // تحديث محلياً
+    const localArchive = JSON.parse(localStorage.getItem('localArchive') || '{}');
+    archiveKeys.forEach(dateKey => {
+      localArchive[dateKey] = archiveData[dateKey];
+    });
+    localStorage.setItem('localArchive', JSON.stringify(localArchive));
+    
+    renderArchiveList();
+    showToast(`✅ تمت مزامنة ${updatedCount} أرشيف مع تاريخ: ${formatFullDate(currentDate)}`, 'success');
+  } catch (error) {
+    showToast('❌ خطأ: ' + error.message, 'error');
+  }
+}
+
+// ✅ دالة للحصول على تاريخ العرض الصحيح للأرشيف
+function getArchiveDisplayDate(archive) {
+  return archive.displayDate || archive.date;
 }
 
 async function createAdminAccount() {
@@ -898,7 +1008,7 @@ function showApp() {
   updateDateDisplay();
   setupRealtimeListener();
   setupArchiveListener();
-  setupDateSync(); // ✅ مزامنة التاريخ
+  setupDateSync();
   startClock();
 }
 
@@ -969,6 +1079,7 @@ async function startNewDay() {
   try {
     const archiveRecord = {
       date: currentDate,
+      displayDate: currentDate, // ✅ إضافة حقل displayDate
       archivedAt: new Date().toISOString(),
       carriersCount: carriers.length,
       carriers: JSON.parse(JSON.stringify(carriers)),
@@ -994,7 +1105,7 @@ async function startNewDay() {
     } catch (e) { console.warn(e); }
     currentDate = newDate;
     localStorage.setItem('currentTrackingDate', currentDate);
-    updateDateInFirebase(currentDate); // ✅ مزامنة التاريخ الجديد
+    updateDateInFirebase(currentDate);
     updateDateDisplay();
     updateDateComparison();
     document.getElementById('newDayDate').value = '';
@@ -1017,22 +1128,32 @@ async function deleteArchive(date) {
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
+// ✅ تحديث renderArchiveList لاستخدام displayDate
 function renderArchiveList() {
   const grid = document.getElementById('archiveGrid');
   const countEl = document.getElementById('archiveCount');
   const dates = Object.keys(archiveData).sort().reverse();
+  
   if (countEl) countEl.innerHTML = `<span class="latin">${dates.length}</span> يوم محفوظ`;
-  if (dates.length === 0) { grid.innerHTML = '<div class="archive-empty">📭 لا يوجد أرشيف</div>'; return; }
+  
+  if (dates.length === 0) {
+    grid.innerHTML = '<div class="archive-empty">📭 لا يوجد أرشيف</div>';
+    return;
+  }
+  
   let html = '';
   dates.forEach(date => {
     const data = archiveData[date];
+    const displayDate = getArchiveDisplayDate(data); // ✅ استخدام displayDate
     const stats = data.stats || {};
     const completionRate = stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0;
+    
     html += `
       <div class="archive-card">
         <div class="archive-date">
-          <span>📅 ${formatDateArabic(date)}</span>
-          <span class="hijri-date">🌙 ${formatHijriDate(date)}</span>
+          <span>📅 ${formatDateArabic(displayDate)}</span>
+          <span class="hijri-date">🌙 ${formatHijriDate(displayDate)}</span>
+          ${displayDate !== date ? `<span class="original-date">📝 المعرف: ${date}</span>` : ''}
         </div>
         <div class="archive-stats">
           <div>👥 الحاملين: <strong class="latin">${stats.total || 0}</strong></div>
@@ -1047,13 +1168,16 @@ function renderArchiveList() {
       </div>
     `;
   });
+  
   grid.innerHTML = html;
 }
 
+// ✅ تحديث viewArchive لاستخدام displayDate
 function viewArchive(date) {
   const data = archiveData[date];
   if (!data) return;
-  document.getElementById('archiveViewDate').textContent = formatFullDate(date);
+  const displayDate = getArchiveDisplayDate(data);
+  document.getElementById('archiveViewDate').textContent = formatFullDate(displayDate);
   const content = document.getElementById('archiveViewContent');
   const carriers = data.carriers || [];
   const stats = data.stats || {};
@@ -1086,8 +1210,8 @@ function viewArchive(date) {
   content.innerHTML = `
     <div class="archive-viewer-header">
       <h2>📋 أرشيف يوم المتابعة</h2>
-      <div class="archive-date-display">${formatDateArabic(date)}</div>
-      <div class="archive-date-display" style="font-size:14px;">🌙 ${formatHijriDate(date)}</div>
+      <div class="archive-date-display">${formatDateArabic(displayDate)}</div>
+      <div class="archive-date-display" style="font-size:14px;">🌙 ${formatHijriDate(displayDate)}</div>
       <div class="archive-stats-row">
         <div class="stat-item"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي</div></div>
         <div class="stat-item"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">نشط</div></div>
@@ -1112,13 +1236,15 @@ function viewArchive(date) {
   document.getElementById('viewArchiveModal').classList.add('active');
 }
 
+// ✅ تحديث exportArchiveAsHTML لاستخدام displayDate
 function exportArchiveAsHTML(date) {
   const data = archiveData[date];
   if (!data) { showToast('⚠️ البيانات غير متوفرة', 'error'); return; }
   const carriers = data.carriers || [];
   const stats = data.stats || {};
-  const gregorian = formatDateArabic(date);
-  const hijri = formatHijriDate(date);
+  const displayDate = getArchiveDisplayDate(data);
+  const gregorian = formatDateArabic(displayDate);
+  const hijri = formatHijriDate(displayDate);
   let tableRows = '';
   carriers.forEach(c => {
     let status = 'قيد الانتظار', badgeClass = 'b-pend';
@@ -1216,9 +1342,10 @@ function exportArchiveAsHTML(date) {
   a.download = `archive_${date}_${Date.now()}.html`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast(`✅ تم تصدير أرشيف ${formatDateArabic(date)}`, 'success');
+  showToast(`✅ تم تصدير أرشيف ${formatDateArabic(displayDate)}`, 'success');
 }
 
+// ✅ تحديث exportAllArchives لاستخدام displayDate
 function exportAllArchives() {
   const dates = Object.keys(archiveData).sort().reverse();
   if (dates.length === 0) { showToast('⚠️ لا يوجد أرشيف', 'info'); return; }
@@ -1227,8 +1354,9 @@ function exportAllArchives() {
     const data = archiveData[date];
     const carriers = data.carriers || [];
     const stats = data.stats || {};
-    const gregorian = formatDateArabic(date);
-    const hijri = formatHijriDate(date);
+    const displayDate = getArchiveDisplayDate(data);
+    const gregorian = formatDateArabic(displayDate);
+    const hijri = formatHijriDate(displayDate);
     let tableRows = '';
     carriers.forEach(c => {
       let status = 'قيد الانتظار', badgeClass = 'b-pend';
@@ -1386,6 +1514,7 @@ function importArchiveHTML(event) {
           });
           archiveData[dateKey] = {
             date: dateKey,
+            displayDate: dateKey,
             archivedAt: new Date().toISOString(),
             carriersCount: carriers.length,
             carriers: carriers,
@@ -1572,85 +1701,51 @@ async function deleteCarrier(id) {
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// ==========================================
-// 🔄 إعادة ضبط الحركات (مدير فقط)
-// ==========================================
-
-// إعادة تعيين حامل واحد (مسح جميع المراحل)
 async function resetCarrier(id) {
   const carrier = carriers.find(c => c.id == id);
   if (!carrier) return;
-  if (!confirm(`⚠️ إعادة تعيين جميع حركات:\n\n👤 ${carrier.name}\n📍 ${carrier.region}\n\nسيتم مسح جميع المراحل (p0, p1, p2, p3) والعودة لحالة "قيد الانتظار".\n\nمتابعة؟`)) return;
+  if (!confirm(`⚠️ إعادة تعيين جميع حركات:\n\n👤 ${carrier.name}\n📍 ${carrier.region}\n\nسيتم مسح جميع المراحل.\n\nمتابعة؟`)) return;
   try {
-    await db.collection('carriers').doc(id.toString()).update({
-      p0: null, p1: null, p2: null, p3: null
-    });
+    await db.collection('carriers').doc(id.toString()).update({ p0: null, p1: null, p2: null, p3: null });
     showToast(`🔄 تم إعادة تعيين ${carrier.name}`, 'success');
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// التراجع عن آخر حركة (يرجع للمرحلة السابقة)
 async function undoLastAction(id) {
   const carrier = carriers.find(c => c.id == id);
   if (!carrier) return;
-  
   let actionDesc = '';
   const update = {};
-  
-  if (carrier.p3) {
-    update.p3 = null;
-    actionDesc = 'تسليم المغلفات للامتحانات (p3)';
-  } else if (carrier.p2) {
-    update.p2 = null;
-    actionDesc = 'استلام مغلف الإجابات (p2)';
-  } else if (carrier.p1) {
-    update.p1 = null;
-    actionDesc = 'تسليم الأسئلة للمركز (p1)';
-  } else if (carrier.p0) {
-    update.p0 = null;
-    actionDesc = 'الانطلاق من المديرية (p0)';
-  } else {
-    showToast('⚠️ لا توجد حركات للتراجع عنها', 'info');
-    return;
-  }
-  
-  if (!confirm(`↩️ التراجع عن:\n\n👤 ${carrier.name}\n📝 آخر حركة: ${actionDesc}\n\nمتابعة؟`)) return;
-  
+  if (carrier.p3) { update.p3 = null; actionDesc = 'تسليم المغلفات (p3)'; }
+  else if (carrier.p2) { update.p2 = null; actionDesc = 'استلام المغلف (p2)'; }
+  else if (carrier.p1) { update.p1 = null; actionDesc = 'تسليم الأسئلة (p1)'; }
+  else if (carrier.p0) { update.p0 = null; actionDesc = 'الانطلاق (p0)'; }
+  else { showToast('⚠️ لا توجد حركات للتراجع', 'info'); return; }
+  if (!confirm(`↩️ التراجع عن:\n\n👤 ${carrier.name}\n📝 ${actionDesc}\n\nمتابعة؟`)) return;
   try {
     await db.collection('carriers').doc(id.toString()).update(update);
     showToast(`↩️ تم التراجع عن ${actionDesc}`, 'success');
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// إعادة تعيين جميع الحاملين
 async function resetAllCarriers() {
   if (carriers.length === 0) { showToast('⚠️ لا يوجد حاملون', 'info'); return; }
-  if (!confirm(`⚠️ إعادة تعيين جميع الحاملين (${carriers.length})؟\n\nسيتم مسح جميع المراحل (p0, p1, p2, p3) والعودة لحالة "قيد الانتظار".\n\n⚠️ هذا الإجراء لا يمكن التراجع عنه!\n\nمتابعة؟`)) return;
+  if (!confirm(`⚠️ إعادة تعيين جميع الحاملين (${carriers.length})؟\n\n⚠️ لا يمكن التراجع!`)) return;
   try {
     const batch = db.batch();
     carriers.forEach(carrier => {
-      batch.update(db.collection('carriers').doc(carrier.id.toString()), {
-        p0: null, p1: null, p2: null, p3: null
-      });
+      batch.update(db.collection('carriers').doc(carrier.id.toString()), { p0: null, p1: null, p2: null, p3: null });
     });
     await batch.commit();
     showToast(`🔄 تم إعادة تعيين ${carriers.length} حامل`, 'success');
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// التراجع عن آخر حركة للجميع
 async function undoLastActions() {
   if (carriers.length === 0) { showToast('⚠️ لا يوجد حاملون', 'info'); return; }
-  
-  // حساب عدد الحاملين الذين لديهم حركات
   const carriersWithActions = carriers.filter(c => c.p0 || c.p1 || c.p2 || c.p3);
-  if (carriersWithActions.length === 0) {
-    showToast('⚠️ لا توجد حركات للتراجع عنها', 'info');
-    return;
-  }
-  
-  if (!confirm(`↩️ التراجع عن آخر حركة لـ ${carriersWithActions.length} حامل؟\n\nسيتم التراجع عن آخر مرحلة مسجلة لكل حامل.\n\nمتابعة؟`)) return;
-  
+  if (carriersWithActions.length === 0) { showToast('⚠️ لا توجد حركات', 'info'); return; }
+  if (!confirm(`↩️ التراجع عن آخر حركة لـ ${carriersWithActions.length} حامل؟`)) return;
   try {
     const batch = db.batch();
     let count = 0;
@@ -1661,25 +1756,21 @@ async function undoLastActions() {
       else if (carrier.p1) update.p1 = null;
       else if (carrier.p0) update.p0 = null;
       else return;
-      
       batch.update(db.collection('carriers').doc(carrier.id.toString()), update);
       count++;
     });
     await batch.commit();
-    showToast(`↩️ تم التراجع عن آخر حركة لـ ${count} حامل`, 'success');
+    showToast(`↩️ تم التراجع عن ${count} حامل`, 'success');
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// إعادة تعيين الحاملين المحددين
 async function resetSelectedCarriers() {
   if (selectedCarriers.size === 0) { showToast('⚠️ لم يتم تحديد أي حامل', 'info'); return; }
-  if (!confirm(`⚠️ إعادة تعيين ${selectedCarriers.size} حامل محدد؟\n\nسيتم مسح جميع المراحل.\n\nمتابعة؟`)) return;
+  if (!confirm(`⚠️ إعادة تعيين ${selectedCarriers.size} حامل محدد؟`)) return;
   try {
     const batch = db.batch();
     selectedCarriers.forEach(id => {
-      batch.update(db.collection('carriers').doc(id.toString()), {
-        p0: null, p1: null, p2: null, p3: null
-      });
+      batch.update(db.collection('carriers').doc(id.toString()), { p0: null, p1: null, p2: null, p3: null });
     });
     await batch.commit();
     showToast(`🔄 تم إعادة تعيين ${selectedCarriers.size} حامل`, 'success');
@@ -1874,7 +1965,7 @@ function renderCarriersTable() {
       <td>${badge}</td>
       <td>
         <button class="action-btn action-btn-edit" onclick="showEditCarrierModal(${carrier.id})" title="تعديل">✏️ تعديل</button>
-        <button class="action-btn action-btn-undo" onclick="undoLastAction(${carrier.id})" title="تراجع عن آخر حركة">↩️ تراجع</button>
+        <button class="action-btn action-btn-undo" onclick="undoLastAction(${carrier.id})" title="تراجع">↩️ تراجع</button>
         <button class="action-btn action-btn-reset" onclick="resetCarrier(${carrier.id})" title="إعادة تعيين">🔄 تعيين</button>
         <button class="action-btn action-btn-delete" onclick="deleteCarrier(${carrier.id})" title="حذف">🗑️ حذف</button>
       </td>
