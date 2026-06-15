@@ -75,6 +75,9 @@
   .date-badge { font-family: var(--font-ar); font-size: 13px; font-weight: 700; color: var(--navy); background: var(--navy-light); padding: 8px 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 4px; align-items: center; }
   .date-badge .gregorian { font-size: 13px; }
   .date-badge .hijri { font-size: 11px; color: var(--teal); font-weight: 600; }
+  .sync-status { font-size: 10px; color: var(--emerald); font-weight: 700; display: flex; align-items: center; gap: 4px; }
+  .sync-status::before { content: ''; width: 6px; height: 6px; background: var(--emerald); border-radius: 50%; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   .container { max-width: 1440px; margin: 0 auto; padding: 32px; }
 
   .tabs { display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 2px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; }
@@ -114,15 +117,6 @@
   .b-ret { background: var(--ocean-light); color: var(--ocean); } .b-ret .badge-dot { background: var(--ocean); }
   .b-comp { background: var(--emerald-light); color: var(--emerald); } .b-comp .badge-dot { background: var(--emerald); }
   .b-over { background: var(--brick-light); color: var(--brick); } .b-over .badge-dot { background: var(--brick); }
-
-  .progress-sec { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow); }
-  .progress-row { margin-bottom: 20px; }
-  .progress-row:last-child { margin-bottom: 0; }
-  .progress-row-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-  .pr-label { font-size: 14px; color: var(--text); font-weight: 700; }
-  .pr-pct { font-size: 15px; font-weight: 800; font-family: var(--font-num); color: var(--navy); }
-  .bar-bg { background: var(--slate-light); border-radius: 99px; height: 12px; overflow: hidden; border: 1px solid var(--border); }
-  .bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s; }
 
   .controls { display: flex; gap: 12px; margin-bottom: 24px; background: var(--surface); padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
   .search-inp { flex: 1; min-width: 280px; padding: 12px 18px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; font-family: var(--font-ar); }
@@ -234,12 +228,16 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    margin: 0 2px;
+    margin: 2px;
   }
   .action-btn-edit { background: var(--ocean-light); color: var(--ocean); }
   .action-btn-edit:hover { background: var(--ocean); color: white; }
   .action-btn-delete { background: var(--brick-light); color: var(--brick); }
   .action-btn-delete:hover { background: var(--brick); color: white; }
+  .action-btn-reset { background: var(--amber-light); color: var(--amber); }
+  .action-btn-reset:hover { background: var(--amber); color: white; }
+  .action-btn-undo { background: var(--purple-light); color: var(--purple); }
+  .action-btn-undo:hover { background: var(--purple); color: white; }
 
   .bulk-actions {
     background: var(--navy-light);
@@ -264,6 +262,18 @@
     cursor: pointer;
     accent-color: var(--navy);
   }
+
+  /* ✅ قسم إعادة الضبط للمدير */
+  .reset-section {
+    background: linear-gradient(135deg, var(--amber-light) 0%, var(--brick-light) 100%);
+    border: 2px dashed var(--amber);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .reset-section h3 { font-size: 18px; font-weight: 800; color: var(--amber); margin-bottom: 12px; }
+  .reset-section p { font-size: 13px; color: #92400E; margin-bottom: 16px; }
+  .reset-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
 
   @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .container { padding: 24px; } }
   @media (max-width: 768px) {
@@ -330,6 +340,7 @@
       <div class="date-badge">
         <span class="gregorian" id="currentDateDisplay">--/--/----</span>
         <span class="hijri" id="currentHijriDate">--</span>
+        <span class="sync-status" id="syncStatus">متزامن</span>
       </div>
       <span class="user-pill" id="uDisp">--</span>
       <div class="clock latin" id="clk">--:--:--</div>
@@ -352,19 +363,34 @@
         <div class="stat-card"><div class="stat-label">تم التسليم</div><div class="stat-value latin" id="statDelivered">0</div><div class="stat-sub">أسئلة للمراكز</div></div>
         <div class="stat-card"><div class="stat-label">مهام مكتملة</div><div class="stat-value latin" id="statDone">0</div><div class="stat-sub">إجابات للامتحانات</div></div>
       </div>
-      <div class="progress-sec">
+      <div class="progress-sec" style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow);">
         <div style="font-size:18px; font-weight:800; margin-bottom:24px;">📊 مستوى الإنجاز العام</div>
-        <div class="progress-row">
-          <div class="progress-row-top"><span class="pr-label">التقدم الإجمالي</span><span class="pr-pct latin" id="pct1">0%</span></div>
-          <div class="bar-bg"><div class="bar-fill" id="bar1" style="width:0%;background:var(--navy)"></div></div>
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
+            <span style="font-size: 14px; color: var(--text); font-weight: 700;">التقدم الإجمالي</span>
+            <span class="latin" id="pct1" style="font-size: 15px; font-weight: 800; color: var(--navy);">0%</span>
+          </div>
+          <div style="background: var(--slate-light); border-radius: 99px; height: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <div id="bar1" style="width:0%;background:var(--navy);height:100%;border-radius:99px;transition:width 0.6s;"></div>
+          </div>
         </div>
-        <div class="progress-row">
-          <div class="progress-row-top"><span class="pr-label">تسليم الأسئلة للمراكز</span><span class="pr-pct latin" id="pct2">0%</span></div>
-          <div class="bar-bg"><div class="bar-fill" id="bar2" style="width:0%;background:var(--teal)"></div></div>
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
+            <span style="font-size: 14px; color: var(--text); font-weight: 700;">تسليم الأسئلة للمراكز</span>
+            <span class="latin" id="pct2" style="font-size: 15px; font-weight: 800; color: var(--teal);">0%</span>
+          </div>
+          <div style="background: var(--slate-light); border-radius: 99px; height: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <div id="bar2" style="width:0%;background:var(--teal);height:100%;border-radius:99px;transition:width 0.6s;"></div>
+          </div>
         </div>
-        <div class="progress-row">
-          <div class="progress-row-top"><span class="pr-label">تسليم مغلفات الإجابات</span><span class="pr-pct latin" id="pct3">0%</span></div>
-          <div class="bar-bg"><div class="bar-fill" id="bar3" style="width:0%;background:var(--amber)"></div></div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
+            <span style="font-size: 14px; color: var(--text); font-weight: 700;">تسليم مغلفات الإجابات</span>
+            <span class="latin" id="pct3" style="font-size: 15px; font-weight: 800; color: var(--amber);">0%</span>
+          </div>
+          <div style="background: var(--slate-light); border-radius: 99px; height: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <div id="bar3" style="width:0%;background:var(--amber);height:100%;border-radius:99px;transition:width 0.6s;"></div>
+          </div>
         </div>
       </div>
       <div class="controls">
@@ -399,11 +425,26 @@
         </div>
         <div style="background:var(--ocean-light);border:1px solid var(--ocean);border-radius:12px;padding:16px;margin-bottom:20px;font-size:14px;color:var(--ocean);">💡 <strong>كيفية دخول حاملي الأسئلة:</strong> بعد إضافة حامل جديد، سيظهر رمز دخول خاص به. اضغط على "طباعة قائمة الدخول" لتوليد قائمة بجميع الحاملين مع أكوادهم.</div>
         
-        <!-- ✅ شريط الإجراءات الجماعية -->
+        <!-- ✅ قسم إعادة الضبط (مدير فقط) -->
+        <div class="reset-section">
+          <h3>🔄 إعادة ضبط الحركات (مدير النظام فقط)</h3>
+          <p>يمكنك إعادة تعيين حركات الحاملين في حال حدوث خطأ. هذه العمليات لا يمكن التراجع عنها.</p>
+          <div class="reset-buttons">
+            <button class="btn btn-amber btn-small" onclick="resetAllCarriers()" style="flex:1;min-width:200px;">
+              🔄 إعادة تعيين جميع الحاملين
+            </button>
+            <button class="btn btn-purple btn-small" onclick="undoLastActions()" style="flex:1;min-width:200px;">
+              ↩️ تراجع عن آخر حركة للجميع
+            </button>
+          </div>
+        </div>
+        
+        <!-- شريط الإجراءات الجماعية -->
         <div class="bulk-actions" id="bulkActions">
           <div class="count">✅ تم تحديد <span id="selectedCount" class="latin">0</span> حامل</div>
           <div class="buttons">
             <button class="btn btn-brick btn-small" onclick="deleteSelectedCarriers()">🗑️ حذف المحدد</button>
+            <button class="btn btn-amber btn-small" onclick="resetSelectedCarriers()">🔄 إعادة تعيين المحدد</button>
             <button class="btn btn-slate btn-small" onclick="clearSelection()">❌ إلغاء التحديد</button>
           </div>
         </div>
@@ -437,15 +478,15 @@
         
         <div class="new-day-section">
           <h3>📅 إدارة تاريخ المتابعة</h3>
-          <p>التاريخ الحالي المخزن في النظام قد لا يتطابق مع تاريخ جهازك. استخدم الأزرار أدناه للمزامنة.</p>
+          <p>التاريخ يتم مزامنته تلقائياً عبر Firebase بين جميع الأجهزة.</p>
           
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;">
             <div style="background:white;border-radius:10px;padding:14px;border:2px solid var(--navy);">
-              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">📅 تاريخ النظام المخزن</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">📅 تاريخ النظام الحالي</div>
               <div style="font-size:16px;font-weight:800;color:var(--navy);margin-top:4px;" id="storedDateDisplay">--</div>
             </div>
             <div style="background:white;border-radius:10px;padding:14px;border:2px solid var(--emerald);">
-              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">💻 تاريخ جهازك الحالي</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">💻 تاريخ جهازك المحلي</div>
               <div style="font-size:16px;font-weight:800;color:var(--emerald);margin-top:4px;" id="deviceDateDisplay">--</div>
             </div>
           </div>
@@ -577,7 +618,7 @@
   </div>
 </div>
 
-<!-- ✅ Edit Carrier Modal -->
+<!-- Edit Carrier Modal -->
 <div id="editCarrierModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -645,14 +686,12 @@ let now = Date.now();
 let trackingInterval = null;
 let unsubscribe = null;
 let unsubscribeArchive = null;
-let selectedCarriers = new Set(); // ✅ المحددون للحذف الجماعي
+let unsubscribeDate = null;
+let selectedCarriers = new Set();
 
 function getLocalDateStr() {
   const d = new Date();
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 let currentDate = localStorage.getItem('currentTrackingDate') || getLocalDateStr();
@@ -705,6 +744,45 @@ function formatFullDate(date) {
   return h ? `${g} | ${h}` : g;
 }
 
+// ==========================================
+// 🌐 مزامنة التاريخ عبر Firebase
+// ==========================================
+function setupDateSync() {
+  if (unsubscribeDate) unsubscribeDate();
+  
+  // الاستماع لتغييرات التاريخ من Firebase
+  unsubscribeDate = db.collection('settings').doc('current').onSnapshot((doc) => {
+    if (doc.exists) {
+      const data = doc.data();
+      const remoteDate = data.currentDate;
+      
+      if (remoteDate && remoteDate !== currentDate) {
+        console.log('🔄 تم مزامنة التاريخ من Firebase:', remoteDate);
+        currentDate = remoteDate;
+        localStorage.setItem('currentTrackingDate', currentDate);
+        updateDateDisplay();
+        updateDateComparison();
+        showToast(`🔄 تم تحديث التاريخ: ${formatFullDate(currentDate)}`, 'info');
+      }
+    }
+  }, (error) => {
+    console.warn('⚠️ فشل مزامنة التاريخ:', error.message);
+  });
+}
+
+async function updateDateInFirebase(newDate) {
+  try {
+    await db.collection('settings').doc('current').set({
+      currentDate: newDate,
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser ? currentUser.email : 'unknown'
+    }, { merge: true });
+    console.log('✅ تم تحديث التاريخ في Firebase');
+  } catch (error) {
+    console.warn('⚠️ فشل تحديث التاريخ في Firebase:', error.message);
+  }
+}
+
 function updateDateComparison() {
   const storedDisplay = document.getElementById('storedDateDisplay');
   const deviceDisplay = document.getElementById('deviceDateDisplay');
@@ -715,12 +793,14 @@ function updateDateComparison() {
 function syncWithDeviceDate() {
   const deviceDate = getLocalDateStr();
   if (deviceDate === currentDate) {
-    showToast('✅ التاريخ متزامن بالفعل مع تاريخ الجهاز', 'success');
+    showToast('✅ التاريخ متزامن بالفعل', 'success');
     return;
   }
-  if (!confirm(`⚠️ سيتم تحديث تاريخ النظام:\n\n📅 من: ${formatFullDate(currentDate)}\n💻 إلى: ${formatFullDate(deviceDate)}\n\nهل تريد المتابعة؟`)) return;
+  if (!confirm(`⚠️ سيتم تحديث تاريخ النظام:\n\n📅 من: ${formatFullDate(currentDate)}\n💻 إلى: ${formatFullDate(deviceDate)}\n\nسيتم المزامنة مع جميع الأجهزة. متابعة؟`)) return;
+  
   currentDate = deviceDate;
   localStorage.setItem('currentTrackingDate', currentDate);
+  updateDateInFirebase(currentDate); // ✅ مزامنة مع Firebase
   updateDateDisplay();
   updateDateComparison();
   const parts = currentDate.split('-');
@@ -732,7 +812,7 @@ function syncWithDeviceDate() {
 function manuallySetDate() {
   const input = prompt(`أدخل التاريخ بصيغة YYYY-MM-DD\n\nمثال: 2026-06-12\n\nالتاريخ الحالي: ${currentDate}`, currentDate);
   if (!input) return;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(input)) { showToast('❌ صيغة غير صحيحة. استخدم YYYY-MM-DD', 'error'); return; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(input)) { showToast('❌ صيغة غير صحيحة', 'error'); return; }
   const parts = input.split('-');
   const year = parseInt(parts[0]), month = parseInt(parts[1]) - 1, day = parseInt(parts[2]);
   const testDate = new Date(year, month, day);
@@ -741,6 +821,7 @@ function manuallySetDate() {
   }
   currentDate = input;
   localStorage.setItem('currentTrackingDate', currentDate);
+  updateDateInFirebase(currentDate); // ✅ مزامنة مع Firebase
   updateDateDisplay();
   updateDateComparison();
   const tomorrow = new Date(year, month, day + 1);
@@ -817,6 +898,7 @@ function showApp() {
   updateDateDisplay();
   setupRealtimeListener();
   setupArchiveListener();
+  setupDateSync(); // ✅ مزامنة التاريخ
   startClock();
 }
 
@@ -832,6 +914,7 @@ async function logout() {
     if (trackingInterval) clearInterval(trackingInterval);
     if (unsubscribe) unsubscribe();
     if (unsubscribeArchive) unsubscribeArchive();
+    if (unsubscribeDate) unsubscribeDate();
     if (currentUser && currentUser.role === 'admin') await auth.signOut();
     location.reload();
   }
@@ -911,6 +994,7 @@ async function startNewDay() {
     } catch (e) { console.warn(e); }
     currentDate = newDate;
     localStorage.setItem('currentTrackingDate', currentDate);
+    updateDateInFirebase(currentDate); // ✅ مزامنة التاريخ الجديد
     updateDateDisplay();
     updateDateComparison();
     document.getElementById('newDayDate').value = '';
@@ -1389,6 +1473,7 @@ function importData(event) {
       if (data.currentDate) {
         currentDate = data.currentDate;
         localStorage.setItem('currentTrackingDate', currentDate);
+        updateDateInFirebase(currentDate);
         updateDateDisplay();
         updateDateComparison();
       }
@@ -1439,14 +1524,9 @@ async function addCarrier() {
   } catch (error) { showAlert('modalAlert', 'خطأ: ' + error.message, 'error'); }
 }
 
-// ==========================================
-// ✅ دوال التعديل والحذف
-// ==========================================
-
 function showEditCarrierModal(id) {
   const carrier = carriers.find(c => c.id == id);
   if (!carrier) return;
-  
   document.getElementById('editCarrierId').value = carrier.id;
   document.getElementById('editCarrierIdDisplay').value = carrier.id;
   document.getElementById('editCarrierName').value = carrier.name || '';
@@ -1465,18 +1545,14 @@ async function saveCarrierEdit() {
   const region = document.getElementById('editCarrierRegion').value.trim();
   const school = document.getElementById('editCarrierSchool').value.trim();
   const time = document.getElementById('editCarrierTime').value;
-  
   if (!name || !phone || !region || !school || !time) {
-    showAlert('editModalAlert', 'الرجاء ملء جميع الحقول', 'error');
-    return;
+    showAlert('editModalAlert', 'الرجاء ملء جميع الحقول', 'error'); return;
   }
-  
   try {
     await db.collection('carriers').doc(id).update({
-      name, phone, region, school,
-      expectedTime: parseInt(time)
+      name, phone, region, school, expectedTime: parseInt(time)
     });
-    showAlert('editModalAlert', '✅ تم حفظ التعديلات بنجاح!', 'success');
+    showAlert('editModalAlert', '✅ تم حفظ التعديلات!', 'success');
     setTimeout(() => {
       closeModal('editCarrierModal');
       showToast('✅ تم تحديث البيانات', 'success');
@@ -1489,58 +1565,154 @@ async function saveCarrierEdit() {
 async function deleteCarrier(id) {
   const carrier = carriers.find(c => c.id == id);
   if (!carrier) return;
-  
-  if (!confirm(`⚠️ هل أنت متأكد من حذف الحامل:\n\n👤 ${carrier.name}\n📍 ${carrier.region}\n🏫 ${carrier.school}\n\nلا يمكن التراجع عن هذا الإجراء!`)) {
-    return;
-  }
-  
+  if (!confirm(`⚠️ حذف الحامل:\n\n👤 ${carrier.name}\n📍 ${carrier.region}\n🏫 ${carrier.school}\n\nلا يمكن التراجع!`)) return;
   try {
     await db.collection('carriers').doc(id.toString()).delete();
     showToast(`🗑️ تم حذف ${carrier.name}`, 'success');
-  } catch (error) {
-    showToast('❌ خطأ: ' + error.message, 'error');
-  }
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// ✅ التحديد الجماعي
+// ==========================================
+// 🔄 إعادة ضبط الحركات (مدير فقط)
+// ==========================================
+
+// إعادة تعيين حامل واحد (مسح جميع المراحل)
+async function resetCarrier(id) {
+  const carrier = carriers.find(c => c.id == id);
+  if (!carrier) return;
+  if (!confirm(`⚠️ إعادة تعيين جميع حركات:\n\n👤 ${carrier.name}\n📍 ${carrier.region}\n\nسيتم مسح جميع المراحل (p0, p1, p2, p3) والعودة لحالة "قيد الانتظار".\n\nمتابعة؟`)) return;
+  try {
+    await db.collection('carriers').doc(id.toString()).update({
+      p0: null, p1: null, p2: null, p3: null
+    });
+    showToast(`🔄 تم إعادة تعيين ${carrier.name}`, 'success');
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
+}
+
+// التراجع عن آخر حركة (يرجع للمرحلة السابقة)
+async function undoLastAction(id) {
+  const carrier = carriers.find(c => c.id == id);
+  if (!carrier) return;
+  
+  let actionDesc = '';
+  const update = {};
+  
+  if (carrier.p3) {
+    update.p3 = null;
+    actionDesc = 'تسليم المغلفات للامتحانات (p3)';
+  } else if (carrier.p2) {
+    update.p2 = null;
+    actionDesc = 'استلام مغلف الإجابات (p2)';
+  } else if (carrier.p1) {
+    update.p1 = null;
+    actionDesc = 'تسليم الأسئلة للمركز (p1)';
+  } else if (carrier.p0) {
+    update.p0 = null;
+    actionDesc = 'الانطلاق من المديرية (p0)';
+  } else {
+    showToast('⚠️ لا توجد حركات للتراجع عنها', 'info');
+    return;
+  }
+  
+  if (!confirm(`↩️ التراجع عن:\n\n👤 ${carrier.name}\n📝 آخر حركة: ${actionDesc}\n\nمتابعة؟`)) return;
+  
+  try {
+    await db.collection('carriers').doc(id.toString()).update(update);
+    showToast(`↩️ تم التراجع عن ${actionDesc}`, 'success');
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
+}
+
+// إعادة تعيين جميع الحاملين
+async function resetAllCarriers() {
+  if (carriers.length === 0) { showToast('⚠️ لا يوجد حاملون', 'info'); return; }
+  if (!confirm(`⚠️ إعادة تعيين جميع الحاملين (${carriers.length})؟\n\nسيتم مسح جميع المراحل (p0, p1, p2, p3) والعودة لحالة "قيد الانتظار".\n\n⚠️ هذا الإجراء لا يمكن التراجع عنه!\n\nمتابعة؟`)) return;
+  try {
+    const batch = db.batch();
+    carriers.forEach(carrier => {
+      batch.update(db.collection('carriers').doc(carrier.id.toString()), {
+        p0: null, p1: null, p2: null, p3: null
+      });
+    });
+    await batch.commit();
+    showToast(`🔄 تم إعادة تعيين ${carriers.length} حامل`, 'success');
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
+}
+
+// التراجع عن آخر حركة للجميع
+async function undoLastActions() {
+  if (carriers.length === 0) { showToast('⚠️ لا يوجد حاملون', 'info'); return; }
+  
+  // حساب عدد الحاملين الذين لديهم حركات
+  const carriersWithActions = carriers.filter(c => c.p0 || c.p1 || c.p2 || c.p3);
+  if (carriersWithActions.length === 0) {
+    showToast('⚠️ لا توجد حركات للتراجع عنها', 'info');
+    return;
+  }
+  
+  if (!confirm(`↩️ التراجع عن آخر حركة لـ ${carriersWithActions.length} حامل؟\n\nسيتم التراجع عن آخر مرحلة مسجلة لكل حامل.\n\nمتابعة؟`)) return;
+  
+  try {
+    const batch = db.batch();
+    let count = 0;
+    carriers.forEach(carrier => {
+      const update = {};
+      if (carrier.p3) update.p3 = null;
+      else if (carrier.p2) update.p2 = null;
+      else if (carrier.p1) update.p1 = null;
+      else if (carrier.p0) update.p0 = null;
+      else return;
+      
+      batch.update(db.collection('carriers').doc(carrier.id.toString()), update);
+      count++;
+    });
+    await batch.commit();
+    showToast(`↩️ تم التراجع عن آخر حركة لـ ${count} حامل`, 'success');
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
+}
+
+// إعادة تعيين الحاملين المحددين
+async function resetSelectedCarriers() {
+  if (selectedCarriers.size === 0) { showToast('⚠️ لم يتم تحديد أي حامل', 'info'); return; }
+  if (!confirm(`⚠️ إعادة تعيين ${selectedCarriers.size} حامل محدد؟\n\nسيتم مسح جميع المراحل.\n\nمتابعة؟`)) return;
+  try {
+    const batch = db.batch();
+    selectedCarriers.forEach(id => {
+      batch.update(db.collection('carriers').doc(id.toString()), {
+        p0: null, p1: null, p2: null, p3: null
+      });
+    });
+    await batch.commit();
+    showToast(`🔄 تم إعادة تعيين ${selectedCarriers.size} حامل`, 'success');
+    clearSelection();
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
+}
+
 function toggleSelectAll() {
   const selectAll = document.getElementById('selectAll').checked;
   const checkboxes = document.querySelectorAll('.carrier-checkbox');
   checkboxes.forEach(cb => {
     cb.checked = selectAll;
-    if (selectAll) {
-      selectedCarriers.add(cb.value);
-    } else {
-      selectedCarriers.delete(cb.value);
-    }
+    if (selectAll) selectedCarriers.add(cb.value);
+    else selectedCarriers.delete(cb.value);
   });
   updateBulkActions();
 }
 
 function toggleCarrierSelection(id, isChecked) {
-  if (isChecked) {
-    selectedCarriers.add(id.toString());
-  } else {
-    selectedCarriers.delete(id.toString());
-  }
+  if (isChecked) selectedCarriers.add(id.toString());
+  else selectedCarriers.delete(id.toString());
   updateBulkActions();
-  
-  // تحديث checkbox الرئيسي
   const selectAll = document.getElementById('selectAll');
   const checkboxes = document.querySelectorAll('.carrier-checkbox');
-  const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-  selectAll.checked = allChecked;
+  selectAll.checked = Array.from(checkboxes).every(cb => cb.checked);
 }
 
 function updateBulkActions() {
   const bulkActions = document.getElementById('bulkActions');
   const countEl = document.getElementById('selectedCount');
   countEl.textContent = selectedCarriers.size;
-  if (selectedCarriers.size > 0) {
-    bulkActions.classList.add('show');
-  } else {
-    bulkActions.classList.remove('show');
-  }
+  if (selectedCarriers.size > 0) bulkActions.classList.add('show');
+  else bulkActions.classList.remove('show');
 }
 
 function clearSelection() {
@@ -1551,26 +1723,17 @@ function clearSelection() {
 }
 
 async function deleteSelectedCarriers() {
-  if (selectedCarriers.size === 0) {
-    showToast('⚠️ لم يتم تحديد أي حامل', 'info');
-    return;
-  }
-  
-  if (!confirm(`⚠️ هل أنت متأكد من حذف ${selectedCarriers.size} حامل؟\n\nلا يمكن التراجع عن هذا الإجراء!`)) {
-    return;
-  }
-  
+  if (selectedCarriers.size === 0) { showToast('⚠️ لم يتم تحديد أي حامل', 'info'); return; }
+  if (!confirm(`⚠️ حذف ${selectedCarriers.size} حامل؟\n\nلا يمكن التراجع!`)) return;
   try {
     const batch = db.batch();
     selectedCarriers.forEach(id => {
       batch.delete(db.collection('carriers').doc(id.toString()));
     });
     await batch.commit();
-    showToast(`🗑️ تم حذف ${selectedCarriers.size} حامل بنجاح`, 'success');
+    showToast(`🗑️ تم حذف ${selectedCarriers.size} حامل`, 'success');
     clearSelection();
-  } catch (error) {
-    showToast('❌ خطأ: ' + error.message, 'error');
-  }
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
 function printCarrierList() {
@@ -1681,7 +1844,6 @@ function buildRow(c) {
   </tr>`;
 }
 
-// ✅ جدول إدارة الحاملين مع أزرار التعديل والحذف
 function renderCarriersTable() {
   const tbody = document.getElementById('carriersTableBody');
   if (carriers.length === 0) {
@@ -1712,6 +1874,8 @@ function renderCarriersTable() {
       <td>${badge}</td>
       <td>
         <button class="action-btn action-btn-edit" onclick="showEditCarrierModal(${carrier.id})" title="تعديل">✏️ تعديل</button>
+        <button class="action-btn action-btn-undo" onclick="undoLastAction(${carrier.id})" title="تراجع عن آخر حركة">↩️ تراجع</button>
+        <button class="action-btn action-btn-reset" onclick="resetCarrier(${carrier.id})" title="إعادة تعيين">🔄 تعيين</button>
         <button class="action-btn action-btn-delete" onclick="deleteCarrier(${carrier.id})" title="حذف">🗑️ حذف</button>
       </td>
     </tr>`;
