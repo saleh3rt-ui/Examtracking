@@ -23,11 +23,113 @@
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08);
     --font-ar: 'Cairo', sans-serif; --font-num: 'Inter', sans-serif;
   }
-  body { font-family: var(--font-ar); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; }
+  body.dark-mode {
+    --bg: #0F172A;
+    --surface: #1E293B;
+    --border: #475569;
+    --text: #F8FAFC;
+    --text-muted: #CBD5E1;
+    --slate-light: #334155;
+    --navy-light: #1E3A5F;
+    --teal-light: #134E4A;
+    --amber-light: #451A03;
+    --emerald-light: #064E3B;
+    --ocean-light: #0C2D48;
+    --purple-light: #2E1065;
+    --brick-light: #450A0A;
+  }
+  body.dark-mode .btn-launch {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #3B82F6 100%);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  body.dark-mode .act-btn { color: #F8FAFC; font-weight: 700; }
+  body.dark-mode .badge { border: 1px solid rgba(255,255,255,0.2); }
+  body.dark-mode .stat-value { color: #60A5FA; }
+  body.dark-mode .card-title, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4 { color: #F8FAFC; }
+  body.dark-mode th { color: #E2E8F0; }
+  body.dark-mode .c-name { color: #F8FAFC; }
+  body.dark-mode .archive-date { color: #60A5FA; }
+  body.dark-mode .archive-date .hijri-date { color: #34D399; }
+  body.dark-mode .login-title { color: #60A5FA; }
+  body.dark-mode .login-box { background: #1E293B; }
+  body.dark-mode .modal-content { background: #1E293B; }
+  body.dark-mode .login-tab.active { background: #1E293B; color: #60A5FA; }
+  body.dark-mode .f-btn.active { background: #3B82F6; color: white; border-color: #3B82F6; }
+  body.dark-mode .btn-launch { color: white !important; }
+  body.dark-mode .btn-dis { background: #334155; color: #CBD5E1; }
+  body.dark-mode .reg-head { background: #334155; color: #F8FAFC; }
+  body.dark-mode .pr-label { color: #F8FAFC; }
+  body.dark-mode .new-day-section h3 { color: #34D399; }
+  body.dark-mode .new-day-section p { color: #6EE7B7; }
+  body.dark-mode .reset-section h3 { color: #FCD34D; }
+  body.dark-mode .reset-section p { color: #FDE68A; }
+  body.dark-mode .date-sync-section h4 { color: #C4B5FD; }
+  body.dark-mode .date-sync-section p { color: #DDD6FE; }
+  body.dark-mode .sync-info h3 { color: #7DD3FC; }
+  body.dark-mode .code-gen-section h3 { color: #34D399; }
+  body.dark-mode .code-gen-section p { color: #6EE7B7; }
+  body.dark-mode .archive-viewer-header { background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); }
+  body.dark-mode tbody tr:hover { background: #334155; }
+  body.dark-mode .archive-card { background: #1E293B; }
+  body.dark-mode .archive-card:hover { border-color: #3B82F6; }
+  body.dark-mode .stat-card { background: #1E293B; }
+  body.dark-mode .card { background: #1E293B; }
+  body.dark-mode .table-wrap { background: #1E293B; }
+  body.dark-mode .controls { background: #1E293B; }
+  body.dark-mode .progress-sec, body.dark-mode .progress-sec > div:first-child { background: #1E293B; }
+  body.dark-mode .archive-section { background: #1E293B; }
+  body.dark-mode .topbar { background: rgba(30, 41, 59, 0.98); }
+  body.dark-mode .bulk-actions { background: #1E3A5F; }
+  body.dark-mode .bulk-actions .count { color: #93C5FD; }
+  body.dark-mode .action-btn-edit { background: #0C2D48; color: #7DD3FC; }
+  body.dark-mode .action-btn-edit:hover { background: #0369A1; color: white; }
+  body.dark-mode .action-btn-delete { background: #450A0A; color: #FCA5A5; }
+  body.dark-mode .action-btn-delete:hover { background: #B91C1C; color: white; }
+  body.dark-mode .action-btn-reset { background: #451A03; color: #FCD34D; }
+  body.dark-mode .action-btn-reset:hover { background: #B45309; color: white; }
+  body.dark-mode .action-btn-undo { background: #2E1065; color: #C4B5FD; }
+  body.dark-mode .action-btn-undo:hover { background: #7C3AED; color: white; }
+  body.dark-mode .archive-btn-view { background: #1E3A5F; color: #93C5FD; }
+  body.dark-mode .archive-btn-view:hover { background: #1E40AF; color: white; }
+  body.dark-mode .archive-btn-download { background: #0C2D48; color: #7DD3FC; }
+  body.dark-mode .archive-btn-download:hover { background: #0369A1; color: white; }
+  body.dark-mode .archive-btn-delete { background: #450A0A; color: #FCA5A5; }
+  body.dark-mode .archive-btn-delete:hover { background: #B91C1C; color: white; }
+  body.dark-mode .admin-credentials { background: #064E3B; border-color: #10B981; }
+  body.dark-mode .admin-credentials h4 { color: #34D399; }
+  body.dark-mode .admin-credentials p { color: #6EE7B7; }
+  body.dark-mode .alert-success { background: #064E3B; color: #34D399; }
+  body.dark-mode .alert-error { background: #450A0A; color: #FCA5A5; }
+  body.dark-mode .new-day-form input { background: #0F172A; color: #F8FAFC; }
+  body.dark-mode .form-group input, body.dark-mode .form-group select { background: #0F172A; color: #F8FAFC; }
+  body.dark-mode .theme-toggle { background: #1E293B; border-color: #475569; }
+  body.dark-mode .theme-toggle:hover { background: #334155; }
+  body.dark-mode .login-subtitle { color: #CBD5E1; }
+  body.dark-mode .login-tab { color: #94A3B8; }
+  body.dark-mode .archive-empty { color: #94A3B8; }
+  body.dark-mode .c-school, body.dark-mode .c-phone { color: #94A3B8; }
+  body.dark-mode .c-id { color: #94A3B8; }
+  body.dark-mode .stat-label { color: #94A3B8; }
+  body.dark-mode .stat-sub { color: #94A3B8; }
+  body.dark-mode .pr-pct { color: #60A5FA; }
+  body.dark-mode .archive-stats { color: #CBD5E1; }
+  body.dark-mode .archive-stats strong { color: #F8FAFC; }
+  body.dark-mode .archive-stats span.latin { color: #F8FAFC; }
+  body.dark-mode .sync-info p { color: #CBD5E1; }
+  body.dark-mode .date-badge { color: #93C5FD; background: #1E3A5F; }
+  body.dark-mode .date-badge .hijri { color: #34D399; }
+  body.dark-mode .user-pill { background: #1E3A5F; color: #93C5FD; }
+  body.dark-mode .clock { background: #334155; color: #CBD5E1; }
+  body.dark-mode .access-code { background: #1E3A5F; color: #93C5FD; }
+  body.dark-mode .carrier-info-box { background: #1E3A5F; border-color: #3B82F6; }
+  body.dark-mode .carrier-info-box .carrier-name { color: #F8FAFC; }
+  body.dark-mode .carrier-info-box .carrier-details { color: #CBD5E1; }
+
+  body { font-family: var(--font-ar); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; transition: background 0.3s, color 0.3s; }
   .latin { font-family: var(--font-num); letter-spacing: -0.02em; }
 
   .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-  .login-box { background: white; border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.25); position: relative; overflow: hidden; }
+  .login-box { background: var(--surface); border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.25); position: relative; overflow: hidden; }
   .login-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--navy), var(--teal), var(--emerald)); }
   .login-title { color: var(--navy); margin-bottom: 8px; text-align: center; font-size: 28px; font-weight: 800; }
   .login-subtitle { color: var(--text-muted); text-align: center; margin-bottom: 30px; font-size: 14px; }
@@ -36,7 +138,7 @@
   .login-tab.active { background: var(--surface); color: var(--navy); box-shadow: var(--shadow); }
   .form-group { margin-bottom: 20px; }
   .form-group label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 14px; }
-  .form-group input, .form-group select { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 12px; font-family: var(--font-ar); font-size: 15px; transition: 0.2s; background: var(--bg); }
+  .form-group input, .form-group select { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 12px; font-family: var(--font-ar); font-size: 15px; transition: 0.2s; background: var(--bg); color: var(--text); }
   .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--navy); background: var(--surface); box-shadow: 0 0 0 4px var(--navy-light); }
   .btn { width: 100%; padding: 16px; background: var(--navy); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(30,58,138,0.25); }
   .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(30,58,138,0.35); }
@@ -63,7 +165,7 @@
 
   .app-container { display: none; }
   .app-container.active { display: block; }
-  .topbar { background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: auto; min-height: 70px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); flex-wrap: wrap; gap: 12px; }
+  .topbar { background: var(--surface); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: auto; min-height: 70px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); flex-wrap: wrap; gap: 12px; transition: background 0.3s; }
   .brand { display: flex; align-items: center; gap: 12px; }
   .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--navy), var(--teal)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
   .brand-title { font-size: 20px; font-weight: 800; }
@@ -73,12 +175,16 @@
   .btn-logout { background: transparent; border: 1px solid var(--brick); color: var(--brick); padding: 8px 18px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 14px; }
   .btn-logout:hover { background: var(--brick); color: white; }
   .clock { font-family: var(--font-num); font-size: 15px; color: var(--text-muted); background: var(--slate-light); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border); font-weight: 600; }
-  .date-badge { font-family: var(--font-ar); font-size: 13px; font-weight: 700; color: var(--navy); background: var(--navy-light); padding: 8px 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 4px; align-items: center; }
+  .date-badge { font-family: var(--font-ar); font-size: 13px; font-weight: 700; color: var(--navy); background: var(--navy-light); padding: 8px 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 4px; align-items: center; cursor: pointer; transition: 0.2s; }
+  .date-badge:hover { transform: scale(1.05); }
   .date-badge .gregorian { font-size: 13px; }
   .date-badge .hijri { font-size: 11px; color: var(--teal); font-weight: 600; }
   .sync-status { font-size: 10px; color: var(--emerald); font-weight: 700; display: flex; align-items: center; gap: 4px; }
   .sync-status::before { content: ''; width: 6px; height: 6px; background: var(--emerald); border-radius: 50%; animation: pulse 1.5s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .theme-toggle { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 8px 12px; cursor: pointer; font-size: 18px; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+  .theme-toggle:hover { background: var(--navy-light); transform: scale(1.05); }
+  .theme-toggle .icon { font-size: 20px; }
   .container { max-width: 1440px; margin: 0 auto; padding: 32px; }
 
   .tabs { display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 2px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; }
@@ -90,7 +196,7 @@
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
-  .stat-card { background: var(--surface); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); border-top: 4px solid var(--navy); }
+  .stat-card { background: var(--surface); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); border-top: 4px solid var(--navy); transition: background 0.3s; }
   .stat-card:nth-child(2) { border-top-color: var(--teal); }
   .stat-card:nth-child(3) { border-top-color: var(--amber); }
   .stat-card:nth-child(4) { border-top-color: var(--emerald); }
@@ -98,17 +204,17 @@
   .stat-value { font-size: 40px; font-weight: 800; color: var(--navy); font-family: var(--font-num); line-height: 1; margin-bottom: 8px; }
   .stat-sub { font-size: 13px; color: var(--text-muted); }
 
-  .card { background: var(--surface); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--border); }
+  .card { background: var(--surface); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--border); transition: background 0.3s; }
   .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
   .card-title { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
 
-  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: background 0.3s; }
   .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 900px; }
   th, td { padding: 18px 20px; text-align: right; border-bottom: 1px solid var(--border); }
   th { background: var(--slate-light); font-weight: 800; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
   tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: #F8FAFC; }
+  tbody tr:hover { background: var(--bg); }
 
   .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; font-size: 13px; font-weight: 700; border: 1px solid transparent; white-space: nowrap; }
   .badge-dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -119,8 +225,8 @@
   .b-comp { background: var(--emerald-light); color: var(--emerald); } .b-comp .badge-dot { background: var(--emerald); }
   .b-over { background: var(--brick-light); color: var(--brick); } .b-over .badge-dot { background: var(--brick); }
 
-  .controls { display: flex; gap: 12px; margin-bottom: 24px; background: var(--surface); padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
-  .search-inp { flex: 1; min-width: 280px; padding: 12px 18px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; font-family: var(--font-ar); }
+  .controls { display: flex; gap: 12px; margin-bottom: 24px; background: var(--surface); padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border); flex-wrap: wrap; align-items: center; transition: background 0.3s; }
+  .search-inp { flex: 1; min-width: 280px; padding: 12px 18px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; font-family: var(--font-ar); background: var(--bg); color: var(--text); }
   .search-inp:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 4px var(--navy-light); }
   .f-btn { padding: 10px 22px; border: 2px solid var(--border); border-radius: 12px; background: var(--surface); font-size: 14px; font-weight: 700; cursor: pointer; color: var(--text-muted); transition: 0.2s; white-space: nowrap; font-family: var(--font-ar); }
   .f-btn:hover { border-color: var(--navy); color: var(--navy); }
@@ -150,7 +256,7 @@
 
   .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
   .modal.active { display: flex; }
-  .modal-content { background: white; border-radius: var(--radius-lg); padding: 30px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; }
+  .modal-content { background: var(--surface); border-radius: var(--radius-lg); padding: 30px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; }
   .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
   .modal-title { font-size: 20px; font-weight: 800; }
   .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-muted); }
@@ -275,7 +381,6 @@
   .reset-section p { font-size: 13px; color: #92400E; margin-bottom: 16px; }
   .reset-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
 
-  /* ✅ قسم مزامنة التاريخ */
   .date-sync-section {
     background: linear-gradient(135deg, var(--purple-light) 0%, var(--navy-light) 100%);
     border: 2px dashed var(--purple);
@@ -286,6 +391,33 @@
   .date-sync-section h4 { font-size: 16px; font-weight: 800; color: var(--purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
   .date-sync-section p { font-size: 13px; color: #5B21B6; margin-bottom: 16px; }
   .date-sync-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .search-hidden { display: none !important; }
+
+  /* ✅ صندوق معلومات حامل الأسئلة */
+  .carrier-info-box {
+    background: var(--navy-light);
+    border: 2px solid var(--navy);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .carrier-info-box .carrier-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .carrier-info-box .carrier-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .carrier-info-box .carrier-details {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
 
   @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .container { padding: 24px; } }
   @media (max-width: 768px) {
@@ -349,13 +481,16 @@
       <div class="brand-title">لوحة <span>المتابعة</span></div>
     </div>
     <div class="user-menu">
-      <div class="date-badge">
+      <div class="date-badge" onclick="forceDateSync()" title="اضغط للمزامنة الفورية">
         <span class="gregorian" id="currentDateDisplay">--/--/----</span>
         <span class="hijri" id="currentHijriDate">--</span>
         <span class="sync-status" id="syncStatus">متزامن</span>
       </div>
       <span class="user-pill" id="uDisp">--</span>
       <div class="clock latin" id="clk">--:--:--</div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع">
+        <span class="icon" id="themeIcon">🌙</span>
+      </button>
       <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
     </div>
   </div>
@@ -405,7 +540,7 @@
           </div>
         </div>
       </div>
-      <div class="controls">
+      <div class="controls" id="searchControls">
         <input class="search-inp" id="searchBox" type="text" placeholder="🔍 ابحث باسم الحامل أو المنطقة أو المدرسة...">
         <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;">
           <button class="f-btn active" onclick="setFilter('all',this)">الكل</button>
@@ -441,12 +576,8 @@
           <h3>🔄 إعادة ضبط الحركات (مدير النظام فقط)</h3>
           <p>يمكنك إعادة تعيين حركات الحاملين في حال حدوث خطأ. هذه العمليات لا يمكن التراجع عنها.</p>
           <div class="reset-buttons">
-            <button class="btn btn-amber btn-small" onclick="resetAllCarriers()" style="flex:1;min-width:200px;">
-              🔄 إعادة تعيين جميع الحاملين
-            </button>
-            <button class="btn btn-purple btn-small" onclick="undoLastActions()" style="flex:1;min-width:200px;">
-              ↩️ تراجع عن آخر حركة للجميع
-            </button>
+            <button class="btn btn-amber btn-small" onclick="resetAllCarriers()" style="flex:1;min-width:200px;">🔄 إعادة تعيين جميع الحاملين</button>
+            <button class="btn btn-purple btn-small" onclick="undoLastActions()" style="flex:1;min-width:200px;">↩️ تراجع عن آخر حركة للجميع</button>
           </div>
         </div>
         
@@ -491,23 +622,19 @@
           <p>التاريخ يتم مزامنته تلقائياً عبر Firebase بين جميع الأجهزة.</p>
           
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;">
-            <div style="background:white;border-radius:10px;padding:14px;border:2px solid var(--navy);">
+            <div style="background:var(--surface);border-radius:10px;padding:14px;border:2px solid var(--navy);">
               <div style="font-size:11px;color:var(--text-muted);font-weight:700;">📅 تاريخ النظام الحالي</div>
               <div style="font-size:16px;font-weight:800;color:var(--navy);margin-top:4px;" id="storedDateDisplay">--</div>
             </div>
-            <div style="background:white;border-radius:10px;padding:14px;border:2px solid var(--emerald);">
+            <div style="background:var(--surface);border-radius:10px;padding:14px;border:2px solid var(--emerald);">
               <div style="font-size:11px;color:var(--text-muted);font-weight:700;">💻 تاريخ جهازك المحلي</div>
               <div style="font-size:16px;font-weight:800;color:var(--emerald);margin-top:4px;" id="deviceDateDisplay">--</div>
             </div>
           </div>
           
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
-            <button class="btn btn-emerald btn-small" onclick="syncWithDeviceDate()" style="flex:1;min-width:200px;">
-              🔄 مزامنة مع تاريخ الجهاز
-            </button>
-            <button class="btn btn-ocean btn-small" onclick="manuallySetDate()" style="flex:1;min-width:200px;">
-              ✏️ تحديد تاريخ يدوياً
-            </button>
+            <button class="btn btn-emerald btn-small" onclick="syncWithDeviceDate()" style="flex:1;min-width:200px;">🔄 مزامنة مع تاريخ الجهاز</button>
+            <button class="btn btn-ocean btn-small" onclick="manuallySetDate()" style="flex:1;min-width:200px;">✏️ تحديد تاريخ يدوياً</button>
           </div>
           
           <div style="border-top:2px dashed var(--emerald);padding-top:16px;">
@@ -517,23 +644,16 @@
                 <label>تاريخ يوم المتابعة الجديد</label>
                 <input type="date" id="newDayDate" class="latin">
               </div>
-              <button class="btn btn-emerald btn-small" onclick="startNewDay()" style="height: 48px;">
-                ✨ أرشفة اليوم وبدء يوم جديد
-              </button>
+              <button class="btn btn-emerald btn-small" onclick="startNewDay()" style="height: 48px;">✨ أرشفة اليوم وبدء يوم جديد</button>
             </div>
           </div>
 
-          <!-- ✅ قسم مزامنة التاريخ مع الأرشيف -->
           <div class="date-sync-section">
             <h4>🔄 مزامنة تاريخ الأرشيف مع تاريخ النظام</h4>
-            <p>يمكنك مزامنة تاريخ الأرشيف الحالي أو جميع الأرشيفات لتطابق تاريخ النظام الحالي. هذا مفيد عند تصحيح التاريخ.</p>
+            <p>يمكنك مزامنة تاريخ الأرشيف الحالي أو جميع الأرشيفات لتطابق تاريخ النظام الحالي.</p>
             <div class="date-sync-buttons">
-              <button class="btn btn-purple btn-small" onclick="syncCurrentArchiveDate()" style="flex:1;min-width:200px;">
-                🔄 مزامنة الأرشيف الحالي فقط
-              </button>
-              <button class="btn btn-navy btn-small" onclick="syncAllArchivesDate()" style="flex:1;min-width:200px;">
-                🌐 مزامنة جميع الأرشيفات
-              </button>
+              <button class="btn btn-purple btn-small" onclick="syncCurrentArchiveDate()" style="flex:1;min-width:200px;">🔄 مزامنة الأرشيف الحالي فقط</button>
+              <button class="btn btn-navy btn-small" onclick="syncAllArchivesDate()" style="flex:1;min-width:200px;">🌐 مزامنة جميع الأرشيفات</button>
             </div>
           </div>
         </div>
@@ -594,27 +714,41 @@
       <div class="card">
         <h2 class="card-title">⏰ التتبع الزمني للمراحل</h2>
         <div style="margin-top: 20px;">
-          <div class="form-group">
-            <label>اختر حامل الأسئلة:</label>
-            <select id="carrierSelect" onchange="loadCarrierTracking()" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 10px; font-family: var(--font-ar); font-size: 15px;">
-              <option value="">-- اختر --</option>
-            </select>
+          
+          <!-- عرض المدير: قائمة منسدلة -->
+          <div id="adminTrackingView" style="display: none;">
+            <div class="form-group">
+              <label>اختر حامل الأسئلة:</label>
+              <select id="carrierSelect" onchange="loadCarrierTracking()" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 10px; font-family: var(--font-ar); font-size: 15px;">
+                <option value="">-- اختر --</option>
+              </select>
+            </div>
           </div>
+          
+          <!-- عرض الحامل: تتبع مباشر -->
+          <div id="carrierTrackingView" style="display: none;">
+            <div class="carrier-info-box">
+              <div class="carrier-label">👤 حامل الأسئلة</div>
+              <div class="carrier-name" id="carrierTrackingName">--</div>
+              <div class="carrier-details" id="carrierTrackingInfo">--</div>
+            </div>
+          </div>
+          
           <div id="trackingContent" style="display: none;">
             <div class="phases-grid">
               <div style="border-color: var(--navy); background: var(--bg); border-radius: var(--radius-lg); padding: 20px; border: 3px solid var(--navy);">
                 <div style="background: var(--navy); color: white; font-size: 16px; font-weight: 800; margin-bottom: 15px; text-align: center; padding: 10px; border-radius: 8px;">🚗 المرحلة الأولى: انطلاق من المديرية</div>
-                <div id="timer1" style="font-size: 2em; font-weight: 700; text-align: center; padding: 15px; background: white; border-radius: 10px; margin: 15px 0; font-family: var(--font-num); color: var(--navy);">--:--:--</div>
+                <div id="timer1" style="font-size: 2em; font-weight: 700; text-align: center; padding: 15px; background: var(--surface); border-radius: 10px; margin: 15px 0; font-family: var(--font-num); color: var(--navy);">--:--:--</div>
                 <button class="btn btn-navy" id="btnPhase1" onclick="startPhase1()">تسجيل الانطلاق من المديرية</button>
               </div>
               <div style="border-color: var(--teal); background: var(--bg); border-radius: var(--radius-lg); padding: 20px; border: 3px solid var(--teal);">
                 <div style="background: var(--teal); color: white; font-size: 16px; font-weight: 800; margin-bottom: 15px; text-align: center; padding: 10px; border-radius: 8px;">🎯 المرحلة الثانية: وقت الامتحان</div>
-                <div id="timer2" style="font-size: 2em; font-weight: 700; text-align: center; padding: 15px; background: white; border-radius: 10px; margin: 15px 0; font-family: var(--font-num); color: var(--teal);">--:--:--</div>
+                <div id="timer2" style="font-size: 2em; font-weight: 700; text-align: center; padding: 15px; background: var(--surface); border-radius: 10px; margin: 15px 0; font-family: var(--font-num); color: var(--teal);">--:--:--</div>
                 <button class="btn btn-teal" id="btnPhase2" onclick="startPhase2()">✓ تسليم الأسئلة للمركز</button>
               </div>
               <div style="border-color: var(--emerald); background: var(--bg); border-radius: var(--radius-lg); padding: 20px; border: 3px solid var(--emerald);">
                 <div style="background: var(--emerald); color: white; font-size: 16px; font-weight: 800; margin-bottom: 15px; text-align: center; padding: 10px; border-radius: 8px;">✅ المرحلة الثالثة: تسليم الإجابات</div>
-                <div id="timer3" style="font-size: 2em; font-weight: 700; text-align: center; padding: 15px; background: white; border-radius: 10px; margin: 15px 0; font-family: var(--font-num); color: var(--emerald);">--:--:--</div>
+                <div id="timer3" style="font-size: 2em; font-weight: 700; text-align: center; padding: 15px; background: var(--surface); border-radius: 10px; margin: 15px 0; font-family: var(--font-num); color: var(--emerald);">--:--:--</div>
                 <button class="btn btn-emerald" id="btnPhase3" onclick="startPhase3()">✓ استلام مغلف الإجابات</button>
               </div>
             </div>
@@ -625,7 +759,6 @@
   </div>
 </div>
 
-<!-- Add Carrier Modal -->
 <div id="addCarrierModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -642,7 +775,6 @@
   </div>
 </div>
 
-<!-- Edit Carrier Modal -->
 <div id="editCarrierModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -746,9 +878,7 @@ function formatHijriDate(date) {
     const day = parseInt(parts[2]);
     if (isNaN(year) || isNaN(month) || isNaN(day)) return '';
     const localDate = new Date(year, month, day);
-    return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', { 
-      year: 'numeric', month: 'long', day: 'numeric' 
-    }).format(localDate);
+    return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', { year: 'numeric', month: 'long', day: 'numeric' }).format(localDate);
   } catch (e) { return ''; }
 }
 
@@ -768,17 +898,12 @@ function formatFullDate(date) {
   return h ? `${g} | ${h}` : g;
 }
 
-// ==========================================
-// 🌐 مزامنة التاريخ عبر Firebase
-// ==========================================
 function setupDateSync() {
   if (unsubscribeDate) unsubscribeDate();
-  
   unsubscribeDate = db.collection('settings').doc('current').onSnapshot((doc) => {
     if (doc.exists) {
       const data = doc.data();
       const remoteDate = data.currentDate;
-      
       if (remoteDate && remoteDate !== currentDate) {
         console.log('🔄 تم مزامنة التاريخ من Firebase:', remoteDate);
         currentDate = remoteDate;
@@ -787,10 +912,36 @@ function setupDateSync() {
         updateDateComparison();
         showToast(`🔄 تم تحديث التاريخ: ${formatFullDate(currentDate)}`, 'info');
       }
+    } else {
+      updateDateInFirebase(currentDate);
     }
   }, (error) => {
     console.warn('⚠️ فشل مزامنة التاريخ:', error.message);
   });
+}
+
+async function forceDateSync() {
+  showToast('🔄 جاري المزامنة الفورية...', 'info');
+  try {
+    const doc = await db.collection('settings').doc('current').get();
+    if (doc.exists) {
+      const remoteDate = doc.data().currentDate;
+      if (remoteDate && remoteDate !== currentDate) {
+        currentDate = remoteDate;
+        localStorage.setItem('currentTrackingDate', currentDate);
+        updateDateDisplay();
+        updateDateComparison();
+        showToast(`✅ تم المزامنة: ${formatFullDate(currentDate)}`, 'success');
+      } else {
+        showToast('✅ التاريخ متزامن بالفعل', 'success');
+      }
+    } else {
+      await updateDateInFirebase(currentDate);
+      showToast('✅ تم إنشاء مستند التاريخ', 'success');
+    }
+  } catch (error) {
+    showToast('❌ فشل المزامنة: ' + error.message, 'error');
+  }
 }
 
 async function updateDateInFirebase(newDate) {
@@ -800,7 +951,6 @@ async function updateDateInFirebase(newDate) {
       updatedAt: new Date().toISOString(),
       updatedBy: currentUser ? currentUser.email : 'unknown'
     }, { merge: true });
-    console.log('✅ تم تحديث التاريخ في Firebase');
   } catch (error) {
     console.warn('⚠️ فشل تحديث التاريخ في Firebase:', error.message);
   }
@@ -820,7 +970,6 @@ function syncWithDeviceDate() {
     return;
   }
   if (!confirm(`⚠️ سيتم تحديث تاريخ النظام:\n\n📅 من: ${formatFullDate(currentDate)}\n💻 إلى: ${formatFullDate(deviceDate)}\n\nسيتم المزامنة مع جميع الأجهزة. متابعة؟`)) return;
-  
   currentDate = deviceDate;
   localStorage.setItem('currentTrackingDate', currentDate);
   updateDateInFirebase(currentDate);
@@ -852,89 +1001,50 @@ function manuallySetDate() {
   showToast(`✅ تم تحديث التاريخ: ${formatFullDate(currentDate)}`, 'success');
 }
 
-// ==========================================
-// 🔄 مزامنة تاريخ الأرشيف مع تاريخ النظام
-// ==========================================
-
-// ✅ مزامنة الأرشيف الحالي فقط
 async function syncCurrentArchiveDate() {
   const currentArchive = archiveData[currentDate];
-  
-  if (!currentArchive) {
-    showToast('ℹ️ لا يوجد أرشيف لهذا التاريخ', 'info');
-    return;
-  }
-  
-  if (!confirm(`⚠️ مزامنة تاريخ الأرشيف الحالي مع تاريخ النظام؟\n\n📅 التاريخ: ${formatFullDate(currentDate)}\n\nسيتم تحديث حقل displayDate في الأرشيف.\n\nمتابعة؟`)) return;
-  
+  if (!currentArchive) { showToast('ℹ️ لا يوجد أرشيف لهذا التاريخ', 'info'); return; }
+  if (!confirm(`⚠️ مزامنة تاريخ الأرشيف الحالي مع تاريخ النظام؟\n\n📅 التاريخ: ${formatFullDate(currentDate)}\n\nمتابعة؟`)) return;
   try {
-    // تحديث في Firebase
     await db.collection('archive').doc(currentDate).update({
       displayDate: currentDate,
       syncedAt: new Date().toISOString(),
       syncedBy: currentUser ? currentUser.email : 'unknown'
     });
-    
-    // تحديث محلياً
     currentArchive.displayDate = currentDate;
     currentArchive.syncedAt = new Date().toISOString();
-    
     const localArchive = JSON.parse(localStorage.getItem('localArchive') || '{}');
     localArchive[currentDate] = currentArchive;
     localStorage.setItem('localArchive', JSON.stringify(localArchive));
-    
     renderArchiveList();
     showToast(`✅ تمت مزامنة أرشيف ${formatFullDate(currentDate)}`, 'success');
-  } catch (error) {
-    showToast('❌ خطأ: ' + error.message, 'error');
-  }
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// ✅ مزامنة جميع الأرشيفات
 async function syncAllArchivesDate() {
   const archiveKeys = Object.keys(archiveData);
-  
-  if (archiveKeys.length === 0) {
-    showToast('ℹ️ لا يوجد أي أرشيف للمزامنة', 'info');
-    return;
-  }
-  
-  if (!confirm(`⚠️ مزامنة جميع الأرشيفات (${archiveKeys.length} يوم) مع تاريخ النظام؟\n\n📅 تاريخ النظام الحالي: ${formatFullDate(currentDate)}\n\nسيتم تحديث حقل displayDate في جميع الأرشيفات لتطابق تاريخ النظام.\n\n⚠️ ملاحظة: هذا سيغير التاريخ المعروض لجميع الأرشيفات.\n\nمتابعة؟`)) return;
-  
+  if (archiveKeys.length === 0) { showToast('ℹ️ لا يوجد أي أرشيف', 'info'); return; }
+  if (!confirm(`⚠️ مزامنة جميع الأرشيفات (${archiveKeys.length} يوم) مع تاريخ النظام؟\n\n📅 تاريخ النظام: ${formatFullDate(currentDate)}\n\nمتابعة؟`)) return;
   try {
     const batch = db.batch();
     let updatedCount = 0;
-    
     archiveKeys.forEach(dateKey => {
       const archive = archiveData[dateKey];
-      
-      // تحديث حقل displayDate
       archive.displayDate = currentDate;
       archive.syncedAt = new Date().toISOString();
       archive.syncedBy = currentUser ? currentUser.email : 'unknown';
-      
-      // إضافة للـ batch
       batch.set(db.collection('archive').doc(dateKey), archive, { merge: true });
       updatedCount++;
     });
-    
     await batch.commit();
-    
-    // تحديث محلياً
     const localArchive = JSON.parse(localStorage.getItem('localArchive') || '{}');
-    archiveKeys.forEach(dateKey => {
-      localArchive[dateKey] = archiveData[dateKey];
-    });
+    archiveKeys.forEach(dateKey => { localArchive[dateKey] = archiveData[dateKey]; });
     localStorage.setItem('localArchive', JSON.stringify(localArchive));
-    
     renderArchiveList();
-    showToast(`✅ تمت مزامنة ${updatedCount} أرشيف مع تاريخ: ${formatFullDate(currentDate)}`, 'success');
-  } catch (error) {
-    showToast('❌ خطأ: ' + error.message, 'error');
-  }
+    showToast(`✅ تمت مزامنة ${updatedCount} أرشيف`, 'success');
+  } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// ✅ دالة للحصول على تاريخ العرض الصحيح للأرشيف
 function getArchiveDisplayDate(archive) {
   return archive.displayDate || archive.date;
 }
@@ -991,12 +1101,33 @@ async function loginAdmin() {
   }
 }
 
+function applyTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('themeIcon').textContent = '☀️';
+  } else {
+    document.body.classList.remove('dark-mode');
+    document.getElementById('themeIcon').textContent = '🌙';
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark-mode');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  document.getElementById('themeIcon').textContent = isDark ? '☀️' : '🌙';
+  showToast(isDark ? '🌙 تم تفعيل الوضع الداكن' : '☀️ تم تفعيل الوضع الفاتح', 'info');
+}
+
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appContainer').classList.add('active');
+  applyTheme();
+  
   if (currentUser.role === 'admin') {
     document.getElementById('uDisp').textContent = '👑 مدير النظام';
     document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+    document.getElementById('searchControls').classList.remove('search-hidden');
     const parts = currentDate.split('-');
     const tomorrow = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]) + 1);
     document.getElementById('newDayDate').value = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
@@ -1004,12 +1135,17 @@ function showApp() {
   } else {
     document.getElementById('uDisp').textContent = '👤 ' + currentUser.name + ' (#' + currentUser.carrierId + ')';
     document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+    document.getElementById('searchControls').classList.add('search-hidden');
   }
   updateDateDisplay();
   setupRealtimeListener();
   setupArchiveListener();
   setupDateSync();
   startClock();
+  
+  if (currentUser.role === 'carrier') {
+    loadCarrierTracking();
+  }
 }
 
 function updateDateDisplay() {
@@ -1039,6 +1175,7 @@ function setupRealtimeListener() {
     updateStats();
     renderTable();
     if (currentUser.role === 'admin') { renderCarriersTable(); loadCarrierSelect(); }
+    else if (currentUser.role === 'carrier') { loadCarrierTracking(); }
   }, (error) => showToast('❌ خطأ في المزامنة', 'error'));
 }
 
@@ -1079,7 +1216,7 @@ async function startNewDay() {
   try {
     const archiveRecord = {
       date: currentDate,
-      displayDate: currentDate, // ✅ إضافة حقل displayDate
+      displayDate: currentDate,
       archivedAt: new Date().toISOString(),
       carriersCount: carriers.length,
       carriers: JSON.parse(JSON.stringify(carriers)),
@@ -1128,26 +1265,18 @@ async function deleteArchive(date) {
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-// ✅ تحديث renderArchiveList لاستخدام displayDate
 function renderArchiveList() {
   const grid = document.getElementById('archiveGrid');
   const countEl = document.getElementById('archiveCount');
   const dates = Object.keys(archiveData).sort().reverse();
-  
   if (countEl) countEl.innerHTML = `<span class="latin">${dates.length}</span> يوم محفوظ`;
-  
-  if (dates.length === 0) {
-    grid.innerHTML = '<div class="archive-empty">📭 لا يوجد أرشيف</div>';
-    return;
-  }
-  
+  if (dates.length === 0) { grid.innerHTML = '<div class="archive-empty">📭 لا يوجد أرشيف</div>'; return; }
   let html = '';
   dates.forEach(date => {
     const data = archiveData[date];
-    const displayDate = getArchiveDisplayDate(data); // ✅ استخدام displayDate
+    const displayDate = getArchiveDisplayDate(data);
     const stats = data.stats || {};
     const completionRate = stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0;
-    
     html += `
       <div class="archive-card">
         <div class="archive-date">
@@ -1168,11 +1297,9 @@ function renderArchiveList() {
       </div>
     `;
   });
-  
   grid.innerHTML = html;
 }
 
-// ✅ تحديث viewArchive لاستخدام displayDate
 function viewArchive(date) {
   const data = archiveData[date];
   if (!data) return;
@@ -1236,7 +1363,6 @@ function viewArchive(date) {
   document.getElementById('viewArchiveModal').classList.add('active');
 }
 
-// ✅ تحديث exportArchiveAsHTML لاستخدام displayDate
 function exportArchiveAsHTML(date) {
   const data = archiveData[date];
   if (!data) { showToast('⚠️ البيانات غير متوفرة', 'error'); return; }
@@ -1271,70 +1397,7 @@ function exportArchiveAsHTML(date) {
       <td><span class="badge ${badgeClass}">${status}</span></td>
     </tr>`;
   });
-  const htmlContent = `<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>أرشيف يوم ${gregorian}</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Cairo', sans-serif; background: #F8FAFC; color: #0F172A; padding: 20px; }
-  .container { max-width: 1200px; margin: 0 auto; }
-  .header { background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; text-align: center; }
-  .header h1 { font-size: 28px; margin-bottom: 10px; }
-  .header .date { font-size: 18px; opacity: 0.95; margin-bottom: 5px; }
-  .header .hijri { font-size: 15px; opacity: 0.85; }
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 24px; }
-  .stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid #1E3A8A; text-align: center; }
-  .stat-card:nth-child(2) { border-top-color: #0D9488; }
-  .stat-card:nth-child(3) { border-top-color: #B45309; }
-  .stat-card:nth-child(4) { border-top-color: #059669; }
-  .stat-card:nth-child(5) { border-top-color: #7C3AED; }
-  .stat-num { font-size: 32px; font-weight: 800; font-family: 'Inter', sans-serif; color: #1E3A8A; }
-  .stat-lbl { font-size: 13px; color: #64748B; margin-top: 5px; }
-  .table-wrap { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th { background: #F1F5F9; padding: 14px; text-align: right; font-size: 12px; font-weight: 800; color: #64748B; border-bottom: 2px solid #E2E8F0; }
-  td { padding: 14px; border-bottom: 1px solid #E2E8F0; vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover { background: #F8FAFC; }
-  .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; }
-  .b-pend { background: #FEF3C7; color: #B45309; }
-  .b-trav { background: #DBEAFE; color: #1E3A8A; }
-  .b-deliv { background: #CCFBF1; color: #0D9488; }
-  .b-ret { background: #E0F2FE; color: #0369A1; }
-  .b-comp { background: #D1FAE5; color: #059669; }
-  .footer { text-align: center; padding: 20px; color: #64748B; font-size: 12px; margin-top: 20px; }
-  .print-btn { position: fixed; top: 20px; left: 20px; background: #1E3A8A; color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 14px; z-index: 1000; }
-  @media print { .print-btn { display: none; } body { padding: 0; } }
-</style>
-</head>
-<body>
-<button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
-<div class="container">
-  <div class="header">
-    <h1>📋 أرشيف يوم المتابعة</h1>
-    <div class="date">${gregorian}</div>
-    <div class="hijri">🌙 ${hijri}</div>
-  </div>
-  <div class="stats">
-    <div class="stat-card"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي</div></div>
-    <div class="stat-card"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">نشط</div></div>
-    <div class="stat-card"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تسليم</div></div>
-    <div class="stat-card"><div class="stat-num">${stats.done || 0}</div><div class="stat-lbl">مكتمل</div></div>
-    <div class="stat-card"><div class="stat-num">${stats.pending || 0}</div><div class="stat-lbl">انتظار</div></div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن</th><th>الحالة</th></tr></thead>
-      <tbody>${tableRows}</tbody>
-    </table>
-  </div>
-  <div class="footer">نظام متابعة الامتحانات | ${new Date().toLocaleString('ar')}</div>
-</div>
-</body>
-</html>`;
+  const htmlContent = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>أرشيف يوم ${gregorian}</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Cairo',sans-serif;background:#F8FAFC;color:#0F172A;padding:20px}.container{max-width:1200px;margin:0 auto}.header{background:linear-gradient(135deg,#1E3A8A 0%,#0D9488 100%);color:white;padding:30px;border-radius:16px;margin-bottom:24px;text-align:center}.header h1{font-size:28px;margin-bottom:10px}.header .date{font-size:18px;opacity:0.95;margin-bottom:5px}.header .hijri{font-size:15px;opacity:0.85}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:24px}.stat-card{background:white;border-radius:12px;padding:20px;box-shadow:0 4px 6px rgba(0,0,0,0.05);border-top:4px solid #1E3A8A;text-align:center}.stat-num{font-size:32px;font-weight:800;font-family:'Inter',sans-serif;color:#1E3A8A}.stat-lbl{font-size:13px;color:#64748B;margin-top:5px}.table-wrap{background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05)}table{width:100%;border-collapse:collapse;font-size:14px}th{background:#F1F5F9;padding:14px;text-align:right;font-size:12px;font-weight:800;color:#64748B;border-bottom:2px solid #E2E8F0}td{padding:14px;border-bottom:1px solid #E2E8F0;vertical-align:middle}tr:last-child td{border-bottom:none}tr:hover{background:#F8FAFC}.badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:99px;font-size:12px;font-weight:700}.b-pend{background:#FEF3C7;color:#B45309}.b-trav{background:#DBEAFE;color:#1E3A8A}.b-deliv{background:#CCFBF1;color:#0D9488}.b-ret{background:#E0F2FE;color:#0369A1}.b-comp{background:#D1FAE5;color:#059669}.footer{text-align:center;padding:20px;color:#64748B;font-size:12px;margin-top:20px}.print-btn{position:fixed;top:20px;left:20px;background:#1E3A8A;color:white;border:none;padding:12px 24px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;z-index:1000}@media print{.print-btn{display:none}body{padding:0}}</style></head><body><button class="print-btn" onclick="window.print()">🖨️ طباعة</button><div class="container"><div class="header"><h1>📋 أرشيف يوم المتابعة</h1><div class="date">${gregorian}</div><div class="hijri">🌙 ${hijri}</div></div><div class="stats"><div class="stat-card"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي</div></div><div class="stat-card"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">نشط</div></div><div class="stat-card"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تسليم</div></div><div class="stat-card"><div class="stat-num">${stats.done || 0}</div><div class="stat-lbl">مكتمل</div></div><div class="stat-card"><div class="stat-num">${stats.pending || 0}</div><div class="stat-lbl">انتظار</div></div></div><div class="table-wrap"><table><thead><tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن</th><th>الحالة</th></tr></thead><tbody>${tableRows}</tbody></table></div><div class="footer">نظام متابعة الامتحانات | ${new Date().toLocaleString('ar')}</div></div></body></html>`;
   const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1345,7 +1408,6 @@ function exportArchiveAsHTML(date) {
   showToast(`✅ تم تصدير أرشيف ${formatDateArabic(displayDate)}`, 'success');
 }
 
-// ✅ تحديث exportAllArchives لاستخدام displayDate
 function exportAllArchives() {
   const dates = Object.keys(archiveData).sort().reverse();
   if (dates.length === 0) { showToast('⚠️ لا يوجد أرشيف', 'info'); return; }
@@ -1369,92 +1431,13 @@ function exportAllArchives() {
         const t1 = c.p1 ? `${fmtTime(c.p0)} → ${fmtTime(c.p1)}` : 'جاري...';
         const t2 = c.p2 ? `${fmtTime(c.p1)} → ${fmtTime(c.p2)}` : (c.p1 ? 'جاري...' : '-');
         const t3 = c.p3 ? `${fmtTime(c.p2)} → ${fmtTime(c.p3)}` : (c.p2 ? 'جاري...' : '-');
-        timeHtml = `<div style="font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;">
-          <div><span style="color:#666;">م١:</span> <b>${t1}</b></div>
-          <div><span style="color:#666;">م٢:</span> <b>${t2}</b></div>
-          <div><span style="color:#666;">م٣:</span> <b>${t3}</b></div>
-        </div>`;
+        timeHtml = `<div style="font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;"><div><span style="color:#666;">م١:</span> <b>${t1}</b></div><div><span style="color:#666;">م٢:</span> <b>${t2}</b></div><div><span style="color:#666;">م٣:</span> <b>${t3}</b></div></div>`;
       }
-      tableRows += `<tr>
-        <td style="font-family:'Inter',sans-serif;font-weight:700;">${c.id}</td>
-        <td><b>${c.name}</b><br><small style="color:#666;">${c.school}</small></td>
-        <td><b>${c.region}</b></td>
-        <td>${timeHtml}</td>
-        <td><span class="badge ${badgeClass}">${status}</span></td>
-      </tr>`;
+      tableRows += `<tr><td style="font-family:'Inter',sans-serif;font-weight:700;">${c.id}</td><td><b>${c.name}</b><br><small style="color:#666;">${c.school}</small></td><td><b>${c.region}</b></td><td>${timeHtml}</td><td><span class="badge ${badgeClass}">${status}</span></td></tr>`;
     });
-    allPages += `
-      <div style="margin-bottom: 40px; page-break-after: always;">
-        <div class="header">
-          <h1>📋 أرشيف يوم - ${gregorian}</h1>
-          <div class="hijri">🌙 ${hijri}</div>
-        </div>
-        <div class="stats">
-          <div class="stat-card"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي</div></div>
-          <div class="stat-card"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">نشط</div></div>
-          <div class="stat-card"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تسليم</div></div>
-          <div class="stat-card"><div class="stat-num">${stats.done || 0}</div><div class="stat-lbl">مكتمل</div></div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن</th><th>الحالة</th></tr></thead>
-            <tbody>${tableRows}</tbody>
-          </table>
-        </div>
-      </div>
-    `;
+    allPages += `<div style="margin-bottom:40px;page-break-after:always;"><div class="header"><h1>📋 أرشيف يوم - ${gregorian}</h1><div class="hijri">🌙 ${hijri}</div></div><div class="stats"><div class="stat-card"><div class="stat-num">${stats.total || 0}</div><div class="stat-lbl">إجمالي</div></div><div class="stat-card"><div class="stat-num">${stats.active || 0}</div><div class="stat-lbl">نشط</div></div><div class="stat-card"><div class="stat-num">${stats.delivered || 0}</div><div class="stat-lbl">تسليم</div></div><div class="stat-card"><div class="stat-num">${stats.done || 0}</div><div class="stat-lbl">مكتمل</div></div></div><div class="table-wrap"><table><thead><tr><th width="50">#</th><th>حامل الأسئلة</th><th>المنطقة</th><th>الزمن</th><th>الحالة</th></tr></thead><tbody>${tableRows}</tbody></table></div></div>`;
   });
-  const htmlContent = `<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>أرشيف كامل</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Cairo', sans-serif; background: #F8FAFC; color: #0F172A; padding: 20px; }
-  .container { max-width: 1200px; margin: 0 auto; }
-  .main-header { background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 30px; text-align: center; }
-  .main-header h1 { font-size: 32px; margin-bottom: 10px; }
-  .header { background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); color: white; padding: 25px; border-radius: 16px; margin-bottom: 20px; text-align: center; }
-  .header h1 { font-size: 24px; margin-bottom: 8px; }
-  .header .hijri { font-size: 15px; opacity: 0.9; }
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
-  .stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid #1E3A8A; text-align: center; }
-  .stat-card:nth-child(2) { border-top-color: #0D9488; }
-  .stat-card:nth-child(3) { border-top-color: #B45309; }
-  .stat-card:nth-child(4) { border-top-color: #059669; }
-  .stat-num { font-size: 32px; font-weight: 800; font-family: 'Inter', sans-serif; color: #1E3A8A; }
-  .stat-lbl { font-size: 13px; color: #64748B; margin-top: 5px; }
-  .table-wrap { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th { background: #F1F5F9; padding: 14px; text-align: right; font-size: 12px; font-weight: 800; color: #64748B; border-bottom: 2px solid #E2E8F0; }
-  td { padding: 14px; border-bottom: 1px solid #E2E8F0; vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover { background: #F8FAFC; }
-  .badge { display: inline-flex; padding: 4px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; }
-  .b-pend { background: #FEF3C7; color: #B45309; }
-  .b-trav { background: #DBEAFE; color: #1E3A8A; }
-  .b-deliv { background: #CCFBF1; color: #0D9488; }
-  .b-ret { background: #E0F2FE; color: #0369A1; }
-  .b-comp { background: #D1FAE5; color: #059669; }
-  .footer { text-align: center; padding: 20px; color: #64748B; font-size: 12px; }
-  .print-btn { position: fixed; top: 20px; left: 20px; background: #1E3A8A; color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 14px; z-index: 1000; }
-  @media print { .print-btn { display: none; } body { padding: 0; } }
-</style>
-</head>
-<body>
-<button class="print-btn" onclick="window.print()">🖨️ طباعة الكل</button>
-<div class="container">
-  <div class="main-header">
-    <h1>📋 الأرشيف الكامل</h1>
-    <div style="font-size: 16px; opacity: 0.95;">عدد الأيام: ${dates.length}</div>
-  </div>
-  ${allPages}
-  <div class="footer">نظام متابعة الامتحانات | ${new Date().toLocaleString('ar')}</div>
-</div>
-</body>
-</html>`;
+  const htmlContent = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>أرشيف كامل</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Cairo',sans-serif;background:#F8FAFC;color:#0F172A;padding:20px}.container{max-width:1200px;margin:0 auto}.main-header{background:linear-gradient(135deg,#1E3A8A 0%,#0D9488 100%);color:white;padding:30px;border-radius:16px;margin-bottom:30px;text-align:center}.main-header h1{font-size:32px;margin-bottom:10px}.header{background:linear-gradient(135deg,#1E3A8A 0%,#0D9488 100%);color:white;padding:25px;border-radius:16px;margin-bottom:20px;text-align:center}.header h1{font-size:24px;margin-bottom:8px}.header .hijri{font-size:15px;opacity:0.9}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:20px}.stat-card{background:white;border-radius:12px;padding:20px;box-shadow:0 4px 6px rgba(0,0,0,0.05);border-top:4px solid #1E3A8A;text-align:center}.stat-num{font-size:32px;font-weight:800;font-family:'Inter',sans-serif;color:#1E3A8A}.stat-lbl{font-size:13px;color:#64748B;margin-top:5px}.table-wrap{background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05);margin-bottom:20px}table{width:100%;border-collapse:collapse;font-size:14px}th{background:#F1F5F9;padding:14px;text-align:right;font-size:12px;font-weight:800;color:#64748B;border-bottom:2px solid #E2E8F0}td{padding:14px;border-bottom:1px solid #E2E8F0;vertical-align:middle}tr:last-child td{border-bottom:none}tr:hover{background:#F8FAFC}.badge{display:inline-flex;padding:4px 12px;border-radius:99px;font-size:12px;font-weight:700}.b-pend{background:#FEF3C7;color:#B45309}.b-trav{background:#DBEAFE;color:#1E3A8A}.b-deliv{background:#CCFBF1;color:#0D9488}.b-ret{background:#E0F2FE;color:#0369A1}.b-comp{background:#D1FAE5;color:#059669}.footer{text-align:center;padding:20px;color:#64748B;font-size:12px}.print-btn{position:fixed;top:20px;left:20px;background:#1E3A8A;color:white;border:none;padding:12px 24px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;z-index:1000}@media print{.print-btn{display:none}body{padding:0}}</style></head><body><button class="print-btn" onclick="window.print()">🖨️ طباعة الكل</button><div class="container"><div class="main-header"><h1>📋 الأرشيف الكامل</h1><div style="font-size:16px;opacity:0.95;">عدد الأيام: ${dates.length}</div></div>${allPages}<div class="footer">نظام متابعة الامتحانات | ${new Date().toLocaleString('ar')}</div></div></body></html>`;
   const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1704,7 +1687,7 @@ async function deleteCarrier(id) {
 async function resetCarrier(id) {
   const carrier = carriers.find(c => c.id == id);
   if (!carrier) return;
-  if (!confirm(`⚠️ إعادة تعيين جميع حركات:\n\n👤 ${carrier.name}\n📍 ${carrier.region}\n\nسيتم مسح جميع المراحل.\n\nمتابعة؟`)) return;
+  if (!confirm(`⚠️ إعادة تعيين جميع حركات:\n\n👤 ${carrier.name}\n\nمتابعة؟`)) return;
   try {
     await db.collection('carriers').doc(id.toString()).update({ p0: null, p1: null, p2: null, p3: null });
     showToast(`🔄 تم إعادة تعيين ${carrier.name}`, 'success');
@@ -1720,7 +1703,7 @@ async function undoLastAction(id) {
   else if (carrier.p2) { update.p2 = null; actionDesc = 'استلام المغلف (p2)'; }
   else if (carrier.p1) { update.p1 = null; actionDesc = 'تسليم الأسئلة (p1)'; }
   else if (carrier.p0) { update.p0 = null; actionDesc = 'الانطلاق (p0)'; }
-  else { showToast('⚠️ لا توجد حركات للتراجع', 'info'); return; }
+  else { showToast('⚠️ لا توجد حركات', 'info'); return; }
   if (!confirm(`↩️ التراجع عن:\n\n👤 ${carrier.name}\n📝 ${actionDesc}\n\nمتابعة؟`)) return;
   try {
     await db.collection('carriers').doc(id.toString()).update(update);
@@ -1730,7 +1713,7 @@ async function undoLastAction(id) {
 
 async function resetAllCarriers() {
   if (carriers.length === 0) { showToast('⚠️ لا يوجد حاملون', 'info'); return; }
-  if (!confirm(`⚠️ إعادة تعيين جميع الحاملين (${carriers.length})؟\n\n⚠️ لا يمكن التراجع!`)) return;
+  if (!confirm(`⚠️ إعادة تعيين جميع الحاملين (${carriers.length})؟`)) return;
   try {
     const batch = db.batch();
     carriers.forEach(carrier => {
@@ -1815,7 +1798,7 @@ function clearSelection() {
 
 async function deleteSelectedCarriers() {
   if (selectedCarriers.size === 0) { showToast('⚠️ لم يتم تحديد أي حامل', 'info'); return; }
-  if (!confirm(`⚠️ حذف ${selectedCarriers.size} حامل؟\n\nلا يمكن التراجع!`)) return;
+  if (!confirm(`⚠️ حذف ${selectedCarriers.size} حامل؟`)) return;
   try {
     const batch = db.batch();
     selectedCarriers.forEach(id => {
@@ -1867,7 +1850,7 @@ function renderTable() {
   let filtered = carriers.filter(c => {
     const s = getStatus(c);
     if (currentFilter !== 'all' && s !== currentFilter) return false;
-    if (search && !c.name.toLowerCase().includes(search) && !c.region.toLowerCase().includes(search) && !c.school.toLowerCase().includes(search)) return false;
+    if (currentUser.role === 'admin' && search && !c.name.toLowerCase().includes(search) && !c.region.toLowerCase().includes(search) && !c.school.toLowerCase().includes(search)) return false;
     if (currentUser.role === 'carrier' && currentUser.carrierId !== c.id) return false;
     return true;
   });
@@ -1987,6 +1970,46 @@ function loadCarrierSelect() {
   if (currentValue) select.value = currentValue;
 }
 
+// ✅ دالة التتبع الزمني المحدّثة
+function loadCarrierTracking() {
+  const content = document.getElementById('trackingContent');
+  const adminView = document.getElementById('adminTrackingView');
+  const carrierView = document.getElementById('carrierTrackingView');
+  
+  let carrierId = null;
+  
+  if (currentUser.role === 'carrier') {
+    carrierId = currentUser.carrierId;
+    adminView.style.display = 'none';
+    carrierView.style.display = 'block';
+    
+    const carrier = carriers.find(c => c.id == carrierId);
+    if (carrier) {
+      document.getElementById('carrierTrackingName').textContent = carrier.name;
+      document.getElementById('carrierTrackingInfo').textContent = 
+        `📍 ${carrier.region} | 🏫 ${carrier.school} | #${carrier.id}`;
+    }
+  } else {
+    const select = document.getElementById('carrierSelect');
+    carrierId = select.value;
+    adminView.style.display = 'block';
+    carrierView.style.display = 'none';
+    
+    if (!carrierId) {
+      content.style.display = 'none';
+      return;
+    }
+  }
+  
+  content.style.display = 'block';
+  const carrier = carriers.find(c => c.id == carrierId);
+  
+  if (carrier) {
+    updateTrackingDisplay(carrier);
+    startTrackingTimer(carrier);
+  }
+}
+
 async function doAction(id, phase) {
   const c = carriers.find(x => x.id == id);
   if (!c) return;
@@ -2004,17 +2027,29 @@ async function doAction(id, phase) {
   } catch (error) { showToast('❌ خطأ: ' + error.message, 'error'); }
 }
 
-async function startPhase1() { const id = document.getElementById('carrierSelect').value; if (id) await doAction(id, 'p0'); }
-async function startPhase2() { const id = document.getElementById('carrierSelect').value; if (id) await doAction(id, 'p1'); }
-async function startPhase3() { const id = document.getElementById('carrierSelect').value; if (id) await doAction(id, 'p2'); }
-
-function loadCarrierTracking() {
-  const carrierId = document.getElementById('carrierSelect').value;
-  const content = document.getElementById('trackingContent');
-  if (!carrierId) { content.style.display = 'none'; return; }
-  content.style.display = 'block';
-  const carrier = carriers.find(c => c.id === carrierId);
-  if (carrier) { updateTrackingDisplay(carrier); startTrackingTimer(carrier); }
+async function startPhase1() { 
+  if (currentUser.role === 'carrier') {
+    await doAction(currentUser.carrierId, 'p0');
+  } else {
+    const id = document.getElementById('carrierSelect').value;
+    if (id) await doAction(id, 'p0');
+  }
+}
+async function startPhase2() { 
+  if (currentUser.role === 'carrier') {
+    await doAction(currentUser.carrierId, 'p1');
+  } else {
+    const id = document.getElementById('carrierSelect').value;
+    if (id) await doAction(id, 'p1');
+  }
+}
+async function startPhase3() { 
+  if (currentUser.role === 'carrier') {
+    await doAction(currentUser.carrierId, 'p2');
+  } else {
+    const id = document.getElementById('carrierSelect').value;
+    if (id) await doAction(id, 'p2');
+  }
 }
 
 function updateTrackingDisplay(carrier) {
@@ -2069,7 +2104,10 @@ function switchTab(tabName) {
   document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
   event.target.classList.add('active');
   document.getElementById(tabName + 'Tab').classList.add('active');
-  if (tabName === 'tracking') loadCarrierSelect();
+  if (tabName === 'tracking') {
+    if (currentUser.role === 'admin') loadCarrierSelect();
+    loadCarrierTracking();
+  }
 }
 function startClock() {
   setInterval(() => {
@@ -2079,6 +2117,7 @@ function startClock() {
 document.getElementById('searchBox').addEventListener('input', renderTable);
 
 window.onload = function() {
+  applyTheme();
   const storedDate = localStorage.getItem('currentTrackingDate');
   if (storedDate) {
     currentDate = storedDate;
