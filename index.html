@@ -24,24 +24,13 @@
     --font-ar: 'Cairo', sans-serif; --font-num: 'Inter', sans-serif;
   }
   body.dark-mode {
-    --bg: #0F172A;
-    --surface: #1E293B;
-    --border: #475569;
-    --text: #F8FAFC;
-    --text-muted: #CBD5E1;
-    --slate-light: #334155;
-    --navy-light: #1E3A5F;
-    --teal-light: #134E4A;
-    --amber-light: #451A03;
-    --emerald-light: #064E3B;
-    --ocean-light: #0C2D48;
-    --purple-light: #2E1065;
+    --bg: #0F172A; --surface: #1E293B; --border: #475569;
+    --text: #F8FAFC; --text-muted: #CBD5E1; --slate-light: #334155;
+    --navy-light: #1E3A5F; --teal-light: #134E4A; --amber-light: #451A03;
+    --emerald-light: #064E3B; --ocean-light: #0C2D48; --purple-light: #2E1065;
     --brick-light: #450A0A;
   }
-  body.dark-mode .btn-launch {
-    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #3B82F6 100%);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  }
+  body.dark-mode .btn-launch { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #3B82F6 100%); box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
   body.dark-mode .act-btn { color: #F8FAFC; font-weight: 700; }
   body.dark-mode .badge { border: 1px solid rgba(255,255,255,0.2); }
   body.dark-mode .stat-value { color: #60A5FA; }
@@ -128,7 +117,58 @@
   body { font-family: var(--font-ar); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; transition: background 0.3s, color 0.3s; }
   .latin { font-family: var(--font-num); letter-spacing: -0.02em; }
 
+  /* ✅ شاشة تحميل مزامنة التاريخ */
+  .date-sync-loading {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .date-sync-loading.hidden { display: none; }
+  .date-sync-loading .spinner {
+    width: 60px; height: 60px;
+    border: 5px solid rgba(255,255,255,0.2);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .date-sync-loading .message {
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .date-sync-loading .sub-message {
+    color: rgba(255,255,255,0.8);
+    font-size: 14px;
+    text-align: center;
+  }
+  .date-sync-loading .skip-btn {
+    margin-top: 10px;
+    padding: 10px 24px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: var(--font-ar);
+    transition: 0.2s;
+  }
+  .date-sync-loading .skip-btn:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
   .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+  .login-screen.hidden { display: none; }
   .login-box { background: var(--surface); border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.25); position: relative; overflow: hidden; }
   .login-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--navy), var(--teal), var(--emerald)); }
   .login-title { color: var(--navy); margin-bottom: 8px; text-align: center; font-size: 28px; font-weight: 800; }
@@ -181,6 +221,7 @@
   .date-badge .hijri { font-size: 11px; color: var(--teal); font-weight: 600; }
   .sync-status { font-size: 10px; color: var(--emerald); font-weight: 700; display: flex; align-items: center; gap: 4px; }
   .sync-status::before { content: ''; width: 6px; height: 6px; background: var(--emerald); border-radius: 50%; animation: pulse 1.5s infinite; }
+  .sync-status.error::before { background: var(--brick); }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   .theme-toggle { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 8px 12px; cursor: pointer; font-size: 18px; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
   .theme-toggle:hover { background: var(--navy-light); transform: scale(1.05); }
@@ -394,7 +435,6 @@
 
   .search-hidden { display: none !important; }
 
-  /* ✅ صندوق معلومات حامل الأسئلة */
   .carrier-info-box {
     background: var(--navy-light);
     border: 2px solid var(--navy);
@@ -446,7 +486,15 @@
 </head>
 <body>
 
-<div id="loginScreen" class="login-screen">
+<!-- ✅ شاشة تحميل مزامنة التاريخ -->
+<div class="date-sync-loading" id="dateSyncLoading">
+  <div class="spinner"></div>
+  <div class="message">🔄 جاري مزامنة تاريخ العمل...</div>
+  <div class="sub-message">يتم التحقق من أحدث تاريخ من الخادم</div>
+  <button class="skip-btn" onclick="skipDateSync()">⏭️ تخطي والمتابعة</button>
+</div>
+
+<div id="loginScreen" class="login-screen hidden">
   <div class="login-box">
     <div class="login-title">📋 نظام المتابعة</div>
     <div class="login-subtitle">لوحة متابعة الامتحانات - مزامنة فورية</div>
@@ -715,7 +763,6 @@
         <h2 class="card-title">⏰ التتبع الزمني للمراحل</h2>
         <div style="margin-top: 20px;">
           
-          <!-- عرض المدير: قائمة منسدلة -->
           <div id="adminTrackingView" style="display: none;">
             <div class="form-group">
               <label>اختر حامل الأسئلة:</label>
@@ -725,7 +772,6 @@
             </div>
           </div>
           
-          <!-- عرض الحامل: تتبع مباشر -->
           <div id="carrierTrackingView" style="display: none;">
             <div class="carrier-info-box">
               <div class="carrier-label">👤 حامل الأسئلة</div>
@@ -850,7 +896,9 @@ function getLocalDateStr() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-let currentDate = localStorage.getItem('currentTrackingDate') || getLocalDateStr();
+// ✅ التاريخ يبدأ بقيمة مؤقتة، سيتم تحديثها من Firebase
+let currentDate = getLocalDateStr();
+let dateSyncComplete = false;
 
 const ADMIN_EMAIL = 'admin@examtraking.local';
 const ADMIN_PASSWORD = 'Admin@2026';
@@ -898,6 +946,48 @@ function formatFullDate(date) {
   return h ? `${g} | ${h}` : g;
 }
 
+// ==========================================
+// ✅ الحل الجذري: مزامنة التاريخ الإجبارية من Firebase
+// ==========================================
+
+// قراءة التاريخ من Firebase (مرة واحدة عند البدء)
+async function fetchDateFromFirebase() {
+  try {
+    const doc = await db.collection('settings').doc('current').get();
+    if (doc.exists) {
+      const remoteDate = doc.data().currentDate;
+      if (remoteDate) {
+        console.log('✅ تم جلب التاريخ من Firebase:', remoteDate);
+        currentDate = remoteDate;
+        localStorage.setItem('currentTrackingDate', currentDate);
+        return true;
+      }
+    }
+    console.log('ℹ️ لا يوجد تاريخ في Firebase، سيتم إنشاء واحد');
+    return false;
+  } catch (error) {
+    console.error('❌ فشل جلب التاريخ من Firebase:', error);
+    return false;
+  }
+}
+
+// إنشاء/تحديث التاريخ في Firebase
+async function updateDateInFirebase(newDate) {
+  try {
+    await db.collection('settings').doc('current').set({
+      currentDate: newDate,
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser ? currentUser.email : 'unknown'
+    }, { merge: true });
+    console.log('✅ تم تحديث التاريخ في Firebase');
+    return true;
+  } catch (error) {
+    console.warn('⚠️ فشل تحديث التاريخ في Firebase:', error.message);
+    return false;
+  }
+}
+
+// الاستماع المستمر لتغييرات التاريخ
 function setupDateSync() {
   if (unsubscribeDate) unsubscribeDate();
   unsubscribeDate = db.collection('settings').doc('current').onSnapshot((doc) => {
@@ -912,14 +1002,18 @@ function setupDateSync() {
         updateDateComparison();
         showToast(`🔄 تم تحديث التاريخ: ${formatFullDate(currentDate)}`, 'info');
       }
-    } else {
-      updateDateInFirebase(currentDate);
     }
   }, (error) => {
     console.warn('⚠️ فشل مزامنة التاريخ:', error.message);
+    const syncStatus = document.getElementById('syncStatus');
+    if (syncStatus) {
+      syncStatus.textContent = 'خطأ';
+      syncStatus.classList.add('error');
+    }
   });
 }
 
+// مزامنة فورية عند الضغط على التاريخ
 async function forceDateSync() {
   showToast('🔄 جاري المزامنة الفورية...', 'info');
   try {
@@ -944,16 +1038,11 @@ async function forceDateSync() {
   }
 }
 
-async function updateDateInFirebase(newDate) {
-  try {
-    await db.collection('settings').doc('current').set({
-      currentDate: newDate,
-      updatedAt: new Date().toISOString(),
-      updatedBy: currentUser ? currentUser.email : 'unknown'
-    }, { merge: true });
-  } catch (error) {
-    console.warn('⚠️ فشل تحديث التاريخ في Firebase:', error.message);
-  }
+// تخطي مزامنة التاريخ (زر الطوارئ)
+function skipDateSync() {
+  console.log('⏭️ تم تخطي مزامنة التاريخ');
+  document.getElementById('dateSyncLoading').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
 }
 
 function updateDateComparison() {
@@ -1120,7 +1209,7 @@ function toggleTheme() {
 }
 
 function showApp() {
-  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('appContainer').classList.add('active');
   applyTheme();
   
@@ -1242,7 +1331,7 @@ async function startNewDay() {
     } catch (e) { console.warn(e); }
     currentDate = newDate;
     localStorage.setItem('currentTrackingDate', currentDate);
-    updateDateInFirebase(currentDate);
+    await updateDateInFirebase(currentDate); // ✅ تحديث Firebase فوراً
     updateDateDisplay();
     updateDateComparison();
     document.getElementById('newDayDate').value = '';
@@ -1970,7 +2059,6 @@ function loadCarrierSelect() {
   if (currentValue) select.value = currentValue;
 }
 
-// ✅ دالة التتبع الزمني المحدّثة
 function loadCarrierTracking() {
   const content = document.getElementById('trackingContent');
   const adminView = document.getElementById('adminTrackingView');
@@ -2116,15 +2204,30 @@ function startClock() {
 }
 document.getElementById('searchBox').addEventListener('input', renderTable);
 
-window.onload = function() {
+// ==========================================
+// ✅ الحل الجذري: تهيئة التطبيق مع مزامنة التاريخ الإجبارية
+// ==========================================
+window.onload = async function() {
   applyTheme();
-  const storedDate = localStorage.getItem('currentTrackingDate');
-  if (storedDate) {
-    currentDate = storedDate;
+  
+  // ✅ الخطوة 1: محاولة قراءة التاريخ من Firebase
+  const syncSuccess = await fetchDateFromFirebase();
+  
+  if (syncSuccess) {
+    console.log('✅ تم مزامنة التاريخ بنجاح:', currentDate);
   } else {
-    currentDate = getLocalDateStr();
-    localStorage.setItem('currentTrackingDate', currentDate);
+    console.log('⚠️ فشل مزامنة التاريخ، سيتم استخدام التاريخ المحلي');
+    // محاولة إنشاء مستند التاريخ في Firebase
+    await updateDateInFirebase(currentDate);
   }
+  
+  // تحديث localStorage بالتاريخ الصحيح
+  localStorage.setItem('currentTrackingDate', currentDate);
+  
+  // إخفاء شاشة التحميل وإظهار صفحة تسجيل الدخول
+  document.getElementById('dateSyncLoading').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  
   createAdminAccount();
   auth.onAuthStateChanged(async (user) => {
     if (user) {
