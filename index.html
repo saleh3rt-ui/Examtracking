@@ -117,7 +117,6 @@
   body { font-family: var(--font-ar); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; transition: background 0.3s, color 0.3s; }
   .latin { font-family: var(--font-num); letter-spacing: -0.02em; }
 
-  /* ✅ شاشة تحميل مزامنة التاريخ */
   .date-sync-loading {
     position: fixed;
     top: 0; left: 0;
@@ -222,6 +221,7 @@
   .sync-status { font-size: 10px; color: var(--emerald); font-weight: 700; display: flex; align-items: center; gap: 4px; }
   .sync-status::before { content: ''; width: 6px; height: 6px; background: var(--emerald); border-radius: 50%; animation: pulse 1.5s infinite; }
   .sync-status.error::before { background: var(--brick); }
+  .sync-status.error { color: var(--brick); }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   .theme-toggle { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 8px 12px; cursor: pointer; font-size: 18px; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
   .theme-toggle:hover { background: var(--navy-light); transform: scale(1.05); }
@@ -486,7 +486,6 @@
 </head>
 <body>
 
-<!-- ✅ شاشة تحميل مزامنة التاريخ -->
 <div class="date-sync-loading" id="dateSyncLoading">
   <div class="spinner"></div>
   <div class="message">🔄 جاري مزامنة تاريخ العمل...</div>
@@ -896,7 +895,6 @@ function getLocalDateStr() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-// ✅ التاريخ يبدأ بقيمة مؤقتة، سيتم تحديثها من Firebase
 let currentDate = getLocalDateStr();
 let dateSyncComplete = false;
 
@@ -946,11 +944,6 @@ function formatFullDate(date) {
   return h ? `${g} | ${h}` : g;
 }
 
-// ==========================================
-// ✅ الحل الجذري: مزامنة التاريخ الإجبارية من Firebase
-// ==========================================
-
-// قراءة التاريخ من Firebase (مرة واحدة عند البدء)
 async function fetchDateFromFirebase() {
   try {
     const doc = await db.collection('settings').doc('current').get();
@@ -971,7 +964,6 @@ async function fetchDateFromFirebase() {
   }
 }
 
-// إنشاء/تحديث التاريخ في Firebase
 async function updateDateInFirebase(newDate) {
   try {
     await db.collection('settings').doc('current').set({
@@ -987,33 +979,60 @@ async function updateDateInFirebase(newDate) {
   }
 }
 
-// الاستماع المستمر لتغييرات التاريخ
+// ✅ الدالة المصححة - التحقق من وجود المستند أولاً
 function setupDateSync() {
   if (unsubscribeDate) unsubscribeDate();
-  unsubscribeDate = db.collection('settings').doc('current').onSnapshot((doc) => {
-    if (doc.exists) {
-      const data = doc.data();
-      const remoteDate = data.currentDate;
-      if (remoteDate && remoteDate !== currentDate) {
-        console.log('🔄 تم مزامنة التاريخ من Firebase:', remoteDate);
-        currentDate = remoteDate;
-        localStorage.setItem('currentTrackingDate', currentDate);
-        updateDateDisplay();
-        updateDateComparison();
-        showToast(`🔄 تم تحديث التاريخ: ${formatFullDate(currentDate)}`, 'info');
+  
+  // أولاً: التأكد من وجود المستند في Firebase
+  db.collection('settings').doc('current').get().then((doc) => {
+    if (!doc.exists) {
+      console.log('ℹ️ مستند التاريخ غير موجود، سيتم إنشاؤه');
+      return updateDateInFirebase(currentDate);
+    }
+    return Promise.resolve();
+  }).then(() => {
+    // الآن إنشاء المستمع
+    unsubscribeDate = db.collection('settings').doc('current').onSnapshot((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        const remoteDate = data.currentDate;
+        if (remoteDate && remoteDate !== currentDate) {
+          console.log('🔄 تم مزامنة التاريخ من Firebase:', remoteDate);
+          currentDate = remoteDate;
+          localStorage.setItem('currentTrackingDate', currentDate);
+          updateDateDisplay();
+          updateDateComparison();
+          showToast(`🔄 تم تحديث التاريخ: ${formatFullDate(currentDate)}`, 'info');
+        }
+        // تحديث حالة المزامنة إلى "متزامن"
+        const syncStatus = document.getElementById('syncStatus');
+        if (syncStatus) {
+          syncStatus.textContent = 'متزامن';
+          syncStatus.classList.remove('error');
+        }
+      } else {
+        console.warn('⚠️ مستند التاريخ غير موجود');
       }
-    }
-  }, (error) => {
-    console.warn('⚠️ فشل مزامنة التاريخ:', error.message);
-    const syncStatus = document.getElementById('syncStatus');
-    if (syncStatus) {
-      syncStatus.textContent = 'خطأ';
-      syncStatus.classList.add('error');
-    }
+    }, (error) => {
+      console.warn('⚠️ فشل مزامنة التاريخ:', error.message);
+      // لا نغير الحالة إلى "خطأ" إلا إذا كان الخطأ مستمراً
+      const syncStatus = document.getElementById('syncStatus');
+      if (syncStatus && !syncStatus.classList.contains('error')) {
+        // ننتظر قليلاً قبل إظهار الخطأ
+        setTimeout(() => {
+          // نتحقق مرة أخرى إذا كان هناك خطأ حقيقي
+          if (!unsubscribeDate) {
+            syncStatus.textContent = 'خطأ';
+            syncStatus.classList.add('error');
+          }
+        }, 3000);
+      }
+    });
+  }).catch((error) => {
+    console.error('❌ فشل إنشاء مستند التاريخ:', error);
   });
 }
 
-// مزامنة فورية عند الضغط على التاريخ
 async function forceDateSync() {
   showToast('🔄 جاري المزامنة الفورية...', 'info');
   try {
@@ -1038,7 +1057,6 @@ async function forceDateSync() {
   }
 }
 
-// تخطي مزامنة التاريخ (زر الطوارئ)
 function skipDateSync() {
   console.log('⏭️ تم تخطي مزامنة التاريخ');
   document.getElementById('dateSyncLoading').classList.add('hidden');
@@ -1331,7 +1349,7 @@ async function startNewDay() {
     } catch (e) { console.warn(e); }
     currentDate = newDate;
     localStorage.setItem('currentTrackingDate', currentDate);
-    await updateDateInFirebase(currentDate); // ✅ تحديث Firebase فوراً
+    await updateDateInFirebase(currentDate);
     updateDateDisplay();
     updateDateComparison();
     document.getElementById('newDayDate').value = '';
@@ -2204,27 +2222,20 @@ function startClock() {
 }
 document.getElementById('searchBox').addEventListener('input', renderTable);
 
-// ==========================================
-// ✅ الحل الجذري: تهيئة التطبيق مع مزامنة التاريخ الإجبارية
-// ==========================================
 window.onload = async function() {
   applyTheme();
   
-  // ✅ الخطوة 1: محاولة قراءة التاريخ من Firebase
   const syncSuccess = await fetchDateFromFirebase();
   
   if (syncSuccess) {
     console.log('✅ تم مزامنة التاريخ بنجاح:', currentDate);
   } else {
     console.log('⚠️ فشل مزامنة التاريخ، سيتم استخدام التاريخ المحلي');
-    // محاولة إنشاء مستند التاريخ في Firebase
     await updateDateInFirebase(currentDate);
   }
   
-  // تحديث localStorage بالتاريخ الصحيح
   localStorage.setItem('currentTrackingDate', currentDate);
   
-  // إخفاء شاشة التحميل وإظهار صفحة تسجيل الدخول
   document.getElementById('dateSyncLoading').classList.add('hidden');
   document.getElementById('loginScreen').classList.remove('hidden');
   
